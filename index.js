@@ -61,10 +61,6 @@ Rdata.on ('text', async (ctx)=>{
       console.log(car.mark, car.model);
   }).catch(err=>console.log(err));
 
-  /*const query = await car.findAll({raw:true}).then(cars=>{
-    console.log(cars);
-    ctx.reply (`${car}`);
-  }).catch(err=>console.log(err));*/
   return ctx.scene.leave()
 })
 const menuRdata = new Scenes.WizardScene('sceneRdata', Rdata)
@@ -74,6 +70,5 @@ bot.use(stager.middleware())
 bot.command ('read', async (ctx) => ctx.scene.enter('sceneRdata'))
 bot.launch()
 
-// Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))

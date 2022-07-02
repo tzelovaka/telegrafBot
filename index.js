@@ -2,7 +2,8 @@ const { Telegraf, Scenes, Composer, session } = require('telegraf');
 const car = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
-const { BOT_TOKEN, URL} = process.env
+const port = process.env.PORT || 3000;
+const { BOT_TOKEN, URL} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 
 if (BOT_TOKEN === undefined) {

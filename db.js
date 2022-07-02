@@ -1,10 +1,10 @@
 const {Sequelize} = require('sequelize')
 module.exports = new Sequelize(
-    'testdb',
-    'postgres',
-    '5233243',
+    'da3dj75k47iina',
+    'uumihhewuscsaz',
+    'bc8deae462f543e0c6692197da02cfc5e68bc0e1f774b7cacd8c9bca473825e8',
     {
-        host: 'localhost',
+        host: 'ec2-54-159-22-90.compute-1.amazonaws.com',
         port: '5432',
         dialect: 'postgres'
     }

@@ -38,15 +38,24 @@ carMar.on ('text', async (ctx)=>{
 const carMod = new Composer()
 carMod.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carMod = ctx.message.text;
-  await console.log(`${ctx.wizard.state.data.carMar} ${ctx.wizard.state.data.carMod}`)
+  await ctx.reply ('Вставьте ссылку на картинку добавляемой машины')
+  return ctx.wizard.next()
+  })
+
+const carPic = new Composer()
+carPic.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.carPic = ctx.message.text;
+  console.log(`${ctx.wizard.state.data.carMar} ${ctx.wizard.state.data.carMod}`)
+  console.log(`${ctx.wizard.state.data.carPic}`)
   const query = await car.create({
     mark: `${ctx.wizard.state.data.carMar}`,
     model: `${ctx.wizard.state.data.carMod}`,
+    pic: `${ctx.wizard.state.data.carPic}`
   })
   return ctx.scene.leave()
 })
 
-const menuScene = new Scenes.WizardScene('sceneWizard', carStart, carMar, carMod)
+const menuScene = new Scenes.WizardScene('sceneWizard', carStart, carMar, carMod, carPic)
 const stage = new Scenes.Stage ([menuScene])
 bot.use(session())
 bot.use(stage.middleware())
@@ -58,6 +67,7 @@ Rdata.on ('text', async (ctx)=>{
   .then(car=>{
       if(!car) return;
       ctx.reply (`${car.mark} ${car.model}`);
+      ctx.reply (`${car.pic}`);
       console.log(car.mark, car.model);
   }).catch(err=>console.log(err));
 

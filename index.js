@@ -66,10 +66,12 @@ Rdata.on ('text', async (ctx)=>{
   const query = await car.findAll({where: {mark: "BMW"}})
   .then(async car=>{
       if(!car) return;
+      await ctx.reply (car.mark.toJSON);
       //while (car.mark != 0){
-      await ctx.reply (`${car.mark} ${car.model}`);
-      await ctx.reply (`${car.pic}`);
-      console.log(car.mark, car.model);
+      //await ctx.reply (`${car.mark} ${car.model}`);
+      //await ctx.reply (`${car.pic}`);
+      //console.log(car.mark, car.model);
+      console.log(car.mark.toJSON);
       //}
   }).catch(err=>console.log(err));
 

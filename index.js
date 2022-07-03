@@ -63,7 +63,7 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
-  const query = await car.findAll({where: {mark: "BMW"}})
+  const query = await car.findOne({where: {mark: "BMW"}})
   .then(async car=>{
       if(!car) return;
       await ctx.reply (`${car.mark} ${car.model}`);

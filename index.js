@@ -64,12 +64,12 @@ const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
   let i = 1;
   while (i<5){
-  const query = await bmw.findOne({where: {id: i}})
+  const query = await bmw.findOne({where: {i}})
   .then(async bmw=>{
       if(!car) return;
       await ctx.reply (`${bmw.model}`);
       //await ctx.reply (`${bmw.pic}`);
-      console.log(bmw.model);
+      console.log(query);
   }).catch(err=>console.log(err));
   i++;
 }

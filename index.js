@@ -64,9 +64,9 @@ const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
   let i = 1;
   while (i<5){
-  const query = await bmw.findOne({where: {i}})
+  const query = await bmw.findByPk(i)
   .then(async bmw=>{
-      if(!car) return;
+      if(!bmw) return;
       await ctx.reply (`${bmw.model}`);
       //await ctx.reply (`${bmw.pic}`);
       console.log(query);

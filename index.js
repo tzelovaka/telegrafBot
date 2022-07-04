@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session } = require('telegraf');
-const car = require('./model')
+const bmw = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 5000;
@@ -24,16 +24,16 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  await ctx.reply ('Введите марку добавляемой машины')
+  await ctx.reply ('Введите модель добавляемой BMW')
   return ctx.wizard.next()
 })
 
-const carMar = new Composer()
+/*const carMar = new Composer()
 carMar.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carMar = ctx.message.text;
   await ctx.reply ('Введите модель добавляемой машины')
   return ctx.wizard.next()
-})
+})*/
 
 const carMod = new Composer()
 carMod.on ('text', async (ctx)=>{
@@ -45,17 +45,16 @@ carMod.on ('text', async (ctx)=>{
 const carPic = new Composer()
 carPic.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carPic = ctx.message.text;
-  console.log(`${ctx.wizard.state.data.carMar} ${ctx.wizard.state.data.carMod}`)
+  console.log(`${ctx.wizard.state.data.carMod}`)
   console.log(`${ctx.wizard.state.data.carPic}`)
-  const query = await car.create({
-    mark: `${ctx.wizard.state.data.carMar}`,
+  const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   })
   return ctx.scene.leave()
 })
 
-const menuScene = new Scenes.WizardScene('sceneWizard', carStart, carMar, carMod, carPic)
+const menuScene = new Scenes.WizardScene('sceneWizard', carStart, /*carMar,*/ carMod, carPic)
 const stage = new Scenes.Stage ([menuScene])
 bot.use(session())
 bot.use(stage.middleware())
@@ -63,14 +62,17 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
-  const query = await car.findOne({where: {mark: "BMW"}})
-  .then(async car=>{
+  let i = 1;
+  while (i<5){
+  const query = await bmw.findOne({where: {id: i}})
+  .then(async bmw=>{
       if(!car) return;
-      await ctx.reply (`${car.mark} ${car.model}`);
-      await ctx.reply (`${car.pic}`);
-      console.log(car.mark, car.model);
+      await ctx.reply (`${bmw.model}`);
+      //await ctx.reply (`${bmw.pic}`);
+      console.log(bmw.model);
   }).catch(err=>console.log(err));
-
+  i++;
+}
   return ctx.scene.leave()
 })
 const menuRdata = new Scenes.WizardScene('sceneRdata', Rdata)

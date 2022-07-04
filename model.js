@@ -1,9 +1,9 @@
 const sequelize = require('./db')
 const {DataTypes} = require('sequelize')
 
-const car = sequelize.define ('car', {
-    mark: {type: DataTypes.STRING, allowNull: false},
+const bmw = sequelize.define ('bmw', {
+    id: {type: DataTypes.STRING, primaryKey: true, unique: true, autoIncrement: true},
     model: {type: DataTypes.STRING, allowNull: false},
     pic: {type: DataTypes.STRING, allowNull: false},
 })
-module.exports = car;
+module.exports = bmw;

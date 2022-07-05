@@ -62,17 +62,14 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
-  let i = 1;
-  for (; ;){
+  for (let i = 1; i > 15; i++){
   const query = await bmw.findByPk(i).then(async bmw=>{
       if(!bmw) return;
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
   }).catch(err=>console.log(err));
-  var x = `${bmw.model}`;
-  if(x.length < 1) break;
+  if (`${bmw.model}`.length < 1) break;
   await ctx.reply (`${bmw.model}`);
-  i++
 }
   return ctx.scene.leave()
 })

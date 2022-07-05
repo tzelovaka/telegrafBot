@@ -69,7 +69,8 @@ Rdata.on ('text', async (ctx)=>{
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
   }).catch(err=>console.log(err));
-  if(bmw.model.length < 1) break;
+  var x = `${bmw.model}`;
+  if(x.length < 1) break;
   await ctx.reply (`${bmw.model}`);
   i++
 }

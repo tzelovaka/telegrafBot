@@ -71,7 +71,7 @@ Rdata.on ('text', async (ctx)=>{
       await ctx.reply (`${bmw.model}`);
   }).catch(err=>console.log(err));*/
   const query = await bmw.findByPk(i)
-  if (`${bmw.model}`.length < 1) {
+  if (bmw.model.length < 1) {
     break;
   }
   else{

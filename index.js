@@ -71,9 +71,9 @@ Rdata.on ('text', async (ctx)=>{
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
       //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
-      inlineKeyboardButton = new InlineKeyboardButton();
-      inlineKeyboardButton.setText(`${bmw.model}`);
-      inlineKeyboardButton.setUrl(`${bmw.pic}`);
+      InlineKeyboardButton = new InlineKeyboardButton();
+      InlineKeyboardButton.setText(`${bmw.model}`);
+      InlineKeyboardButton.setUrl(`${bmw.pic}`);
       
   }).catch(err=>console.log(err));
 }

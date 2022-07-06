@@ -70,7 +70,10 @@ Rdata.on ('text', async (ctx)=>{
     if(!bmw) return;
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
-      await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
+      //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
+      inlineKeyboardButton = new InlineKeyboardButton();
+      inlineKeyboardButton.setText(`${bmw.model}`);
+      inlineKeyboardButton.setUrl(`${bmw.pic}`);
       
   }).catch(err=>console.log(err));
 }

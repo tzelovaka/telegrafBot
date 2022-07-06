@@ -71,7 +71,7 @@ Rdata.on ('text', async (ctx)=>{
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
       //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
-      ctx.reply(" ", {
+      ctx.reply("___", {
         reply_markup: {
             inline_keyboard: [
                 [ { text: `${bmw.model}`, url: `${bmw.pic}` }]

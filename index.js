@@ -71,12 +71,19 @@ Rdata.on ('text', async (ctx)=>{
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
       //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
-      ctx.reply("___", {
+      /*ctx.reply("___", {
         reply_markup: {
             inline_keyboard: [
                 [ { text: `${bmw.model}`, url: `${bmw.pic}` }]
             ]
           }
+        })*/
+        bot.telegram.sendMessage(ctx.chat.id, questionMessage, {
+          reply_markup: {
+            inline_keyboard: [
+                [ { text: `${bmw.model}`, url: `${bmw.pic}` }]
+            ]
+          },
         })
       
   }).catch(err=>console.log(err));

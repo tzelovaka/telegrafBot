@@ -71,9 +71,14 @@ Rdata.on ('text', async (ctx)=>{
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
       //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
-      InlineKeyboardButton = new InlineKeyboardButton();
-      InlineKeyboardButton.setText(`${bmw.model}`);
-      InlineKeyboardButton.setUrl(`${bmw.pic}`);
+      ctx.reply("Hi there!", {
+        reply_markup: {
+            inline_keyboard: [
+                /* Inline buttons. 2 side-by-side */
+                [ { text: `${bmw.model}`, url: `${bmw.pic}` }]
+            ]
+          }
+        })
       
   }).catch(err=>console.log(err));
 }

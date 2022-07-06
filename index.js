@@ -70,7 +70,8 @@ Rdata.on ('text', async (ctx)=>{
     if(!bmw) return;
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
-      await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
+      await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}<br/>
+      <img src="1.png" width="32px"></a>`);
       
   }).catch(err=>console.log(err));
 }

@@ -74,7 +74,7 @@ Rdata.on ('text', async (ctx)=>{
       ctx.reply(`${bmw.model}`, {
         reply_markup: {
             inline_keyboard: [
-                [ { text: 'Посмотреть...', url: `${bmw.pic}` }]
+                [ { text: '🔎', url: `${bmw.pic}` }]
             ]
           }
         })

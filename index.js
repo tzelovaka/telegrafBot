@@ -51,6 +51,7 @@ carPic.on ('text', async (ctx)=>{
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   })
+  await query.save();
   return ctx.scene.leave()
 })
 

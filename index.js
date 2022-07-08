@@ -48,7 +48,7 @@ carPic.on ('text', async (ctx)=>{
   console.log(`${ctx.wizard.state.data.carMod}`)
   console.log(`${ctx.wizard.state.data.carPic}`)
   const t = await sequelize.transaction();
-  try{
+  //try{
   const result = await sequelize.transaction({isolationLevel: sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE}, async transaction => {
   const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
@@ -56,9 +56,9 @@ carPic.on ('text', async (ctx)=>{
   })//, { transaction: t });
 });
 await result.commit();
-} catch (error) {
-  await result.rollback();
-}
+//} catch (error) {
+ // await result.rollback();
+//}
   return ctx.scene.leave()
 })
 

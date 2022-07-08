@@ -5,6 +5,7 @@ require ('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const { BOT_TOKEN, URL} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
+const t = await sequelize.transaction();
 
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
@@ -47,11 +48,15 @@ carPic.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carPic = ctx.message.text;
   console.log(`${ctx.wizard.state.data.carMod}`)
   console.log(`${ctx.wizard.state.data.carPic}`)
+  try{
   const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
-  }, { transaction });
-  await commit();
+  }, { transaction: t });
+  await t.commit();
+} catch (error) {
+  await t.rollback();
+}
   return ctx.scene.leave()
 })
 

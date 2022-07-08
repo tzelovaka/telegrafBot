@@ -49,7 +49,7 @@ carPic.on ('text', async (ctx)=>{
   console.log(`${ctx.wizard.state.data.carPic}`)
   const t = await sequelize.transaction();
   //try{
-  const result = await sequelize.transaction({isolationLevel: sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE}, async transaction => {
+  const result = await sequelize.transaction( async transaction => {
   const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`

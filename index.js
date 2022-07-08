@@ -47,11 +47,16 @@ carPic.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carPic = ctx.message.text;
   console.log(`${ctx.wizard.state.data.carMod}`)
   console.log(`${ctx.wizard.state.data.carPic}`)
+  try{
   const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
-  })
-  await query.save();
+  }, { transaction: t });
+  await t.commit();
+} catch (error) {
+  await t.rollback();
+
+}
   return ctx.scene.leave()
 })
 

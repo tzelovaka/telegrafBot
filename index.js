@@ -55,9 +55,9 @@ carPic.on ('text', async (ctx)=>{
     pic: `${ctx.wizard.state.data.carPic}`
   })//, { transaction: t });
 });
-await t.commit();
+await result.commit();
 } catch (error) {
-  await t.rollback();
+  await result.rollback();
 }
   return ctx.scene.leave()
 })

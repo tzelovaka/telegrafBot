@@ -50,8 +50,8 @@ carPic.on ('text', async (ctx)=>{
   const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
-  }, { transaction: t });
-  await t.commit();
+  }, { transaction });
+  await commit();
   return ctx.scene.leave()
 })
 

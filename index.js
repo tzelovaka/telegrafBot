@@ -49,10 +49,12 @@ carPic.on ('text', async (ctx)=>{
   console.log(`${ctx.wizard.state.data.carPic}`)
   const t = await sequelize.transaction();
   try{
-  const query = await bmw.create({
+    const result = await sequelize.transaction(async (t) => {
+    const query = await bmw.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });
+})
 await t.commit('commit');
 } catch (error) {
   await t.rollback();

@@ -53,7 +53,7 @@ carPic.on ('text', async (ctx)=>{
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });
-await t.commit();
+await t.commit('commit');
 } catch (error) {
   await t.rollback();
 }

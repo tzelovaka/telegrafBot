@@ -36,7 +36,7 @@ carStart.on ('text', async (ctx)=>{
         [Markup.button.callback('Renault', 'btn_25'), Markup.button.callback('Saab', 'btn_26'), Markup.button.callback('Subaru', 'btn_27'), Markup.button.callback('Suzuki', 'btn_28')],
         [Markup.button.callback('Toyota', 'btn_29'), Markup.button.callback('Volkswagen', 'btn_30')]
       ]))
-      bot.action('btn_1', async (ctx) => {
+      bot.action('btn_1', async () => {
         try{
           x = 'audi'
         } catch(e) {

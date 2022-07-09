@@ -24,6 +24,7 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
+  let x = 'auto'
   await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
     [
         [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')],
@@ -35,20 +36,34 @@ carStart.on ('text', async (ctx)=>{
         [Markup.button.callback('Renault', 'btn_25'), Markup.button.callback('Saab', 'btn_26'), Markup.button.callback('Subaru', 'btn_27'), Markup.button.callback('Suzuki', 'btn_28')],
         [Markup.button.callback('Toyota', 'btn_29'), Markup.button.callback('Volkswagen', 'btn_30')]
       ]))
+      bot.action('btn_1', async (ctx) => {
+        try{
+          x = 'audi'
+        } catch(e) {
+          console.log(error);
+        }
+      })
+      bot.action('btn_2', async () => {
+        try{
+          x = 'bmw'
+        } catch(e) {
+          console.log(error);
+        }
+      })
   return ctx.wizard.next()
 })
 
 const carMar = new Composer()
 carMar.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.carMar = ctx.message.text;
-  await ctx.reply ('Введите модель добавляемой машины')
+  ctx.wizard.state.data.carMar = x;
+  await ctx.reply ('Введите модель добавляемого авто')
   return ctx.wizard.next()
 })
 
 const carMod = new Composer()
 carMod.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carMod = ctx.message.text;
-  await ctx.reply ('Вставьте ссылку на картинку добавляемой машины')
+  await ctx.reply ('Вставьте ссылку на картинку добавляемого авто')
   return ctx.wizard.next()
   })
 
@@ -60,7 +75,7 @@ carPic.on ('text', async (ctx)=>{
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
-    const query = await bmw.create({
+    const query = await `${ctx.wizard.state.data.carMar}`.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });

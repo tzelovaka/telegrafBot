@@ -75,7 +75,7 @@ carPic.on ('text', async (ctx)=>{
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
-    const query = await `${ctx.wizard.state.data.carMar}`.create({
+    const query = await ctx.wizard.state.data.carMar.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });
@@ -96,18 +96,18 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
   //let i = 1
-  const count = await bmw.count();
+  const count = await audi.count();
   console.log(count);
   for (let i=1; i<=count; i++){
-  const query = await bmw.findByPk(i).then(async bmw=>{
+  const query = await audi.findByPk(i).then(async bmw=>{
     if(!bmw) return;
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
       //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
-      await ctx.reply(`${bmw.model}`, {
+      await ctx.reply(`${audi.model}`, {
         reply_markup: {
             inline_keyboard: [
-                [ { text: '🔎', url: `${bmw.pic}` }]
+                [ { text: '🔎', url: `${audi.pic}` }]
             ]
           }
         })

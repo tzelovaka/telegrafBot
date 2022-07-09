@@ -26,7 +26,9 @@ carStart.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
   await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
     [
-        [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')]
+        [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')],
+        [Markup.button.callback('Chevrolet', 'btn_5'), Markup.button.callback('Chrysler', 'btn_6'), Markup.button.callback('Citroen', 'btn_7'), Markup.button.callback('Daewoo', 'btn_8')],
+        [Markup.button.callback('Daihatsu', 'btn_9'), Markup.button.callback('Fiat', 'btn_10'), Markup.button.callback('Ford', 'btn_11'), Markup.button.callback('Honda', 'btn_12')],
       ]))
   return ctx.wizard.next()
 })

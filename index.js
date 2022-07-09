@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const bmw = require('./model')
+const audi = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 5000;
@@ -75,7 +75,7 @@ carPic.on ('text', async (ctx)=>{
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
-    const query = await `${ctx.wizard.state.data.carMar}`.create({
+    const query = await ctx.wizard.state.data.carMar.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });

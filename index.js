@@ -1,4 +1,4 @@
-const { Telegraf, Scenes, Composer, session, Markup, InlineKeyboardButton } = require('telegraf');
+const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const bmw = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
@@ -24,16 +24,19 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  await ctx.reply ('Введите модель добавляемой BMW')
+  await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
+    [
+        [Markup.button.callback('Audi', 'btn_1'), Markup.button.callback('BMW', 'btn_2'),]
+      ]))
   return ctx.wizard.next()
 })
 
-/*const carMar = new Composer()
+const carMar = new Composer()
 carMar.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carMar = ctx.message.text;
   await ctx.reply ('Введите модель добавляемой машины')
   return ctx.wizard.next()
-})*/
+})
 
 const carMod = new Composer()
 carMod.on ('text', async (ctx)=>{
@@ -62,7 +65,7 @@ await t.commit('commit');
   return ctx.scene.leave()
 })
 
-const menuScene = new Scenes.WizardScene('sceneWizard', carStart, /*carMar,*/ carMod, carPic)
+const menuScene = new Scenes.WizardScene('sceneWizard', carStart, carMar, carMod, carPic)
 const stage = new Scenes.Stage ([menuScene])
 bot.use(session())
 bot.use(stage.middleware())

@@ -32,6 +32,8 @@ carStart.on ('text', async (ctx)=>{
         [Markup.button.callback('Hyndai', 'btn_13'), Markup.button.callback('Jeep', 'btn_14'), Markup.button.callback('KIA', 'btn_15'), Markup.button.callback('Lancia', 'btn_16')],
         [Markup.button.callback('Lexus', 'btn_17'), Markup.button.callback('Lincoln', 'btn_18'), Markup.button.callback('Mazda', 'btn_19'), Markup.button.callback('Mercedes', 'btn_20')],
         [Markup.button.callback('Mitsubishi', 'btn_21'), Markup.button.callback('Nissan', 'btn_22'), Markup.button.callback('Opel', 'btn_23'), Markup.button.callback('Peugeot', 'btn_24')],
+        [Markup.button.callback('Renault', 'btn_25'), Markup.button.callback('Saab', 'btn_26'), Markup.button.callback('Subaru', 'btn_27'), Markup.button.callback('Suzuki', 'btn_28')],
+        [Markup.button.callback('Toyota', 'btn_29'), Markup.button.callback('Volkswagen', 'btn_30')]
       ]))
   return ctx.wizard.next()
 })

@@ -75,7 +75,7 @@ carPic.on ('text', async (ctx)=>{
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
-    const query = await audi.create({
+    const query = await `${ctx.wizard.state.data.carMar}`.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });

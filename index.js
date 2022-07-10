@@ -3,7 +3,7 @@ const car = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 5000;
-const { BOT_TOKEN, URL} = process.env;
+const { BOT_TOKEN, ADMIN_ID} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 
 if (BOT_TOKEN === undefined) {

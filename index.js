@@ -105,7 +105,7 @@ Rdata.on ('text', async (ctx)=>{
   });
   console.log(count);
   let x = count - 1;
-  ctx.replyWithHTML('<b>Mercedes</b>')
+  await ctx.replyWithHTML('<b>Mercedes</b>')
   for (let i=0; i<=x; i++){
     await ctx.reply(rows[i].model, {
       reply_markup: {

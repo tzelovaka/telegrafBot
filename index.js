@@ -24,7 +24,6 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  let x = 'auto'
   await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
     [
         [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')],
@@ -36,20 +35,6 @@ carStart.on ('text', async (ctx)=>{
         [Markup.button.callback('Renault', 'btn_25'), Markup.button.callback('Saab', 'btn_26'), Markup.button.callback('Subaru', 'btn_27'), Markup.button.callback('Suzuki', 'btn_28')],
         [Markup.button.callback('Toyota', 'btn_29'), Markup.button.callback('Volkswagen', 'btn_30')]
       ]))
-      /*bot.action('btn_1', async () => {
-        try{
-          x = 'audi'
-        } catch(e) {
-          console.log(error);
-        }
-      })
-      bot.action('btn_2', async () => {
-        try{
-          x = 'bmw'
-        } catch(e) {
-          console.log(error);
-        }
-      })*/
   return ctx.wizard.next()
 })
 
@@ -96,11 +81,30 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
+  ctx.wizard.state.data = {};
+  await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
+    [
+        [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')],
+        [Markup.button.callback('Chevrolet', 'btn_5'), Markup.button.callback('Chrysler', 'btn_6'), Markup.button.callback('Citroen', 'btn_7'), Markup.button.callback('Daewoo', 'btn_8')],
+        [Markup.button.callback('Daihatsu', 'btn_9'), Markup.button.callback('Fiat', 'btn_10'), Markup.button.callback('Ford', 'btn_11'), Markup.button.callback('Honda', 'btn_12')],
+        [Markup.button.callback('Hyndai', 'btn_13'), Markup.button.callback('Jeep', 'btn_14'), Markup.button.callback('KIA', 'btn_15'), Markup.button.callback('Lancia', 'btn_16')],
+        [Markup.button.callback('Lexus', 'btn_17'), Markup.button.callback('Lincoln', 'btn_18'), Markup.button.callback('Mazda', 'btn_19'), Markup.button.callback('Mercedes', 'btn_20')],
+        [Markup.button.callback('Mitsubishi', 'btn_21'), Markup.button.callback('Nissan', 'btn_22'), Markup.button.callback('Opel', 'btn_23'), Markup.button.callback('Peugeot', 'btn_24')],
+        [Markup.button.callback('Renault', 'btn_25'), Markup.button.callback('Saab', 'btn_26'), Markup.button.callback('Subaru', 'btn_27'), Markup.button.callback('Suzuki', 'btn_28')],
+        [Markup.button.callback('Toyota', 'btn_29'), Markup.button.callback('Volkswagen', 'btn_30')]
+      ]))
+  return ctx.wizard.next()
+})
+
+const readCar = new Composer()
+readCar.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.Rdata = ctx.message.text;
   const co = await car.count();
   console.log(co);
+  try{
   const { count, rows } = await car.findAndCountAll({
     where: {
-      mark: "Mercedes"
+      mark: `${ctx.wizard.state.data.Rdata}`
     }
   });
   console.log(count);
@@ -115,22 +119,13 @@ Rdata.on ('text', async (ctx)=>{
         }
       })
   }
-  /*for (let i=1; i<=count; i++){
-  const query = await car.findByPk(i).then(async car=>{
-    if(!car) return;
-      await ctx.reply(`${car.model}`, {
-        reply_markup: {
-            inline_keyboard: [
-                [ { text: '🔎', url: `${car.pic}` }]
-            ]
-          }
-        })
-      
-  }).catch(err=>console.log(err));
-}*/
+} catch (e){
+  console.log(error);
+  await ctx.replyWithHTML('<i>Ошибка!</i>')
+}
   return ctx.scene.leave()
 })
-const menuRdata = new Scenes.WizardScene('sceneRdata', Rdata)
+const menuRdata = new Scenes.WizardScene('sceneRdata', Rdata, readCar)
 const stager = new Scenes.Stage ([menuRdata])
 bot.use(session())
 bot.use(stager.middleware())

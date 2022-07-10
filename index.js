@@ -96,14 +96,8 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
-  //let i = 1
   const co = await car.count();
   console.log(co);
-  /*const amount = await car.count({
-    where: {
-      model: "E32"
-    }
-  });*/
   const { count, rows } = await car.findAndCountAll({
     where: {
       mark: "Mercedes"
@@ -111,8 +105,8 @@ Rdata.on ('text', async (ctx)=>{
   });
   console.log(count);
   let x = count - 1;
+  ctx.replyWithHTML('<b>Mercedes</b>')
   for (let i=0; i<=x; i++){
-    ctx.replyWithHTML('<h2>Mercedes</h2>')
     await ctx.reply(rows[i].model, {
       reply_markup: {
           inline_keyboard: [

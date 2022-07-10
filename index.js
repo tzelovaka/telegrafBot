@@ -109,11 +109,12 @@ Rdata.on ('text', async (ctx)=>{
     }
   });
   console.log(count);
-  for (let i=0; i<=count; i++){
-    await ctx.reply(`${rows[i].Model}`, {
+  let x = count - 1;
+  for (let i=0; i<=x; i++){
+    await ctx.reply(rows[i].model, {
       reply_markup: {
           inline_keyboard: [
-              [ { text: '🔎', url: rows[i].Pic }]
+              [ { text: '🔎', url: rows[i].pic }]
           ]
         }
       })

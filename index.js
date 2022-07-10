@@ -12,7 +12,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  //sequelize.sync({ force: true })
+  sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД: ', e)
@@ -70,12 +70,13 @@ carMod.on ('text', async (ctx)=>{
 const carPic = new Composer()
 carPic.on ('text', async (ctx)=>{
   ctx.wizard.state.data.carPic = ctx.message.text;
-  console.log(`${ctx.wizard.state.data.carMod}`)
+  console.log(`${ctx.wizard.state.data.carMod} ${ctx.wizard.state.data.carMod}`)
   console.log(`${ctx.wizard.state.data.carPic}`)
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
-    const query = await /*ctx.wizard.state.data.carMar*/car.create({
+    const query = await car.create({
+    mark: `${ctx.wizard.state.data.carMar}`,
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });
@@ -105,7 +106,7 @@ Rdata.on ('text', async (ctx)=>{
   });*/
   const { count, rows } = await car.findAndCountAll({
     where: {
-      model: "E33"
+      mark: "Mercedes"
     }
   });
   console.log(count);

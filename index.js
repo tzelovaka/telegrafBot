@@ -109,7 +109,7 @@ readCar.on ('text', async (ctx)=>{
   });
   console.log(count);
   let x = count - 1;
-  await ctx.replyWithHTML('<b>Mercedes</b>')
+  await ctx.replyWithHTML(`<b>${ctx.wizard.state.data.Rdata}</b>`)
   for (let i=0; i<=x; i++){
     await ctx.reply(rows[i].model, {
       reply_markup: {

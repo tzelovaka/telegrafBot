@@ -12,7 +12,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД: ', e)
@@ -103,7 +103,7 @@ Rdata.on ('text', async (ctx)=>{
       model: "E32"
     }
   });*/
-  const { c, rows } = await Project.findAndCountAll({
+  const { c, rows } = await car.findAndCountAll({
     where: {
       model: E32
     }

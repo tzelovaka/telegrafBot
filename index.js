@@ -98,12 +98,18 @@ Rdata.on ('text', async (ctx)=>{
   //let i = 1
   const count = await car.count();
   console.log(count);
-  const amount = await car.count({
+  /*const amount = await car.count({
     where: {
       model: "E32"
     }
+  });*/
+  const { c, rows } = await Project.findAndCountAll({
+    where: {
+      model: E32
+    }
   });
-  console.log(amount);
+  console.log(c);
+  console.log(rows);
   for (let i=1; i<=count; i++){
   const query = await car.findByPk(i).then(async car=>{
     if(!car) return;

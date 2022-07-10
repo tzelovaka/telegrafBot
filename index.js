@@ -100,7 +100,7 @@ Rdata.on ('text', async (ctx)=>{
   console.log(count);
   const amount = await car.count({
     where: {
-      model: E32
+      model: "E32"
     }
   });
   console.log(amount);

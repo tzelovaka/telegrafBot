@@ -109,7 +109,7 @@ Rdata.on ('text', async (ctx)=>{
     }
   });
   console.log(count);
-  await ctx.reply(rows.model);
+  await ctx.reply(rows);
   console.log(rows);
   /*for (let i=1; i<=count; i++){
   const query = await car.findByPk(i).then(async car=>{

@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const audi = require('./model')
+const car = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 5000;
@@ -75,7 +75,7 @@ carPic.on ('text', async (ctx)=>{
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
-    const query = await ctx.wizard.state.data.carMar.create({
+    const query = await /*ctx.wizard.state.data.carMar*/car.create({
     model: `${ctx.wizard.state.data.carMod}`,
     pic: `${ctx.wizard.state.data.carPic}`
   }, { transaction: t });
@@ -96,18 +96,24 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
   //let i = 1
-  const count = await audi.count();
+  const count = await car.count();
   console.log(count);
+  const amount = await car.count({
+    where: {
+      model: E32
+    }
+  });
+  console.log(amount);
   for (let i=1; i<=count; i++){
-  const query = await audi.findByPk(i).then(async bmw=>{
-    if(!bmw) return;
+  const query = await car.findByPk(i).then(async bmw=>{
+    if(!car) return;
       //await ctx.reply (`${bmw.pic}`);
       //console.log(query);
       //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
-      await ctx.reply(`${audi.model}`, {
+      await ctx.reply(`${car.model}`, {
         reply_markup: {
             inline_keyboard: [
-                [ { text: '🔎', url: `${audi.pic}` }]
+                [ { text: '🔎', url: `${car.pic}` }]
             ]
           }
         })

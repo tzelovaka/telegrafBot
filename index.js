@@ -3,7 +3,7 @@ const car = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 5000;
-const { BOT_TOKEN, ADMIN_ID} = process.env;
+const { BOT_TOKEN, ADMIN_ID, MODERATOR_ID} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 
 if (BOT_TOKEN === undefined) {
@@ -23,7 +23,7 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
-  if (ctx.message.from.id != ADMIN_ID){
+  if (ctx.message.from.id != ADMIN_ID && ctx.message.from.id != MODERATOR_ID){
   ctx.reply('У вас нет доступа к этой функции!')
   return ctx.scene.leave()
 }

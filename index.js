@@ -23,6 +23,10 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
+  if (ctx.message.from.id != 543050615){
+  ctx.reply('У вас нет доступа к этой функции!')
+  return ctx.scene.leave()
+}
   ctx.wizard.state.data = {};
   await ctx.replyWithHTML('Выберите марку добавляемого авто', Markup.keyboard(
     [

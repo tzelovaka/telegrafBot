@@ -110,7 +110,13 @@ Rdata.on ('text', async (ctx)=>{
   });
   console.log(count);
   for (let i=0; i<=count; i++){
-  await ctx.reply(rows[i].model);
+    await ctx.reply(rows[i].model, {
+      reply_markup: {
+          inline_keyboard: [
+              [ { text: '🔎', url: rows[i].pic }]
+          ]
+        }
+      })
   }
   /*for (let i=1; i<=count; i++){
   const query = await car.findByPk(i).then(async car=>{

@@ -105,7 +105,7 @@ Rdata.on ('text', async (ctx)=>{
   });*/
   const { count, rows } = await car.findAndCountAll({
     where: {
-      model: "E32"
+      model: "E33"
     }
   });
   console.log(count);

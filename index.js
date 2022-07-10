@@ -96,19 +96,19 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
   //let i = 1
-  const count = await car.count();
-  console.log(count);
+  const co = await car.count();
+  console.log(co);
   /*const amount = await car.count({
     where: {
       model: "E32"
     }
   });*/
-  const { c, rows } = await car.findAndCountAll({
+  const { count, rows } = await car.findAndCountAll({
     where: {
       model: "E32"
     }
   });
-  console.log(c);
+  console.log(count);
   console.log(rows);
   for (let i=1; i<=count; i++){
   const query = await car.findByPk(i).then(async car=>{

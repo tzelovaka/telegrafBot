@@ -109,9 +109,9 @@ Rdata.on ('text', async (ctx)=>{
     }
   });
   console.log(count);
-  await ctx.reply(rows)
+  await ctx.reply(rows.model);
   console.log(rows);
-  for (let i=1; i<=count; i++){
+  /*for (let i=1; i<=count; i++){
   const query = await car.findByPk(i).then(async car=>{
     if(!car) return;
       await ctx.reply(`${car.model}`, {
@@ -123,7 +123,7 @@ Rdata.on ('text', async (ctx)=>{
         })
       
   }).catch(err=>console.log(err));
-}
+}*/
   return ctx.scene.leave()
 })
 const menuRdata = new Scenes.WizardScene('sceneRdata', Rdata)

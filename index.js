@@ -109,8 +109,9 @@ Rdata.on ('text', async (ctx)=>{
     }
   });
   console.log(count);
-  await ctx.reply(`${rows.model}`);
-  console.log(rows);
+  for (let i=0; i<=count; i++){
+  await ctx.reply(rows[i].model);
+  }
   /*for (let i=1; i<=count; i++){
   const query = await car.findByPk(i).then(async car=>{
     if(!car) return;

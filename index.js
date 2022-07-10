@@ -105,11 +105,8 @@ Rdata.on ('text', async (ctx)=>{
   });
   console.log(amount);
   for (let i=1; i<=count; i++){
-  const query = await car.findByPk(i).then(async bmw=>{
+  const query = await car.findByPk(i).then(async car=>{
     if(!car) return;
-      //await ctx.reply (`${bmw.pic}`);
-      //console.log(query);
-      //await ctx.replyWithHTML (`<a href="${bmw.pic}">${bmw.model}</a>`);
       await ctx.reply(`${car.model}`, {
         reply_markup: {
             inline_keyboard: [

@@ -12,7 +12,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД: ', e)
@@ -24,7 +24,7 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
+  await ctx.replyWithHTML('Выберите марку добавляемого авто', Markup.keyboard(
     [
         [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')],
         [Markup.button.callback('Chevrolet', 'btn_5'), Markup.button.callback('Chrysler', 'btn_6'), Markup.button.callback('Citroen', 'btn_7'), Markup.button.callback('Daewoo', 'btn_8')],
@@ -82,7 +82,7 @@ bot.command ('add', async (ctx) => ctx.scene.enter('sceneWizard'))
 const Rdata = new Composer()
 Rdata.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  await ctx.replyWithHTML('<b>Выберите марку добавляемого авто</b>', Markup.keyboard(
+  await ctx.replyWithHTML('Выберите марку искомого авто', Markup.keyboard(
     [
         [Markup.button.callback('Alfa Romeo', 'btn_1'), Markup.button.callback('Audi', 'btn_2'), Markup.button.callback('BMW', 'btn_3'), Markup.button.callback('Cadillac', 'btn_4')],
         [Markup.button.callback('Chevrolet', 'btn_5'), Markup.button.callback('Chrysler', 'btn_6'), Markup.button.callback('Citroen', 'btn_7'), Markup.button.callback('Daewoo', 'btn_8')],

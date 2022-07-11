@@ -22,7 +22,7 @@ try {
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 bot.command ('doc', async (ctx) => {
   try{
-  await ctx.replyWithDocument({ source: 'Перечень.pdf' })
+  await ctx.replyWithDocument({ source: 'Перечень авто.pdf' })
 } catch(e){console.error(e)}
 })
 

@@ -20,6 +20,7 @@ try {
 
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
+bot.command ('doc', (ctx) => ctx.replyWithDocument('Перечень.pdf'))
 
 const carStart = new Composer()
 carStart.on ('text', async (ctx)=>{

@@ -22,10 +22,8 @@ try {
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 bot.command ('doc', async (ctx) => {
   try{
-  await ctx.replyWithDocument({source: './Перечень.pdf'})
-  } catch(e){
-    console.log(e);
-  }
+  await ctx.replyWithDocument({ source: 'Перечень.pdf' })
+} catch(e){console.error(e)}
 })
 
 const carStart = new Composer()

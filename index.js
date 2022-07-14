@@ -28,8 +28,8 @@ baseEmpty.on ('text', async (ctx)=>{
   console.log(count);
   console.log(rows);
   if (count > 0) {
-    await ctx.reply('История уже создаётся!')
-  return ctx.scene.leave()
+    await ctx.reply ('История уже создаётся!');
+    return await ctx.scene.leave()
   }
   await ctx.reply ('Введите текст открывающего блока.');
   return ctx.wizard.next()

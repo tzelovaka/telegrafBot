@@ -29,7 +29,7 @@ baseEmpty.on ('text', async (ctx)=>{
   console.log(rows);
   if (count > 0) {
     await ctx.reply ('История уже создаётся!');
-    return await ctx.scene.leave()
+    return ctx.scene.leave()
   }
   await ctx.reply ('Введите текст открывающего блока.');
   return ctx.wizard.next()
@@ -50,7 +50,7 @@ await t.commit('commit');
   await t.rollback();
 }
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
-  return ctx.wizard.next()
+  return ctx.scene.leave()
 })
 
 

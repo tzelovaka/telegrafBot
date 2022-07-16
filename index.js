@@ -70,6 +70,27 @@ ctx.wizard.state.data = {};
     await ctx.reply ('Надо создать блок!');
     return ctx.scene.leave()
   }
+  await ctx.reply ('Выберите блок из доступных:');
+
+  const co = await storybl.count();
+  console.log(co);
+  try{
+  const { count, rows } = await storybl.findAndCountAll();
+  console.log(count);
+  let x = count - 1;
+  for (let i=0; i<=x; i++){
+    await ctx.reply(rows[i].bl, {
+      reply_markup: {
+          inline_keyboard: [
+              [ { text: '✔', callback_data: 'btn'}]
+          ]
+        }
+      })
+  }
+} catch (e){
+  console.log(error);
+  await ctx.replyWithHTML('<i>Ошибка!</i>')
+}
   await ctx.reply ('Введите текст ссылки.');
   return ctx.wizard.next()
 })

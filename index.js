@@ -1,6 +1,6 @@
-const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const storybl = require('./model')
-const storylin = require('./model')
+const { Telegraf, Scenes, Composer, session} = require('telegraf');
+const storybl = require('./modebl')
+const storylin = require('./modelink')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
@@ -79,8 +79,8 @@ blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
   const t = await sequelize.transaction();
   try{
-    const result = await sequelize.transaction(async (t) => {
-    const query = await storylin.create({
+    const resul = await sequelize.transaction(async (t) => {
+    const quer = await storylin.create({
     lin: `${ctx.wizard.state.data.blockLink}`
   }, { transaction: t });
 })

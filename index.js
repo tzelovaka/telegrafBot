@@ -1,5 +1,6 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const storybl = require('./model')
+const storylin = require('./model')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
@@ -53,12 +54,49 @@ await t.commit('commit');
   return ctx.scene.leave()
 })
 
-
 const menuCreate = new Scenes.WizardScene('sceneCreate', baseEmpty, baseSave)
 const stage = new Scenes.Stage ([menuCreate])
 bot.use(session())
 bot.use(stage.middleware())
-bot.command ('read', async (ctx) => ctx.scene.enter('sceneCreate'))
+bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
+
+const blockEmpty = new Composer()
+blockEmpty.on ('text', async (ctx)=>{
+ctx.wizard.state.data = {};
+  const { count, rows } = await storybl.findAndCountAll();
+  console.log(count);
+  console.log(rows);
+  if (count < 1) {
+    await ctx.reply ('Надо создать блок!');
+    return ctx.scene.leave()
+  }
+  await ctx.reply ('Введите текст ссылки.');
+  return ctx.wizard.next()
+})
+
+const blockLink = new Composer()
+blockLink.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.blockLink = ctx.message.text;
+  const t = await sequelize.transaction();
+  try{
+    const result = await sequelize.transaction(async (t) => {
+    const query = await storylin.create({
+    lin: `${ctx.wizard.state.data.blockLink}`
+  }, { transaction: t });
+})
+await t.commit('commit');
+} catch (error) {
+  await t.rollback();
+}
+  await ctx.reply ('Вы успешно добавили ссылку.');
+  return ctx.scene.leave()
+})
+
+const menuLink = new Scenes.WizardScene('sceneLink', blockEmpty, blockLink)
+const stagee = new Scenes.Stage ([menuLink])
+bot.use(session())
+bot.use(stagee.middleware())
+bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 bot.launch()
 

@@ -81,7 +81,7 @@ blockLink.on ('text', async (ctx)=>{
   try{
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
-    lin: `${ctx.wizard.state.data.blockLink}`
+    link: `${ctx.wizard.state.data.blockLink}`
   }, { transaction: t });
 })
 await t.commit('commit');

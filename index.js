@@ -1,9 +1,8 @@
-const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const {CallbackData} = require('telegraf-callback-data');
+const { Telegraf, Scenes, Composer, session, Markup, Context} = require('telegraf');
+const { CallbackData } = require('telegraf-callback-data');
 const storybl = require('./modebl')
 const storylin = require('./modelink')
 const sequelize = require('./db');
-const { INTEGER } = require('sequelize');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
@@ -63,7 +62,7 @@ bot.use(session())
 bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
-const callData = new CallbackData<{ type: INTEGER }>(
+const callData = new CallbackData<{ type: string, }>(
   'storyblId',
   ['storyblId'] 
 );

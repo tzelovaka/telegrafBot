@@ -80,8 +80,10 @@ ctx.wizard.state.data = {};
   console.log(co);
   try{
   let x = count - 1;
+  let o = i;
   for (let i=0; i<=x; i++){
-    await ctx.reply(i)
+    o++
+    await ctx.reply(o)
     await ctx.reply(rows[i].bl/*, Markup.inlineKeyboard(
       [
           [Markup.button.callback('+', callData.create({

@@ -83,13 +83,14 @@ ctx.wizard.state.data = {};
   console.log(count);
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.reply(rows[i].bl, Markup.inlineKeyboard(
+    await ctx.replyWithHTML('<b>', i, '</b>')
+    await ctx.reply(rows[i].bl/*, Markup.inlineKeyboard(
       [
           [Markup.button.callback('+', callData.create({
             storyblId: rows[i].id,
           }))]
       ]
-    ))
+    )*/)
   }
 } catch (e){
   console.log(e);

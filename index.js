@@ -66,10 +66,6 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-const callData = new CallbackData<{ type: INTEGER }>(
-  'storyblId',
-  ['storyblId'] 
-);
   const { count, rows } = await storybl.findAndCountAll();
   console.log(count);
   console.log(rows);
@@ -81,6 +77,10 @@ const callData = new CallbackData<{ type: INTEGER }>(
 
   const co = await storybl.count();
   console.log(co);
+  const callData = new CallbackData<{ type: INTEGER }>(
+    'storyblId',
+    ['storyblId'] 
+  );
   try{
   const { count, rows } = await storybl.findAndCountAll();
   console.log(count);

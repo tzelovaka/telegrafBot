@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup, Context} = require('telegraf');
-const { CallbackData } = require('telegraf-callback-data');
+const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl')
 const storylin = require('./modelink')
 const sequelize = require('./db');

@@ -1,7 +1,9 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
+const {CallbackData} = require('telegraf-callback-data');
 const storybl = require('./modebl')
 const storylin = require('./modelink')
 const sequelize = require('./db');
+const { INTEGER } = require('sequelize');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
@@ -64,6 +66,10 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
+const callData = new CallbackData<{ type: INTEGER }>(
+  'storyblId',
+  ['storyblId'] 
+);
   const { count, rows } = await storybl.findAndCountAll();
   console.log(count);
   console.log(rows);
@@ -82,16 +88,19 @@ ctx.wizard.state.data = {};
   for (let i=0; i<=x; i++){
     await ctx.reply(rows[i].bl, Markup.inlineKeyboard(
       [
-          [Markup.button.callback('+', 'btn')]
+          [Markup.button.callback('+', callData.create({
+            storybl: rows[i].id,
+          }))]
       ]
     ))
   }
-  /**/
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
-function blockChoice (name) {
+const parsedCallbackData = callData.parse(callData);
+console.log(parsedCallbackData);
+/*function blockChoice (name) {
   bot.action (name, async (ctx) => {
     try {
       await ctx.answerCbQuery()
@@ -101,7 +110,7 @@ function blockChoice (name) {
     }
   })
 }
-blockChoice ('btn')
+blockChoice ('btn')*/
   return ctx.wizard.next()
 })
 

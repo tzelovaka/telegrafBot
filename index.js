@@ -19,6 +19,7 @@ try {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
 
+storybl.hasMany(storylin);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 

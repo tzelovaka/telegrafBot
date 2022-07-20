@@ -80,13 +80,11 @@ ctx.wizard.state.data = {};
   console.log(count);
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.reply(rows[i].bl, {
-      reply_markup: {
-          inline_keyboard: [
-              [ { text: '✔', callback: 'btn'}]
-          ]
-        }
-      })
+    await ctx.reply(rows[i].bl, Markup.keyboard(
+      [
+          [Markup.button.callback('+', 'btn')]
+      ]
+    ))
   }
   function blockChoice (name) {
     bot.action (name, async (ctx) => {

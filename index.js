@@ -62,10 +62,7 @@ bot.use(session())
 bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
-const callData = new CallbackData<{ type: string, }>(
-  'storyblId',
-  ['storyblId'] 
-);
+const callData = new CallbackData('storyblId', ['storyblId']);
 
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{

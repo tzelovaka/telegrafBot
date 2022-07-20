@@ -98,7 +98,7 @@ ctx.wizard.state.data = {};
   }
   blockChoice ('btn')*/
 } catch (e){
-  console.log(error);
+  console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
   return ctx.wizard.next()

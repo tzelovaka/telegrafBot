@@ -86,7 +86,7 @@ ctx.wizard.state.data = {};
       ]
     ))
   }
-  function blockChoice (name) {
+  /*function blockChoice (name) {
     bot.action (name, async (ctx) => {
       try {
         await ctx.answerCbQuery()
@@ -96,7 +96,7 @@ ctx.wizard.state.data = {};
       }
     })
   }
-  blockChoice ('btn')
+  blockChoice ('btn')*/
 } catch (e){
   console.log(error);
   await ctx.replyWithHTML('<i>Ошибка!</i>')

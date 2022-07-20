@@ -95,7 +95,7 @@ ctx.wizard.state.data = {};
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
-const parsedCallbackData = callData.parse(callData);
+const parsedCallbackData = callData.parse(callbackQuery.data);
 console.log(parsedCallbackData);
 /*function blockChoice (name) {
   bot.action (name, async (ctx) => {

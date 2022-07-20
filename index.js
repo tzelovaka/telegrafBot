@@ -91,12 +91,23 @@ ctx.wizard.state.data = {};
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
+function blockChoice (name) {
+  bot.action (name, async (ctx) => {
+    try {
+      await ctx.answerCbQuery()
+      console.log(`${ctx.message.from.message_id}`);
+    } catch (error) {
+      
+    }
+  })
+}
+blockChoice ('btn')
   return ctx.wizard.next()
 })
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = ctx.message.text;
+  ctx.wizard.state.data.blockChoice = ctx.callbackQuery.data;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()
@@ -121,17 +132,6 @@ await t.commit('commit');
   return ctx.scene.leave()
 })
 
-function blockChoice (name) {
-  bot.action (name, async (ctx) => {
-    try {
-      await ctx.answerCbQuery()
-      console.log(`${ctx.message.from.message_id}`);
-    } catch (error) {
-      
-    }
-  })
-}
-blockChoice ('btn')
 const menuLink = new Scenes.WizardScene('sceneLink', blockEmpty, blockChoice, blockLink)
 const stagee = new Scenes.Stage ([menuLink])
 bot.use(session())

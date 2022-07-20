@@ -82,21 +82,11 @@ ctx.wizard.state.data = {};
   for (let i=0; i<=x; i++){
     await ctx.reply(rows[i].bl, Markup.inlineKeyboard(
       [
-          [Markup.button.callback(i, 'btn')]
+          [Markup.button.callback('+', 'btn')]
       ]
     ))
   }
-  /*function blockChoice (name) {
-    bot.action (name, async (ctx) => {
-      try {
-        await ctx.answerCbQuery()
-        console.log(`${ctx.message.from.message_id}`);
-      } catch (error) {
-        
-      }
-    })
-  }
-  blockChoice ('btn')*/
+  /**/
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
@@ -131,6 +121,17 @@ await t.commit('commit');
   return ctx.scene.leave()
 })
 
+function blockChoice (name) {
+  bot.action (name, async (ctx) => {
+    try {
+      await ctx.answerCbQuery()
+      console.log(`${ctx.message.from.message_id}`);
+    } catch (error) {
+      
+    }
+  })
+}
+blockChoice ('btn')
 const menuLink = new Scenes.WizardScene('sceneLink', blockEmpty, blockChoice, blockLink)
 const stagee = new Scenes.Stage ([menuLink])
 bot.use(session())

@@ -95,9 +95,9 @@ function blockChoice (name) {
   bot.action (name, async (ctx) => {
     try {
       await ctx.answerCbQuery()
-      console.log(`${ctx.message.from.message_id}`);
+      console.log('привет');
     } catch (error) {
-      
+      console.log(e);
     }
   })
 }

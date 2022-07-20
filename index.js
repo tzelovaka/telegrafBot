@@ -83,7 +83,7 @@ ctx.wizard.state.data = {};
     await ctx.reply(rows[i].bl, {
       reply_markup: {
           inline_keyboard: [
-              [ { text: '✔', callback_data: 'btn'}]
+              [ { text: '✔', callback: 'btn'}]
           ]
         }
       })

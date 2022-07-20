@@ -89,7 +89,7 @@ const callData = new CallbackData<{ type: INTEGER }>(
     await ctx.reply(rows[i].bl, Markup.inlineKeyboard(
       [
           [Markup.button.callback('+', callData.create({
-            storybl: rows[i].id,
+            storyblId: rows[i].id,
           }))]
       ]
     ))

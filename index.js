@@ -88,11 +88,29 @@ ctx.wizard.state.data = {};
         }
       })
   }
+  function blockChoice (name) {
+    bot.action (name, async (ctx) => {
+      try {
+        await ctx.answerCbQuery()
+        console.log(`${ctx.message.from.message_id}`);
+      } catch (error) {
+        
+      }
+    })
+  }
+  blockChoice ('btn')
 } catch (e){
   console.log(error);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
+  return ctx.wizard.next()
+})
+
+const blockChoice = new Composer()
+blockChoice.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.blockChoice = ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
+  
   return ctx.wizard.next()
 })
 
@@ -114,7 +132,7 @@ await t.commit('commit');
   return ctx.scene.leave()
 })
 
-const menuLink = new Scenes.WizardScene('sceneLink', blockEmpty, blockLink)
+const menuLink = new Scenes.WizardScene('sceneLink', blockEmpty, blockChoice, blockLink)
 const stagee = new Scenes.Stage ([menuLink])
 bot.use(session())
 bot.use(stagee.middleware())

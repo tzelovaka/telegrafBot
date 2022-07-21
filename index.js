@@ -21,6 +21,7 @@ try {
 }
 
 storybl.hasMany(storylin);
+storylin.hasOne(storybl);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 
@@ -62,7 +63,7 @@ bot.use(session())
 bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
-const callData = new CallbackData('storyblId', ['storyblId']);
+//const callData = new CallbackData('storyblId', ['storyblId']);
 
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
@@ -81,7 +82,7 @@ ctx.wizard.state.data = {};
   try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.reply(`Блок №${rows[i].id}`)
+    await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
     await ctx.reply(rows[i].bl/*, Markup.inlineKeyboard(
       [
           [Markup.button.callback('+', callData.create({

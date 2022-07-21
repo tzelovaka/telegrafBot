@@ -211,10 +211,10 @@ bot.command ('play', async (ctx) => {
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
   console.log(count);
   console.log(rows);
-  let x = c - 1;
+  let x = count - 1;
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
-    ctx.reply('+', Markup.inlineKeyboard(
+    await ctx.reply('+', Markup.inlineKeyboard(
     [
       [Markup.button.callback(`${rows[i].link}`, 'btn')]
     ]

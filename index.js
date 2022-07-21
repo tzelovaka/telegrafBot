@@ -206,6 +206,11 @@ bot.use(session())
 bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
+bot.command ('play', async (ctx) => {
+  const play = await storybl.findOne({where: {linid: 0}});
+  await ctx.reply(`${storybl.bl}`)
+})
+
 bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))

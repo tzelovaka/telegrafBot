@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const { CallbackData } = require('@bot-base/callback-data');
+//const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl')
 const storylin = require('./modelink')
 const sequelize = require('./db');
@@ -21,7 +21,7 @@ try {
 }
 
 storybl.hasMany(storylin);
-storylin.hasOne(storybl);
+//storylin.hasOne(storybl);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 

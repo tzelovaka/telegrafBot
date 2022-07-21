@@ -126,7 +126,7 @@ blockLink.on ('text', async (ctx)=>{
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,
-    storyblId: ctx.wizard.state.data.blockChoice
+    storyblId: `${ctx.wizard.state.data.blockChoice}`
   }, { transaction: t });
 })
 await t.commit('commit');

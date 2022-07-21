@@ -212,7 +212,7 @@ bot.command ('play', async (ctx) => {
   let x = c - 1;
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
-    await ctx.reply(Markup.inlineKeyboard(
+    await ctx.reply('+', Markup.inlineKeyboard(
     [
       [Markup.button.callback(`${link[i].link}`, 'btn')]
     ]

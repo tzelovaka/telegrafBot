@@ -14,7 +14,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -81,7 +81,7 @@ ctx.wizard.state.data = {};
   try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.reply(i)
+    await ctx.reply(rows[i].id)
     await ctx.reply(rows[i].bl/*, Markup.inlineKeyboard(
       [
           [Markup.button.callback('+', callData.create({

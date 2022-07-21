@@ -46,6 +46,7 @@ baseSave.on ('text', async (ctx)=>{
   try{
     const result = await sequelize.transaction(async (t) => {
     const query = await storybl.create({
+    linid: null,
     bl: `${ctx.wizard.state.data.baseSave}`
   }, { transaction: t });
 })

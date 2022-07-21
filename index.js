@@ -208,15 +208,15 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
   const row = await storybl.findOne({where: {linid: 0}});
-  const {c, link} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
-  console.log(c);
-  console.log(link);
+  const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
+  console.log(count);
+  console.log(rows);
   let x = c - 1;
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     ctx.reply('+', Markup.inlineKeyboard(
     [
-      [Markup.button.callback(`${link[i].link}`, 'btn')]
+      [Markup.button.callback(`${rows[i].link}`, 'btn')]
     ]
   ))
   }

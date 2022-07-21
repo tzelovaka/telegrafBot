@@ -74,7 +74,7 @@ ctx.wizard.state.data = {};
     await ctx.reply ('Надо создать блок!');
     return ctx.scene.leave()
   }
-  await ctx.reply ('Выберите блок из доступных:');
+  await ctx.reply ('Выберите блок из доступных и введите его номер (Например: 7):');
 
   const co = await storybl.count();
   console.log(co);
@@ -132,6 +132,8 @@ blockLink.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
+  await ctx.reply ('Ошибка! Попробуйте сначала.');
+  return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили ссылку.');
   return ctx.scene.leave()

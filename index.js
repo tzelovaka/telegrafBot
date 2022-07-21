@@ -81,7 +81,7 @@ ctx.wizard.state.data = {};
   try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.reply(rows[i].id)
+    await ctx.reply(`${rows[i].id} ✔`)
     await ctx.reply(rows[i].bl/*, Markup.inlineKeyboard(
       [
           [Markup.button.callback('+', callData.create({

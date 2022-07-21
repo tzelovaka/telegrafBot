@@ -208,7 +208,15 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
   const row = await storybl.findOne({where: {linid: 0}});
-  await ctx.reply(`${row.bl}`)
+  const {c, link} = await storylin.findAndCountAll ({where: {storyblId: `${row.id}`}})
+  await ctx.reply(`${row.bl}`);
+  for (let i = 1; i <= c; i++){
+    await ctx.reply(Markup.inlineKeyboard(
+    [
+      [Markup.button.callback(`${link[i].link}`, 'btn')]
+    ]
+  ))
+  }
 })
 
 bot.launch()

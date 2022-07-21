@@ -146,6 +146,65 @@ bot.use(session())
 bot.use(stagee.middleware())
 bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
+
+const linkEmpty = new Composer()
+linkEmpty.on ('text', async (ctx)=>{
+ctx.wizard.state.data = {};
+  const { count, rows } = await storylin.findAndCountAll();
+  console.log(count);
+  console.log(rows);
+  if (count < 1) {
+    await ctx.reply ('Надо создать ссылку!');
+    return ctx.scene.leave()
+  }
+  await ctx.reply ('Выберите ссылку из доступных, за которой последует блок и введите её номер (Например: 7):');
+  try{
+  let x = count - 1;
+  for (let i=0; i<=x; i++){
+    await ctx.replyWithHTML(`<b>Выбор №${rows[i].id}</b>`)
+    await ctx.reply(rows[i].link)
+  }
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>')
+}
+  return ctx.wizard.next()
+})
+
+const linkChoice = new Composer()
+linkChoice.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.linkChoice = ctx.message.text;
+  await ctx.reply ('Введите текст блока.');
+  return ctx.wizard.next()
+})
+
+const linkBlock = new Composer()
+linkBlock.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.linkBlock = ctx.message.text;
+  const t = await sequelize.transaction();
+  try{
+    const resul = await sequelize.transaction(async (t) => {
+    const quer = await storybl.create({
+    linid: `${ctx.wizard.state.data.linkChoice}`,
+    bl: `${ctx.wizard.state.data.linkBlock}`
+  }, { transaction: t });
+})
+await t.commit('commit');
+} catch (error) {
+  await t.rollback();
+  await ctx.reply ('Ошибка! Попробуйте сначала.');
+  return ctx.scene.leave()
+}
+  await ctx.reply ('Вы успешно добавили ссылку.');
+  return ctx.scene.leave()
+})
+
+const menuBlock = new Scenes.WizardScene('sceneBlock', linkEmpty, linkChoice, linkBlock)
+const stager = new Scenes.Stage ([menuBlock])
+bot.use(session())
+bot.use(stager.middleware())
+bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
+
 bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))

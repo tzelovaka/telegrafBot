@@ -213,13 +213,14 @@ bot.command ('play', async (ctx) => {
   console.log(rows);
   let x = count - 1;
   await ctx.reply(`${row.bl}`);
-  let i = 0;
+  let o = 0;
   const inlineKeyboard = Markup.inlineKeyboard(
     [
-    [Markup.button.callback(`${rows[i].link}`, 'btn')]
+    [Markup.button.callback(`${rows[o].link}`, 'btn')]
   ])
   for (let i = 0; i <= x; i++){
     await ctx.reply(inlineKeyboard)
+    o++
   }
 })
 

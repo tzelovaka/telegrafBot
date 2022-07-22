@@ -218,7 +218,7 @@ bot.command ('play', async (ctx) => {
       [
       [Markup.button.callback(`${rows[i].link}`, 'btn')]
     ])
-    await ctx.reply(inlineKeyboard)
+    await ctx.reply(`${inlineKeyboard}`)
   }
 })
 

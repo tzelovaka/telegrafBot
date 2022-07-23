@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const { CallbackData } = require('callback-data');
+const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl')
 const storylin = require('./modelink')
 const sequelize = require('./db');
@@ -7,6 +7,7 @@ require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
+const flagBtn = new CallbackData('flagBtn', ['number']);
 
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
@@ -64,7 +65,6 @@ bot.use(session())
 bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
-//const callData = new CallbackData('storyblId', ['storyblId']);
 
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
@@ -84,31 +84,12 @@ ctx.wizard.state.data = {};
   let x = count - 1;
   for (let i=0; i<=x; i++){
     await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
-    await ctx.reply(rows[i].bl/*, Markup.inlineKeyboard(
-      [
-          [Markup.button.callback('+', callData.create({
-            storyblId: rows[i].id,
-          }))]
-      ]
-    )*/)
+    await ctx.reply(rows[i].bl)
   }
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
-/*const parsedCallbackData = callData.parse(ctx.callbackQuery.data);
-console.log(parsedCallbackData);
-function blockChoice (name) {
-  bot.action (name, async (ctx) => {
-    try {
-      await ctx.answerCbQuery()
-      console.log('привет');
-    } catch (error) {
-      console.log(e);
-    }
-  })
-}
-blockChoice ('btn')*/
   return ctx.wizard.next()
 })
 
@@ -207,7 +188,6 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
-  const flagBtn = new CallbackData('flagBtn', 'number');
   const row = await storybl.findOne({where: {linid: 0}});
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
   console.log(count);

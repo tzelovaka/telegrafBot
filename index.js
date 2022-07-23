@@ -210,24 +210,24 @@ bot.command ('play', async (ctx) => {
 
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+    let v = number
     /*await ctx.reply(`You ordered #${number}`, {
       show_alert: true
     });*/
   const {con, rov} = await storybl.findAndCountAll ()
-  let v = number
-  while (v <= con) {
-  const ro = await storybl.findOne({where: {linid: number}});
-  const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: ro.id}})
-  let b = count - 1;
+  /*while (v <= con) {*/
+  const ro = await storybl.findOne({where: {linid: `${number}`}});
+  const {c, r} = await storylin.findAndCountAll ({where: {storyblId: `${ro.id}`}})
+  let b = c - 1;
   await ctx.reply(`${ro.bl}`)
   for (let l = 0; l <= b; l++) {
-    await ctx.reply(`${rows[l].link}`, Markup.inlineKeyboard(
+    await ctx.reply(`${r[l].link}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', 'btn')]
     ]))
   }
-  v++
-  }
+  //v++
+  //}
 })
 
 bot.launch()

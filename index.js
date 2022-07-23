@@ -191,8 +191,8 @@ bot.command ('play', async (ctx) => {
   const {con, rov} = await storybl.findAndCountAll ();
   let u = 1; //link's id
   let p = 0; //linid
-  let t = con - 1; //counter
-  while (p <= t){
+  let t = con; //counter
+  while (p < t){
   let v = -1;
   const row = await storybl.findOne({where: {linid: p}});
   console.log(`${row.bl}`);
@@ -216,7 +216,7 @@ bot.command ('play', async (ctx) => {
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    let v = number
+    v = number
 })
   if (v = number) continue
   p = v;

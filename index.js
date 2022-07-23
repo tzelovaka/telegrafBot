@@ -213,10 +213,10 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     await ctx.reply(`You ordered #${number}`/*, {
       show_alert: true
     }*/);
-  /*const {con, rov} = await storybl.findAndCountAll ()
-  let v = 1
+  const {con, rov} = await storybl.findAndCountAll ()
+  let v = number
   while (v <= con) {
-  const ro = await storybl.findOne({where: {linid: v}});
+  const ro = await storybl.findOne({where: {linid: number}});
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: ro.id}})
   let b = count - 1;
   await ctx.reply(`${ro.bl}`)
@@ -227,7 +227,7 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     ]))
   }
   v++
-  }*/
+  }
 })
 
 bot.launch()

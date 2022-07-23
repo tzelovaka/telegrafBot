@@ -218,7 +218,27 @@ bot.command ('play', async (ctx) => {
       [
       [Markup.button.callback('👆', 'btn')]
     ])
-  )}
+  )
+
+}
+  bot.action('btn', async (ctx)=>{
+    const ro = await storybl.findOne({where: {linid: 1}});
+     await ctx.reply(`${ro.bl}`)
+  })
+  /*function addActionBot (name){
+    bot.action(name, async (ctx)=>{
+      try{
+        await ctx.answerCbQuery()
+        console.log()
+        for (; ;) {
+          
+        }
+      }catch(e){
+        console.log(e);
+      }
+    })
+  }
+  addActionBot ('btn')*/
 })
 
 bot.launch()

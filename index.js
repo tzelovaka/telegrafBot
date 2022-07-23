@@ -1,5 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-//const { CallbackData } = require('@bot-base/callback-data');
+const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl')
 const storylin = require('./modelink')
 const sequelize = require('./db');
@@ -207,38 +207,44 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
+  const flagBtn = new CallbackData('flagBtn', 'number');
   const row = await storybl.findOne({where: {linid: 0}});
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
   console.log(count);
   console.log(rows);
   let x = count - 1;
+  let u = 1;
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback('👆', 'btn')]
-    ])
+      [Markup.button.callback('👆', flagBtn.create({
+        number: u}))]
+    ]
+    )
   )
-
+  u++;
 }
-  bot.action('btn', async (ctx)=>{
-    const ro = await storybl.findOne({where: {linid: 1}});
-     await ctx.reply(`${ro.bl}`)
-  })
-  /*function addActionBot (name){
-    bot.action(name, async (ctx)=>{
-      try{
-        await ctx.answerCbQuery()
-        console.log()
-        for (; ;) {
-          
-        }
-      }catch(e){
-        console.log(e);
-      }
-    })
+})
+
+bot.action('btn', async (ctx)=>{
+  const number = flagBtn.parse(ctx.callbackQuery.data);
+  await ctx.answerCbQuery(`Вы выбрали №${number}`);
+  /*const {con, rov} = await storybl.findAndCountAll ()
+  let v = 1
+  while (v <= con) {
+  const ro = await storybl.findOne({where: {linid: v}});
+  const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: ro.id}})
+  let b = count - 1;
+  await ctx.reply(`${ro.bl}`)
+  for (let l = 0; l <= b; l++) {
+    await ctx.reply(`${rows[l].link}`, Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('👆', 'btn')]
+    ]))
   }
-  addActionBot ('btn')*/
+  v++
+  }*/
 })
 
 bot.launch()

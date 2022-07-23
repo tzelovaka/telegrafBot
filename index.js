@@ -210,9 +210,9 @@ bot.command ('play', async (ctx) => {
 
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    await ctx.answerCbQuery(`You ordered #${number}`, {
+    await ctx.answerCbQuery(`You ordered #${number}`/*, {
       show_alert: true
-    });
+    }*/);
   /*const {con, rov} = await storybl.findAndCountAll ()
   let v = 1
   while (v <= con) {

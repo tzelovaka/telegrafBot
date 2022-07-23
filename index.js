@@ -208,7 +208,7 @@ bot.command ('play', async (ctx) => {
 }
 })
 
-bot.action('btn', flagBtn.filter({action: 'true'}), async (ctx)=>{
+bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
     await ctx.answerCbQuery(`You ordered #${number}`, {
       show_alert: true

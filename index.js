@@ -188,6 +188,7 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
+  try{
   const {con, rov} = await storybl.findAndCountAll ();
   console.log(rov);
   let u = 1; //link's id
@@ -221,6 +222,9 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
 })
   if (v = number) continue
   p = v;
+}
+}catch(e){
+  console.log(e);
 }
 })
 

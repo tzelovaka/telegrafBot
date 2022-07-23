@@ -188,7 +188,7 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
-  const {con, rov} = await storybl.findAndCountAll ()
+  const {con, rov} = await storybl.findAndCountAll ();
   let u = 1; //link's id
   let p = 0; //linid
   let t = con - 1; //counter
@@ -196,7 +196,7 @@ bot.command ('play', async (ctx) => {
   let v = -1;
   const row = await storybl.findOne({where: {linid: p}});
   console.log(`${row.bl}`);
-  const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
+  const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});
   console.log(count);
   let x = count - 1;
   

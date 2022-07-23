@@ -188,17 +188,14 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
-  const {con, rov} = await storybl.findAndCountAll ()
-  let u = 1; //link's id
-  let p = 0; //linid
-  let t = con - 1; //counter
-  while (p <= t){
-  let v = -1;
+  let u = 1;
+  let p = 0;
+
   const row = await storybl.findOne({where: {linid: p}});
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
   console.log(count);
   let x = count - 1;
-  
+
 
   await ctx.reply(`${row.bl}`);
 
@@ -216,10 +213,24 @@ bot.command ('play', async (ctx) => {
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
     let v = number
+    /*await ctx.reply(`You ordered #${number}`, {
+      show_alert: true
+    });*/
+  const {con, rov} = await storybl.findAndCountAll ()
+  /*while (v <= con) {*/
+  const ro = await storybl.findOne({where: {linid: `${number}`}});
+  const {c, r} = await storylin.findAndCountAll ({where: {storyblId: `${ro.id}`}})
+  let b = c - 1;
+  await ctx.reply(`${ro.bl}`)
+  for (let l = 0; l <= b; l++) {
+    await ctx.reply(`${r[l].link}`, Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('👆', 'btn')]
+    ]))
+  }
+  //v++
+  //}
 })
-  if (v = number) continue
-  p = v;
-}
 })
 
 bot.launch()

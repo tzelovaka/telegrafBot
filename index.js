@@ -7,7 +7,7 @@ require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
-const flagBtn = new CallbackData('flagBtn', ['number']);
+const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
 
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
@@ -199,7 +199,8 @@ bot.command ('play', async (ctx) => {
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', flagBtn.create({
-        number: u}))]
+        number: u,
+        action: 'true'}))]
     ]
     )
   )
@@ -207,10 +208,11 @@ bot.command ('play', async (ctx) => {
 }
 })
 
-bot.action('btn', async (ctx)=>{
-  const number = flagBtn.parse(ctx.callbackQuery.data);
-  await ctx.answerCbQuery();
-  await ctx.reply(`Counter: ${number}`)
+bot.action('btn', flagBtn.filter({action: 'true'}), async (ctx)=>{
+    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+    await ctx.answerCbQuery(`You ordered #${number}`, {
+      show_alert: true
+    });
   /*const {con, rov} = await storybl.findAndCountAll ()
   let v = 1
   while (v <= con) {

@@ -209,7 +209,8 @@ bot.command ('play', async (ctx) => {
 
 bot.action('btn', async (ctx)=>{
   const number = flagBtn.parse(ctx.callbackQuery.data);
-  await ctx.answerCbQuery(`Вы выбрали №${number}`);
+  await ctx.answerCbQuery();
+  await ctx.reply(`Counter: ${number}`)
   /*const {con, rov} = await storybl.findAndCountAll ()
   let v = 1
   while (v <= con) {

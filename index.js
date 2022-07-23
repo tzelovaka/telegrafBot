@@ -189,6 +189,7 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
   const {con, rov} = await storybl.findAndCountAll ();
+  console.log(rov);
   let u = 1; //link's id
   let p = 0; //linid
   let t = con; //counter

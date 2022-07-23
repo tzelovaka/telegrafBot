@@ -195,6 +195,7 @@ bot.command ('play', async (ctx) => {
   while (p <= t){
   let v = -1;
   const row = await storybl.findOne({where: {linid: p}});
+  console.log(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
   console.log(count);
   let x = count - 1;

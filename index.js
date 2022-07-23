@@ -188,13 +188,17 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
-  const row = await storybl.findOne({where: {linid: 0}});
+  let u = 1;
+  let p = 0;
+
+  const row = await storybl.findOne({where: {linid: p}});
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}})
   console.log(count);
-  console.log(rows);
   let x = count - 1;
-  let u = 1;
+
+
   await ctx.reply(`${row.bl}`);
+
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
@@ -206,7 +210,6 @@ bot.command ('play', async (ctx) => {
   )
   u++;
 }
-})
 
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
@@ -228,6 +231,7 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   }
   //v++
   //}
+})
 })
 
 bot.launch()

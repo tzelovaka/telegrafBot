@@ -189,15 +189,14 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
   try{
-  const {count, rows} = await storybl.findAndCountAll ();
-  console.log(count);
+  //const {count, rows} = await storybl.findAndCountAll ();
+  //console.log(count);
   let u = 1; //link's id (counter)
   let p = 0; //linid
-  let t = count; //counter
-  
-  while (p < t){
-  let v = -1;
-  let q = -2;
+  //let t = count; //counter
+  btnLoop();
+//while (p < t){
+  async function btnLoop() {
   const row = await storybl.findOne({where: {linid: p}});
   console.log(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});
@@ -218,13 +217,13 @@ bot.command ('play', async (ctx) => {
   )
   u++;
 }
-  if (v = q) continue
-  p = v;
+  //if (v = q) continue
+  //p = v;
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  q = number
-  v = number
+  p = number
+  btnLoop();
 })
 }catch(e){
   console.log(e);

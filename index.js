@@ -191,13 +191,7 @@ bot.command ('play', async (ctx) => {
   var u = 1; //link's id (counter)
   var p = 0; //linid
   btnLoop();
-})
-bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  p = number
-  btnLoop();
-})
-async function btnLoop() {
+  async function btnLoop() {
   const row = await storybl.findOne({where: {linid: p}});
   console.log(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});
@@ -218,6 +212,12 @@ async function btnLoop() {
   }
   console.log(u);
 }
+bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  p = number
+  btnLoop();
+})
+})
 
 bot.launch()
 

@@ -208,7 +208,6 @@ bot.command ('play', async (ctx) => {
     )
   )
   }
-  console.log(u);
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);

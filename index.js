@@ -188,8 +188,8 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
-  let u = 1; //link's id (counter)
-  let p = 0; //linid
+  var u = 1; //link's id (counter)
+  var p = 0; //linid
   btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {linid: p}});

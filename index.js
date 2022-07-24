@@ -188,7 +188,6 @@ bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
-  var u = 1; //link's id (counter)
   var p = 0; //linid
   btnLoop();
   async function btnLoop() {
@@ -203,12 +202,11 @@ bot.command ('play', async (ctx) => {
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', flagBtn.create({
-        number: u,
+        number: rows[i].id,
         action: 'true'}))]
     ]
     )
   )
-  u++;
   }
   console.log(u);
 }

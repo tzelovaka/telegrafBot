@@ -190,6 +190,7 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 bot.command ('play', async (ctx) => {
   let u = 1; //link's id (counter)
   let p = 0; //linid
+  btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {linid: p}});
   console.log(`${row.bl}`);

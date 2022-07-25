@@ -83,21 +83,9 @@ ctx.wizard.state.data = {};
   try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
-      [
-      [Markup.button.callback('👆', flagBtn.create({
-        number: rows[i].id,
-        action: 'true'}))]
-    ]
-    )
-  )
-    //await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
-    //await ctx.reply(rows[i].bl)
+    await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
+    await ctx.reply(rows[i].bl)
   }
-  bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
-    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    var f = number
-  })
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
@@ -107,7 +95,7 @@ ctx.wizard.state.data = {};
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = f;//ctx.message.text;
+  ctx.wizard.state.data.blockChoice = ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

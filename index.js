@@ -95,20 +95,20 @@ var f = -1;
     //await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
     //await ctx.reply(rows[i].bl)
   }
-  bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
-    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    f = number
-  })
+  //bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
+    //const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+   // f = number
+ // })
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
-  if (f > 0) return ctx.wizard.next()
+  return ctx.wizard.next()
 })
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = f;//ctx.message.text;
+  ctx.wizard.state.data.blockChoice = ctx.callbackQuery.data.flagBtn.number;//ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

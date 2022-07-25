@@ -69,6 +69,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
+var f = -1;
   const { count, rows } = await storybl.findAndCountAll();
   console.log(count);
   console.log(rows);
@@ -96,13 +97,13 @@ ctx.wizard.state.data = {};
   }
   bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    var f = number
+    f = number
   })
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
-  return ctx.wizard.next()
+  if (f > 0) return ctx.wizard.next()
 })
 
 const blockChoice = new Composer()

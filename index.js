@@ -99,15 +99,14 @@ ctx.wizard.state.data = {};
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  console.log(number);
   return ctx.wizard.next()
 })
 })
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = ctx.callbackQuery.data.flagBtn.number;//ctx.message.text;
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.blockChoice = number;//ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

@@ -100,14 +100,14 @@ ctx.wizard.state.data = {};
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  console.log(number);
+  var f = number;
   return ctx.wizard.next()
 })
 })
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = ctx.callback_query.data.flagBtn.number;//ctx.message.text;
+  ctx.wizard.state.data.blockChoice = f;//ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

@@ -105,6 +105,7 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   nextScene();
 })
 function nextScene () {
+  ctx.reply ('Вы выбрали блок');
   return ctx.wizard.next()
 }
 })

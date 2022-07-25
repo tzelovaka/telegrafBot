@@ -107,7 +107,7 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = number;//ctx.message.text;
+  ctx.wizard.state.data.blockChoice = ctx.callbackQuery.data.flagBtn.number;//ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

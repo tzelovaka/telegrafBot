@@ -98,11 +98,15 @@ ctx.wizard.state.data = {};
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
+var f;
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  var f = number;
-  return ctx.wizard.next()
+  f = number;
+  nextScene();
 })
+function nextScene (name) {
+  return ctx.wizard.next()
+}
 })
 
 const blockChoice = new Composer()

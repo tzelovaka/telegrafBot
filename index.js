@@ -104,7 +104,7 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   f = number;
   nextScene();
 })
-function nextScene (name) {
+function nextScene () {
   return ctx.wizard.next()
 }
 })

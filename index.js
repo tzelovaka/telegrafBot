@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
+const flagBlo = new CallbackData('flagBlo', ['num', 'act']);
 
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
@@ -76,16 +77,27 @@ ctx.wizard.state.data = {};
     await ctx.reply ('Надо создать блок!');
     return ctx.scene.leave()
   }
-  await ctx.reply ('Выберите блок из доступных и введите его номер (Например: 7):');
+  await ctx.reply ('Выберите блок из доступных:');
 
   const co = await storybl.count();
   console.log(co);
   try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
-    await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
-    await ctx.reply(rows[i].bl)
+    await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('👆', flagBlo.create({
+        number: rows[i].id,
+        action: 'true'}))]
+    ]
+    )
+  )
+    //await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
+    //await ctx.reply(rows[i].bl)
   }
+  bot.action(flagBlo.filter({action: 'true'}), async (ctx)=>{
+    const { num, act } = flagBtn.parse(ctx.callbackQuery.data);
+  })
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
@@ -95,7 +107,7 @@ ctx.wizard.state.data = {};
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = ctx.message.text;
+  ctx.wizard.state.data.blockChoice = ctx.callbackQuery.data;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

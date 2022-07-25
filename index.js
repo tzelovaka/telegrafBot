@@ -92,6 +92,7 @@ var f = -1;
     ]
     )
   )
+  console.log(ctx.callbackQuery.data);
     //await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
     //await ctx.reply(rows[i].bl)
   }

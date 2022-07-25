@@ -69,7 +69,6 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-var f = -1;
   const { count, rows } = await storybl.findAndCountAll();
   console.log(count);
   console.log(rows);
@@ -92,24 +91,23 @@ var f = -1;
     ]
     )
   )
-  console.log(ctx.callbackQuery.data);
     //await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
     //await ctx.reply(rows[i].bl)
   }
-  bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
-    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-   f = number
- })
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
 }
+bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  console.log(number);
   return ctx.wizard.next()
+})
 })
 
 const blockChoice = new Composer()
 blockChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.blockChoice = ctx.callbackQuery.data.number;//ctx.message.text;
+  ctx.wizard.state.data.blockChoice = number;//ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
   
   return ctx.wizard.next()

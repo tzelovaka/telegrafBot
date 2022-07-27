@@ -148,8 +148,24 @@ ctx.wizard.state.data = {};
     await ctx.reply ('Надо создать ссылку!');
     return ctx.scene.leave()
   }
-  await ctx.reply ('Выберите ссылку из доступных, за которой последует блок и введите её номер (Например: 7):');
+  await ctx.reply ('Выберите ссылку из доступных:');
   try{
+    let x = count - 1;
+    for (let i=0; i<=x; i++){
+      await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
+        [
+        [Markup.button.callback('👆', flagBtn.create({
+          number: rows[i].id,
+          action: 'true'}))]
+      ]
+      )
+    )
+    }
+  } catch (e){
+    console.log(e);
+    await ctx.replyWithHTML('<i>Ошибка!</i>')
+  }
+  /*try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
     await ctx.replyWithHTML(`<b>Выбор №${rows[i].id}</b>`)
@@ -158,13 +174,14 @@ ctx.wizard.state.data = {};
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
-}
+}*/
   return ctx.wizard.next()
 })
 
 const linkChoice = new Composer()
-linkChoice.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.linkChoice = ctx.message.text;
+linkChoice.on ('callback_query', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.linkChoice = number;
   await ctx.reply ('Введите текст блока.');
   return ctx.wizard.next()
 })
@@ -186,7 +203,7 @@ await t.commit('commit');
   await ctx.reply ('Ошибка! Попробуйте сначала.');
   return ctx.scene.leave()
 }
-  await ctx.reply ('Вы успешно добавили ссылку.');
+  await ctx.reply ('Вы успешно добавили блок.');
   return ctx.scene.leave()
 })
 

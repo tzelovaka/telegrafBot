@@ -170,7 +170,7 @@ ctx.wizard.state.data = {};
     let x = count - 1;
     let u = 1;
     for (let i=0; i<=x; i++){
-      if (row[u].linid != rows[i].id) continue
+      //if (row[u].linid != rows[i].id) continue
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({

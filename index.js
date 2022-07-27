@@ -66,6 +66,14 @@ bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
+
+
+
+
+
+
+
+
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -138,9 +146,18 @@ bot.use(stagee.middleware())
 bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 
+
+
+
+
+
+
+
+
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
+  const {co, row} = storybl.findAndCountAll();
   const { count, rows } = await storylin.findAndCountAll();
   console.log(count);
   console.log(rows);
@@ -151,7 +168,9 @@ ctx.wizard.state.data = {};
   await ctx.reply ('Выберите ссылку из доступных:');
   try{
     let x = count - 1;
+    let u = 1;
     for (let i=0; i<=x; i++){
+      if (row[u].linid != rows[i].id) continue
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({
@@ -212,6 +231,15 @@ const stager = new Scenes.Stage ([menuBlock])
 bot.use(session())
 bot.use(stager.middleware())
 bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
+
+
+
+
+
+
+
+
+
 
 bot.command ('play', async (ctx) => {
   var p = 0; //linid

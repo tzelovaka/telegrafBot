@@ -274,11 +274,14 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 bot.command ('play', async (ctx) => {
+  const { coun, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  let c = coun - 1;
+  await ctx.replyWithHTML(`<b>${rows[c].name}</b>`)
+  await ctx.reply (`<i>${rows[c].desc}</i>`)
   var p = 0; //linid
   btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {linid: p}});
-  console.log(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});
   console.log(count);
   let x = count - 1;

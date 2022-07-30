@@ -24,7 +24,7 @@ try {
 }
 
 //storybl.hasMany(storylin);
-//storylin.hasOne(storybl);
+story.hasOne(storybl);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 

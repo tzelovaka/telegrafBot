@@ -1,7 +1,9 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
-const storybl = require('./modebl')
-const storylin = require('./modelink')
+const storybl = require('./modebl');
+const storylin = require('./modelink');
+const story = require ('./story')
+const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
@@ -21,7 +23,7 @@ try {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
 
-storybl.hasMany(storylin);
+//storybl.hasMany(storylin);
 //storylin.hasOne(storybl);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
@@ -36,7 +38,33 @@ baseEmpty.on ('text', async (ctx)=>{
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
   }
+  await ctx.reply ('Введите название.');
+  return ctx.wizard.next()
+})
+
+const storyName = new Composer()
+storyName.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.storyName = ctx.message.text;
+  await ctx.reply ('Введите описание истории');
+  return ctx.wizard.next()
+})
+
+const storyDesc = new Composer()
+storyDesc.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.storyDesc = ctx.message.text;
   await ctx.reply ('Введите текст открывающего блока.');
+  const t = await sequelize.transaction();
+  try{
+    const result = await sequelize.transaction(async (t) => {
+    const query = await story.create({
+    name: `${ctx.wizard.state.data.storyName}`,
+    desc: `${ctx.wizard.state.data.storyDesc}`
+  }, { transaction: t });
+})
+await t.commit('commit');
+} catch (error) {
+  await t.rollback();
+}
   return ctx.wizard.next()
 })
 
@@ -59,7 +87,7 @@ await t.commit('commit');
   return ctx.scene.leave()
 })
 
-const menuCreate = new Scenes.WizardScene('sceneCreate', baseEmpty, baseSave)
+const menuCreate = new Scenes.WizardScene('sceneCreate', baseEmpty, storyName, storyDesc, baseSave)
 const stage = new Scenes.Stage ([menuCreate])
 bot.use(session())
 bot.use(stage.middleware())

@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -274,10 +274,10 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 bot.command ('play', async (ctx) => {
-  const { coun, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  let c = coun - 1;
-  await ctx.replyWithHTML(`<b>${rows[c].name}</b>`)
-  await ctx.reply (`<i>${rows[c].desc}</i>`)
+  const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  let c = count - 1;
+  await ctx.reply(`${rows[c].name}`)
+  await ctx.reply (`${rows[c].desc}`)
   var p = 0; //linid
   btnLoop();
   async function btnLoop() {

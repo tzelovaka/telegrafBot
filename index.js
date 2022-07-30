@@ -2,7 +2,7 @@ const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');
 const storylin = require('./modelink');
-const story = require ('./story')
+//const story = require ('./story')
 const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
 require ('dotenv').config();
@@ -53,6 +53,11 @@ const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
   ctx.wizard.state.data.storyDesc = ctx.message.text;
   await ctx.reply ('Введите текст открывающего блока.');
+  const story = sequelize.define (`${ctx.wizard.state.data.storyName}`, {
+    id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+    desc: {type: DataTypes.STRING, allowNull: false},
+})
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {

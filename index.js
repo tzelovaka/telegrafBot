@@ -58,7 +58,8 @@ storyDesc.on ('text', async (ctx)=>{
     const result = await sequelize.transaction(async (t) => {
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,
-    desc: `${ctx.wizard.state.data.storyDesc}`
+    desc: `${ctx.wizard.state.data.storyDesc}`,
+    authId: `${ctx.message.from.id}`
   }, { transaction: t });
 })
 await t.commit('commit');
@@ -73,10 +74,13 @@ baseSave.on ('text', async (ctx)=>{
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
   try{
+    const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+    let c = count - 1;
     const result = await sequelize.transaction(async (t) => {
     const query = await storybl.create({
     linid: 0,
-    bl: `${ctx.wizard.state.data.baseSave}`
+    bl: `${ctx.wizard.state.data.baseSave}`,
+    storyId: `${rows[c].id}`,
   }, { transaction: t });
 })
 await t.commit('commit');

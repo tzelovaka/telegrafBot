@@ -5,7 +5,6 @@ const storylin = require('./modelink');
 const story = require ('./story');
 const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
-const story = require('./story');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;

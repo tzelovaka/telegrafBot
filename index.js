@@ -110,12 +110,12 @@ const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
   const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  let n = coun - 1;
-  const { count, rows } = await storybl.findAndCountAll({where: {storyId: row[n].id}});
-  if (count < 1) {
-    await ctx.reply ('Надо создать блок!');
+  if (coun < 1) {
+    await ctx.reply ('Надо создать историю!');
     return ctx.scene.leave()
   }
+  let n = coun - 1;
+  const { count, rows } = await storybl.findAndCountAll({where: {storyId: row[n].id}});
   await ctx.reply ('Выберите блок из доступных:');
 
   try{
@@ -188,15 +188,15 @@ const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
   const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  let n = coun - 1;
-  console.log(n);
-  const { count, rows } = await storylin.findAndCountAll({where: {storyId: n}});
-  console.log(count);
-  console.log(rows);
-  if (count < 1) {
-    await ctx.reply ('Надо создать ссылку!');
+  if (coun < 1) {
+    await ctx.reply ('Надо создать историю!');
     return ctx.scene.leave()
   }
+  let n = coun - 1;
+  console.log(n);
+  const { count, rows } = await storylin.findAndCountAll({where: {storyId: row[n].id}});
+  console.log(count);
+  console.log(rows);
   await ctx.reply ('Выберите ссылку из доступных:');
   try{
     let x = count - 1;

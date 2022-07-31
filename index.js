@@ -152,8 +152,8 @@ blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
   const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
   var s = count - 1;
+  const t = await sequelize.transaction();
   try{
-    const t = await sequelize.transaction();
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,

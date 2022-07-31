@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  //sequelize.sync({ force: true })
+  sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -109,14 +109,17 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-try{
+/*try{
 const {cou, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  var n = cou - 1;
-  if (n < 0) {
-    await ctx.reply ('Надо создать историю!');
+  var n = cou - 1;*/
+  const { count, rows } = await storybl.findAndCountAll({where: {
+    authId: `${ctx.message.from.id}`,
+    release: false
+  }});
+  if (count < 0) {
+    await ctx.reply ('Надо создать историю! => /make');
     return ctx.scene.leave()
   }
-  const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${row[n].id}`}});
   await ctx.reply ('Выберите блок из доступных:');
   let x = count - 1;
   for (let i=0; i<=x; i++){
@@ -129,10 +132,10 @@ const {cou, row} = await story.findAndCountAll({where: {authId: `${ctx.message.f
     )
   )
   }
-} catch (e){
+/*} catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
-}
+}*/
   return ctx.wizard.next()
 })
 

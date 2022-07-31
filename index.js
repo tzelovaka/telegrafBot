@@ -111,6 +111,8 @@ blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
 try{
   const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  console.log(coun);
+  console.log(row);
   let n = coun - 1;
   if (n < 0) {
     await ctx.reply ('Надо создать историю!');

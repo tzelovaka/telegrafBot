@@ -5,6 +5,7 @@ const storylin = require('./modelink');
 const story = require ('./story');
 const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
+const story = require('./story');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
@@ -23,15 +24,15 @@ try {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
 
-//storybl.hasMany(storylin);
-story.hasOne(storybl);
+story.hasMany(storybl);
+story.hasMany(storylin);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  const { count, rows } = await storybl.findAndCountAll();
+  const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
   console.log(count);
   console.log(rows);
   if (count > 0) {
@@ -52,7 +53,7 @@ storyName.on ('text', async (ctx)=>{
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
   ctx.wizard.state.data.storyDesc = ctx.message.text;
-  await ctx.reply ('Введите текст открывающего блока.');
+  await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
@@ -109,17 +110,17 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-  const { count, rows } = await storybl.findAndCountAll();
+  const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  let n = coun - 1;
+  const { count, rows } = await storybl.findAndCountAll({where: {storyId: n}});
   console.log(count);
   console.log(rows);
   if (count < 1) {
     await ctx.reply ('Надо создать блок!');
     return ctx.scene.leave()
   }
-  await ctx.reply ('Выберите блок из доступных');
+  await ctx.reply ('Выберите блок из доступных:');
 
-  const co = await storybl.count();
-  console.log(co);
   try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
@@ -146,19 +147,21 @@ blockChoice.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.blockChoice = number;//ctx.message.text;
   await ctx.reply ('Введите текст ссылки.');
-  
   return ctx.wizard.next()
 })
 
 const blockLink = new Composer()
 blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
+  const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  let n = count - 1;
   const t = await sequelize.transaction();
   try{
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,
-    storyblId: `${ctx.wizard.state.data.blockChoice}`
+    storyblId: `${ctx.wizard.state.data.blockChoice}`,
+    storyId: n,
   }, { transaction: t });
 })
 await t.commit('commit');
@@ -189,8 +192,10 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-  const {co, row} = storybl.findAndCountAll();
-  const { count, rows } = await storylin.findAndCountAll();
+  const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  let n = coun - 1;
+  console.log(n);
+  const { count, rows } = await storylin.findAndCountAll({where: {storyId: n}});
   console.log(count);
   console.log(rows);
   if (count < 1) {
@@ -200,9 +205,7 @@ ctx.wizard.state.data = {};
   await ctx.reply ('Выберите ссылку из доступных:');
   try{
     let x = count - 1;
-    let u = 1;
     for (let i=0; i<=x; i++){
-      //if (row[u].linid != rows[i].id) continue
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({
@@ -216,16 +219,6 @@ ctx.wizard.state.data = {};
     console.log(e);
     await ctx.replyWithHTML('<i>Ошибка!</i>')
   }
-  /*try{
-  let x = count - 1;
-  for (let i=0; i<=x; i++){
-    await ctx.replyWithHTML(`<b>Выбор №${rows[i].id}</b>`)
-    await ctx.reply(rows[i].link)
-  }
-} catch (e){
-  console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>')
-}*/
   return ctx.wizard.next()
 })
 
@@ -240,12 +233,15 @@ linkChoice.on ('callback_query', async (ctx)=>{
 const linkBlock = new Composer()
 linkBlock.on ('text', async (ctx)=>{
   ctx.wizard.state.data.linkBlock = ctx.message.text;
+  const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  let n = count - 1;
   const t = await sequelize.transaction();
   try{
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storybl.create({
     linid: `${ctx.wizard.state.data.linkChoice}`,
-    bl: `${ctx.wizard.state.data.linkBlock}`
+    bl: `${ctx.wizard.state.data.linkBlock}`,
+    storyId: n,
   }, { transaction: t });
 })
 await t.commit('commit');
@@ -276,12 +272,19 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 bot.command ('play', async (ctx) => {
   const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
   let c = count - 1;
+  if (c<0) {
+    endCom();
+  }
   await ctx.reply(`${rows[c].name}`)
   await ctx.reply (`${rows[c].desc}`)
   var p = 0; //linid
   btnLoop();
   async function btnLoop() {
-  const row = await storybl.findOne({where: {linid: p}});
+  const row = await storybl.findOne({where: {
+    linid: p, 
+    storyId: c
+  }
+});
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});
   console.log(count);
   let x = count - 1;
@@ -303,6 +306,9 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   p = number
   btnLoop();
 })
+  function endCom() {
+    ctx.reply('Вы не добавили ни одной истории!')
+  }
 })
 
 bot.launch()

@@ -1,5 +1,5 @@
 const sequelize = require('./db')
-const {DataTypes} = require('sequelize')
+const {DataTypes, HasMany} = require('sequelize')
 
 const story = sequelize.define ('story', {
     id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},

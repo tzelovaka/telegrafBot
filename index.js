@@ -202,15 +202,15 @@ const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
 try{
-  const story = await story.findOne({where: {
+  const row = await story.findOne({where: {
     authId: `${ctx.message.from.id}`,
     release: false
   }});
-  if (story = null) {
+  if (row === null) {
     await ctx.reply ('Надо создать историю!');
     return ctx.scene.leave()
   }
-  const { count, rows } = await storylin.findAndCountAll({where: {storyId: story.id}});
+  const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
   await ctx.reply ('Выберите ссылку из доступных:');
     let x = count - 1;
     for (let i=0; i<=x; i++){

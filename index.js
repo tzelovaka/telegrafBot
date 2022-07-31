@@ -111,9 +111,7 @@ blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
   const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
   let n = coun - 1;
-  const { count, rows } = await storybl.findAndCountAll({where: {storyId: n}});
-  console.log(count);
-  console.log(rows);
+  const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${row[n].id}`}});
   if (count < 1) {
     await ctx.reply ('Надо создать блок!');
     return ctx.scene.leave()
@@ -131,8 +129,6 @@ ctx.wizard.state.data = {};
     ]
     )
   )
-    //await ctx.replyWithHTML(`<b>Блок №${rows[i].id}</b>`)
-    //await ctx.reply(rows[i].bl)
   }
 } catch (e){
   console.log(e);
@@ -144,7 +140,7 @@ ctx.wizard.state.data = {};
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  ctx.wizard.state.data.blockChoice = number;//ctx.message.text;
+  ctx.wizard.state.data.blockChoice = number;
   await ctx.reply ('Введите текст ссылки.');
   return ctx.wizard.next()
 })

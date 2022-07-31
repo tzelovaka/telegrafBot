@@ -109,17 +109,14 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  console.log(count);
-  console.log(rows);
-  var stor = rows;
-  var n = count - 1;
-  try{
+try{
+const {cou, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  var n = cou - 1;
   if (n < 0) {
     await ctx.reply ('Надо создать историю!');
     return ctx.scene.leave()
   }
-  const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${stor[n].id}`}});
+  const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${row[n].id}`}});
   await ctx.reply ('Выберите блок из доступных:');
   let x = count - 1;
   for (let i=0; i<=x; i++){

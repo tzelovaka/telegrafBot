@@ -282,19 +282,23 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 bot.command ('play', async (ctx) => {
-  const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  let c = count - 1;
-  if (c<0) {
+  const row = await story.findOne({where: {
+    authId: `${ctx.message.from.id}`,
+    release: false
+  }});
+  if (row === null) {
     endCom();
   }
-  await ctx.reply(`${rows[c].name}`)
-  await ctx.reply (`${rows[c].desc}`)
+  await ctx.reply(`${row.name}`)
+  await ctx.reply (`${row.desc}`)
   var p = 0; //linid
   btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {
-    linid: p, 
-    storyId: c
+    linid: p,
+    storyId: `${row.id}`,
+    authId: `${ctx.message.from.id}`,
+    release: false
   }
 });
   const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});

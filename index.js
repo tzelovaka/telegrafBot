@@ -201,18 +201,17 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-  const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  if (coun < 1) {
+try{
+  const story = await story.findOne({where: {
+    authId: `${ctx.message.from.id}`,
+    release: false
+  }});
+  if (story = null) {
     await ctx.reply ('Надо создать историю!');
     return ctx.scene.leave()
   }
-  let n = coun - 1;
-  console.log(n);
-  const { count, rows } = await storylin.findAndCountAll({where: {storyId: row[n].id}});
-  console.log(count);
-  console.log(rows);
+  const { count, rows } = await storylin.findAndCountAll({where: {storyId: story.id}});
   await ctx.reply ('Выберите ссылку из доступных:');
-  try{
     let x = count - 1;
     for (let i=0; i<=x; i++){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -242,15 +241,19 @@ linkChoice.on ('callback_query', async (ctx)=>{
 const linkBlock = new Composer()
 linkBlock.on ('text', async (ctx)=>{
   ctx.wizard.state.data.linkBlock = ctx.message.text;
-  const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  let n = count - 1;
-  const t = await sequelize.transaction();
   try{
+  const row = await story.findOne({where: {
+    authId: `${ctx.message.from.id}`,
+    release: false
+  }});
+  const t = await sequelize.transaction();
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storybl.create({
     linid: `${ctx.wizard.state.data.linkChoice}`,
     bl: `${ctx.wizard.state.data.linkBlock}`,
-    storyId: n,
+    authId: `${ctx.message.from.id}`,
+    release: false,
+    storyId: `${row.id}`,
   }, { transaction: t });
 })
 await t.commit('commit');

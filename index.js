@@ -158,7 +158,7 @@ blockLink.on ('text', async (ctx)=>{
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,
     storyblId: `${ctx.wizard.state.data.blockChoice}`,
-    storyId: s,
+    storyId: `${s}`,
   }, { transaction: t });
 })
 await t.commit('commit');

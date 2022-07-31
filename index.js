@@ -292,11 +292,12 @@ bot.command ('play', async (ctx) => {
   await ctx.reply(`${row.name}`)
   await ctx.reply (`${row.desc}`)
   var p = 0; //linid
+  var r = row.id
   btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {
     linid: p,
-    storyId: `${row.id}`,
+    storyId: r,
     authId: `${ctx.message.from.id}`,
     release: false
   }

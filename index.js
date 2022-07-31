@@ -286,9 +286,7 @@ bot.command ('play', async (ctx) => {
     authId: `${ctx.message.from.id}`,
     release: false
   }});
-  if (row === null) {
-    endCom();
-  }
+  if (row != null) {
   await ctx.reply(`${row.name}`)
   await ctx.reply (`${row.desc}`)
   var p = 0; //linid
@@ -323,9 +321,12 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   p = number
   btnLoop();
 })
+  } else{
+  endCom();
   function endCom() {
     ctx.reply('Вы не добавили ни одной истории!')
   }
+}
 })
 
 bot.launch()

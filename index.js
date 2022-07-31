@@ -111,7 +111,7 @@ blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
   const {coun, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
   let n = coun - 1;
-  const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${row[n].id}`}});
+  const { count, rows } = await storybl.findAndCountAll({where: {storyId: row[n].id}});
   if (count < 1) {
     await ctx.reply ('Надо создать блок!');
     return ctx.scene.leave()

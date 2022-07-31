@@ -151,14 +151,14 @@ const blockLink = new Composer()
 blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
   const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  let n = count - 1;
+  var s = count - 1;
   const t = await sequelize.transaction();
   try{
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,
     storyblId: `${ctx.wizard.state.data.blockChoice}`,
-    storyId: n,
+    storyId: s,
   }, { transaction: t });
 })
 await t.commit('commit');

@@ -115,7 +115,7 @@ ctx.wizard.state.data = {};
     return ctx.scene.leave()
   }
   let n = coun - 1;
-  const { count, rows } = await storybl.findAndCountAll({where: {storyId: row[n].id}});
+  const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${row[n].id}`}});
   await ctx.reply ('Выберите блок из доступных:');
 
   try{

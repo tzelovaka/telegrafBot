@@ -112,6 +112,7 @@ ctx.wizard.state.data = {};
 const {count, rows} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
   console.log(count);
   console.log(rows);
+  let n = count - 1;
 try{
   if (n < 0) {
     await ctx.reply ('Надо создать историю!');

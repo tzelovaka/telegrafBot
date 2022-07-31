@@ -31,7 +31,10 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+  const { count, rows } = await story.findAndCountAll({where: {
+    authId: `${ctx.message.from.id}`, 
+    release: false,
+  }});
   console.log(count);
   console.log(rows);
   if (count > 0) {
@@ -59,7 +62,8 @@ storyDesc.on ('text', async (ctx)=>{
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
-    authId: `${ctx.message.from.id}`
+    authId: `${ctx.message.from.id}`,
+    release: false
   }, { transaction: t });
 })
 await t.commit('commit');
@@ -74,13 +78,16 @@ baseSave.on ('text', async (ctx)=>{
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
   try{
-    const { count, rows } = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
+    const { count, rows } = await story.findAndCountAll({where: {
+      authId: `${ctx.message.from.id}`,
+      release: false}});
     let c = count - 1;
     const result = await sequelize.transaction(async (t) => {
     const query = await storybl.create({
     linid: 0,
     bl: `${ctx.wizard.state.data.baseSave}`,
     storyId: `${rows[c].id}`,
+    release: false
   }, { transaction: t });
 })
 await t.commit('commit');

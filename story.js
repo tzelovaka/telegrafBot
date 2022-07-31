@@ -5,7 +5,8 @@ const story = sequelize.define ('story', {
     id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
     name: {type: DataTypes.STRING, allowNull: false},
     desc: {type: DataTypes.STRING, allowNull: false},
-    authId: {type: DataTypes.INTEGER, allowNull: false}
+    authId: {type: DataTypes.INTEGER, allowNull: false},
+    release: {type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false}
 })
 
 module.exports = story;

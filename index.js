@@ -114,11 +114,10 @@ ctx.wizard.state.data = {};
     await ctx.reply ('Надо создать историю!');
     return ctx.scene.leave()
   }
+  try{
   let n = coun - 1;
   const { count, rows } = await storybl.findAndCountAll({where: {storyId: `${row[n].id}`}});
   await ctx.reply ('Выберите блок из доступных:');
-
-  try{
   let x = count - 1;
   for (let i=0; i<=x; i++){
     await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(

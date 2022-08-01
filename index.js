@@ -283,6 +283,7 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
   try{
+  var ctxid = ctx.message.from.id;
   const row = await story.findOne({where: {
     authId: `${ctx.message.from.id}`,
     release: false
@@ -291,7 +292,6 @@ bot.command ('play', async (ctx) => {
   await ctx.reply (`${row.desc}`)
   var p = 0; //linid
   var r = row.id
-  var ctxid = ctx.message.from.id;
   btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {

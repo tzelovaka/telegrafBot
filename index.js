@@ -285,7 +285,7 @@ bot.command ('play', async (ctx) => {
   try{
   var ctxid = ctx.message.from.id;
   const row = await story.findOne({where: {
-    authId: `${ctx.message.from.id}`,
+    authId: ctxid,
     release: false
   }});
   await ctx.reply(`${row.name}`)
@@ -326,6 +326,7 @@ await ctx.reply(`${row.bl}`);
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   p = number
+  ctxid = ctx.callbackQuery.from.id
 
   btnLoop();
 })

@@ -286,7 +286,7 @@ bot.command ('play', async (ctx) => {
     authId: `${ctx.message.from.id}`,
     release: false
   }});
-  if (row != null) {
+  if (row === null) endCom();
   await ctx.reply(`${row.name}`)
   await ctx.reply (`${row.desc}`)
   var p = 0; //linid
@@ -305,7 +305,6 @@ bot.command ('play', async (ctx) => {
     release: false,
     storyblId: `${row.id}`
   }});
-  console.log(count);
   let x = count - 1;
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
@@ -324,10 +323,9 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   p = number
   btnLoop();
 })
-  } else endCom();
   function endCom() {
     ctx.reply('Вы не добавили ни одной истории!')
-  }
+}
 })
 
 bot.launch()

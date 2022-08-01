@@ -303,7 +303,7 @@ bot.command ('play', async (ctx) => {
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: `${ctx.message.from.id}`,
     release: false,
-    storyblId: row.id
+    storyblId: `${row.id}`
   }});
   console.log(count);
   let x = count - 1;

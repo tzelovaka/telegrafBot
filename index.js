@@ -307,7 +307,6 @@ bot.command ('play', async (ctx) => {
   }});
   console.log(count);
   let x = count - 1;
-  if (x>0){
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -319,7 +318,6 @@ bot.command ('play', async (ctx) => {
     )
   )
   }
-} else endCom();
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);

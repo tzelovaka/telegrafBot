@@ -291,17 +291,18 @@ bot.command ('play', async (ctx) => {
   await ctx.reply (`${row.desc}`)
   var p = 0; //linid
   var r = row.id
+  var ctxid = `${ctx.message.from.id}`;
   btnLoop();
   async function btnLoop() {
   const row = await storybl.findOne({where: {
     linid: p,
     storyId: r,
-    authId: `${ctx.message.from.id}`,
+    authId: ctxid,
     release: false
   }
 });
   const {count, rows} = await storylin.findAndCountAll ({where: {
-    authId: `${ctx.message.from.id}`,
+    authId: ctxid,
     release: false,
     storyblId: `${row.id}`
   }});
@@ -321,6 +322,7 @@ bot.command ('play', async (ctx) => {
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   p = number
+
   btnLoop();
 })
 } catch (e){

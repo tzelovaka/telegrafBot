@@ -282,11 +282,11 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 bot.command ('play', async (ctx) => {
+  try{
   const row = await story.findOne({where: {
     authId: `${ctx.message.from.id}`,
     release: false
   }});
-  if (row === null) endCom();
   await ctx.reply(`${row.name}`)
   await ctx.reply (`${row.desc}`)
   var p = 0; //linid
@@ -323,7 +323,7 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   p = number
   btnLoop();
 })
-  function endCom() {
+} catch (e){
     ctx.reply('Вы не добавили ни одной истории!')
 }
 })

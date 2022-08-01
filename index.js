@@ -300,10 +300,14 @@ bot.command ('play', async (ctx) => {
     release: false
   }
 });
-  const {count, rows} = await storylin.findAndCountAll ({where: {storyblId: row.id}});
+  const {count, rows} = await storylin.findAndCountAll ({where: {
+    authId: `${ctx.message.from.id}`,
+    release: false,
+    storyblId: row.id
+  }});
   console.log(count);
   let x = count - 1;
-  
+  if (x>0){
   await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -315,18 +319,17 @@ bot.command ('play', async (ctx) => {
     )
   )
   }
+} else endCom();
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   p = number
   btnLoop();
 })
-  } else{
-  endCom();
+  } else endCom();
   function endCom() {
     ctx.reply('Вы не добавили ни одной истории!')
   }
-}
 })
 
 bot.launch()

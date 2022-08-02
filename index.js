@@ -293,20 +293,21 @@ bot.command ('play', async (ctx) => {
   var r = row.id
   btnLoop();
   async function btnLoop() {
-  const row = storybl.findOne({where: {
+  const row = await storybl.findOne({where: {
     linid: p,
     storyId: r,
     authId: ctx.message.from.id,
     release: false
   }
 });
-await ctx.reply(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.message.from.id,
     release: false,
     storyblId: row.id
   }});
   let x = count - 1;
+  
+await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [

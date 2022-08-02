@@ -293,7 +293,7 @@ bot.command ('play', async (ctx) => {
   var r = row.id
   btnLoop();
   async function btnLoop() {
-  const row = await storybl.findOne({where: {
+  const row = storybl.findOne({where: {
     linid: p,
     storyId: r,
     authId: ctx.message.from.id,
@@ -306,7 +306,6 @@ await ctx.reply(`${row.bl}`);
     release: false,
     storyblId: row.id
   }});
-  if (rows === null) jumpLink()
   let x = count - 1;
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(

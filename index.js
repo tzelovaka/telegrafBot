@@ -332,8 +332,8 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   btnLoop();
 }
 )
-function endCom(){
-  ctx.reply('Вы завершили прохождение сюжетной ветки!')
+async function endCom(){
+   await ctx.reply('Вы завершили прохождение сюжетной ветки!')
 }
 } catch (e){
     ctx.reply('Вы не добавили ни одной истории!')

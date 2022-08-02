@@ -158,12 +158,12 @@ blockChoice.on ('callback_query', async (ctx)=>{
 const blockLink = new Composer()
 blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
-  const t = await sequelize.transaction();
-  try{
   const {count, rows} = await storybl.findAndCountAll({where: {
     authId: ctx.message.from.id,
     release: false
   }});
+  const t = await sequelize.transaction();
+  try{
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,

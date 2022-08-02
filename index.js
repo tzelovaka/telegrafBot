@@ -158,12 +158,12 @@ blockChoice.on ('callback_query', async (ctx)=>{
 const blockLink = new Composer()
 blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
+  const t = await sequelize.transaction();
   try{
   const {count, rows} = await storybl.findAndCountAll({where: {
     authId: ctx.message.from.id,
     release: false
   }});
-  const t = await sequelize.transaction();
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,
@@ -175,8 +175,8 @@ blockLink.on ('text', async (ctx)=>{
 })
 await t.commit('commit');
 } catch (error) {
-  await t.rollback();
   await ctx.reply ('Ошибка! Попробуйте сначала.');
+  await t.rollback();
   return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили ссылку.');
@@ -241,12 +241,12 @@ linkChoice.on ('callback_query', async (ctx)=>{
 const linkBlock = new Composer()
 linkBlock.on ('text', async (ctx)=>{
   ctx.wizard.state.data.linkBlock = ctx.message.text;
+  const t = await sequelize.transaction();
   try{
   const row = await story.findOne({where: {
     authId: ctx.message.from.id,
     release: false
   }});
-  const t = await sequelize.transaction();
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storybl.create({
     linid: ctx.wizard.state.data.linkChoice,
@@ -258,8 +258,8 @@ linkBlock.on ('text', async (ctx)=>{
 })
 await t.commit('commit');
 } catch (error) {
-  await t.rollback();
   await ctx.reply ('Ошибка! Попробуйте сначала.');
+  await t.rollback();
   return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили блок.');

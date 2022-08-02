@@ -307,8 +307,7 @@ bot.command ('play', async (ctx) => {
     release: false,
     storyblId: row.id
   }});
-  //await ctx.reply(`${row.bl}`);
-  await bot.sendMessage (ctxid, `${row.bl}`);
+  await ctx.reply(`${row.bl}`);
   let x = count - 1;
   if (x<0) endCom();
   for (let i = 0; i <= x; i++){
@@ -324,15 +323,15 @@ bot.command ('play', async (ctx) => {
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   await ctx.answerCbQuery();
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const { number, action } = flagBtn.parse(ctx.inlineQuery.data);
   const row = await story.findOne({where: {
-    authId: ctx.callbackQuery.from.id,
+    authId: ctx.inlineQuery.from.id,
     release: false
   }})
   await ctx.reply ('Выбор сделан')
   r = row.id
   p = number
-  ctxid = ctx.callbackQuery.from.id
+  ctxid = ctx.inlineQuery.from.id
   btnLoop();
 }
 )

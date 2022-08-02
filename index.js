@@ -306,9 +306,9 @@ bot.command ('play', async (ctx) => {
     release: false,
     storyblId: row.id
   }});
+  await ctx.reply(`${row.bl}`);
   let x = count - 1;
   if (x<0) endCom();
-await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
@@ -321,11 +321,13 @@ await ctx.reply(`${row.bl}`);
   }
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
+  await ctx.answerCbQuery();
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   const row = await story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false
   }})
+  await ctx.reply ('Выбор сделан')
   r = row.id
   p = number
   ctxid = ctx.callbackQuery.from.id

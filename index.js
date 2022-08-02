@@ -1,4 +1,4 @@
-const TelegramApi = require('node-telegram-bot-api');
+const TelegramBot = require('node-telegram-bot-api');
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');

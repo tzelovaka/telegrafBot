@@ -307,7 +307,7 @@ bot.command ('play', async (ctx) => {
     storyblId: row.id
   }});
   let x = count - 1;
-  
+  if (x<0) endCom();
 await ctx.reply(`${row.bl}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -325,7 +325,11 @@ bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   p = number
   ctxid = ctx.callbackQuery.from.id
   btnLoop();
-})
+}
+)
+function endCom(){
+  ctx.reply('Вы завершили прохождение сюжетной ветки!')
+}
 } catch (e){
     ctx.reply('Вы не добавили ни одной истории!')
 }

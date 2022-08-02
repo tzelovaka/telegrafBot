@@ -79,7 +79,7 @@ baseSave.on ('text', async (ctx)=>{
   const t = await sequelize.transaction();
   try{
     const { count, rows } = await story.findAndCountAll({where: {
-      authId: 3,//`${ctx.message.from.id}`,
+      authId: ctx.message.from.id,//`${ctx.message.from.id}`,
       release: false}});
     let c = count - 1;
     const result = await sequelize.transaction(async (t) => {

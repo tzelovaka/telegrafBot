@@ -6,7 +6,7 @@ const storybl = sequelize.define ('storybl', {
     //id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
     linid: {type: DataTypes.INTEGER},
     bl: {type: DataTypes.STRING},
-    authId: {type: DataTypes.INTEGER(255), unique: true},
+    authId: {type: DataTypes.BIGINT, unique: true},
     release: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
 storybl.hasMany(storylin);

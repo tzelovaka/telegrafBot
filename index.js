@@ -31,7 +31,7 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  const { count, rows } = await story.findAndCountAll({where: {
+  /*const { count, rows } = await story.findAndCountAll({where: {
     authId: `${ctx.message.from.id}`, 
     release: false,
   }});
@@ -40,7 +40,7 @@ baseEmpty.on ('text', async (ctx)=>{
   if (count > 0) {
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
-  }
+  }*/
   await ctx.reply ('Введите название.');
   return ctx.wizard.next()
 })

@@ -87,7 +87,7 @@ baseSave.on ('text', async (ctx)=>{
     linid: 0,
     bl: `${ctx.wizard.state.data.baseSave}`,
     authId: ctx.message.from.id,//`${ctx.message.from.id}`,
-    storyId: `${rows[c].id}`,
+    storyId: rows[c].id,
     release: false
   }, { transaction: t });
 })

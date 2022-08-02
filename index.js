@@ -322,6 +322,11 @@ await ctx.reply(`${row.bl}`);
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const row = await story.findOne({where: {
+    authId: ctx.message.from.id,
+    release: false
+  }})
+  r = row.id
   p = number
   ctxid = ctx.callbackQuery.from.id
   btnLoop();

@@ -31,8 +31,8 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  /*const { count, rows } = await story.findAndCountAll({where: {
-    authId: `${ctx.message.from.id}`, 
+  const { count, rows } = await story.findAndCountAll({where: {
+    authId: ctx.message.from.id, 
     release: false,
   }});
   console.log(count);
@@ -40,7 +40,7 @@ baseEmpty.on ('text', async (ctx)=>{
   if (count > 0) {
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
-  }*/
+  }
   await ctx.reply ('Введите название.');
   return ctx.wizard.next()
 })
@@ -62,7 +62,7 @@ storyDesc.on ('text', async (ctx)=>{
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
-    authId: 3,//`${ctx.message.from.id}`,
+    authId: ctx.message.from.id,//`${ctx.message.from.id}`,
     release: false
   }, { transaction: t });
 })
@@ -86,7 +86,7 @@ baseSave.on ('text', async (ctx)=>{
     const query = await storybl.create({
     linid: 0,
     bl: `${ctx.wizard.state.data.baseSave}`,
-    authId: 3,//`${ctx.message.from.id}`,
+    authId: ctx.message.from.id,//`${ctx.message.from.id}`,
     storyId: `${rows[c].id}`,
     release: false
   }, { transaction: t });
@@ -117,11 +117,11 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
-/*try{
-const {cou, row} = await story.findAndCountAll({where: {authId: `${ctx.message.from.id}`}});
-  var n = cou - 1;*/
+try{
+//const {cou, row} = await story.findAndCountAll({where: {authId: ctx.message.from.id}});
+ // var n = cou - 1;
   const { count, rows } = await storybl.findAndCountAll({where: {
-    authId: `${ctx.message.from.id}`,
+    authId: ctx.message.from.id,
     release: false
   }});
   if (count < 0) {
@@ -140,10 +140,10 @@ const {cou, row} = await story.findAndCountAll({where: {authId: `${ctx.message.f
     )
   )
   }
-/*} catch (e){
+} catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>')
-}*/
+}
   return ctx.wizard.next()
 })
 
@@ -160,14 +160,14 @@ blockLink.on ('text', async (ctx)=>{
   ctx.wizard.state.data.blockLink = ctx.message.text;
   try{
   const {count, rows} = await storybl.findAndCountAll({where: {
-    authId: `${ctx.message.from.id}`,
+    authId: ctx.message.from.id,
     release: false
   }});
   const t = await sequelize.transaction();
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storylin.create({
     link: `${ctx.wizard.state.data.blockLink}`,
-    authId: `${ctx.message.from.id}`,
+    authId: ctx.message.from.id,
     release: false,
     storyblId: `${ctx.wizard.state.data.blockChoice}`,
     storyId: `${rows[0].storyId}`
@@ -203,7 +203,7 @@ linkEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
 try{
   const row = await story.findOne({where: {
-    authId: `${ctx.message.from.id}`,
+    authId: ctx.message.from.id,
     release: false
   }});
   if (row === null) {
@@ -243,15 +243,15 @@ linkBlock.on ('text', async (ctx)=>{
   ctx.wizard.state.data.linkBlock = ctx.message.text;
   try{
   const row = await story.findOne({where: {
-    authId: `${ctx.message.from.id}`,
+    authId: ctx.message.from.id,
     release: false
   }});
   const t = await sequelize.transaction();
     const resul = await sequelize.transaction(async (t) => {
     const quer = await storybl.create({
-    linid: `${ctx.wizard.state.data.linkChoice}`,
+    linid: ctx.wizard.state.data.linkChoice,
     bl: `${ctx.wizard.state.data.linkBlock}`,
-    authId: `${ctx.message.from.id}`,
+    authId: ctx.message.from.id,
     release: false,
     storyId: `${row.id}`,
   }, { transaction: t });
@@ -283,9 +283,8 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 bot.command ('play', async (ctx) => {
   try{
-  var ctxid = ctx.message.from.id;
   const row = await story.findOne({where: {
-    authId: ctxid,
+    authId: ctx.message.from.id,
     release: false
   }});
   await ctx.reply(`${row.name}`)
@@ -297,15 +296,15 @@ bot.command ('play', async (ctx) => {
   const row = await storybl.findOne({where: {
     linid: p,
     storyId: r,
-    authId: ctxid,
+    authId: ctx.message.from.id,
     release: false
   }
 });
 await ctx.reply(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
-    authId: ctxid,
+    authId: ctx.message.from.id,
     release: false,
-    storyblId: `${row.id}`
+    storyblId: row.id
   }});
   if (rows === null) jumpLink()
   let x = count - 1;
@@ -323,12 +322,6 @@ await ctx.reply(`${row.bl}`);
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   p = number
-  ctxid = ctx.callbackQuery.from.id
-  const row = await story.findOne({where: {
-    authId: ctxid,
-    release: false
-  }});
-  var r = row.id
   btnLoop();
 })
 } catch (e){

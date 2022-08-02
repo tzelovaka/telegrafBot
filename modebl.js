@@ -3,7 +3,7 @@ const storylin = require('./modelink')
 const {DataTypes} = require('sequelize');
 
 const storybl = sequelize.define ('storybl', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
+    //id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
     linid: {type: DataTypes.INTEGER, primaryKey: true, /*unique: true,*/ allownull: false},
     bl: {type: DataTypes.STRING, allowNull: false},
     authId: {type: DataTypes.INTEGER, allowNull: false},

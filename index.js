@@ -62,7 +62,7 @@ storyDesc.on ('text', async (ctx)=>{
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
-    authId: ctx.message.from.id,
+    authId: `${ctx.message.from.id}`,
     release: false
   }, { transaction: t });
 })
@@ -86,7 +86,7 @@ baseSave.on ('text', async (ctx)=>{
     const query = await storybl.create({
     linid: 0,
     bl: `${ctx.wizard.state.data.baseSave}`,
-    authId: ctx.message.from.id,//`${ctx.message.from.id}`,
+    authId: `${ctx.message.from.id}`,//`${ctx.message.from.id}`,
     storyId: rows[c].id,
     release: false
   }, { transaction: t });

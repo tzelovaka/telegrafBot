@@ -1,3 +1,4 @@
+const TelegramApi = require('node-telegram-bot-api');
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');
@@ -306,7 +307,8 @@ bot.command ('play', async (ctx) => {
     release: false,
     storyblId: row.id
   }});
-  await ctx.reply(`${row.bl}`);
+  //await ctx.reply(`${row.bl}`);
+  await bot.sendMessage (ctxid, `${row.bl}`);
   let x = count - 1;
   if (x<0) endCom();
   for (let i = 0; i <= x; i++){

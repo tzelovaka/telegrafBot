@@ -319,15 +319,16 @@ await ctx.reply(`${row.bl}`);
     )
   )
   }
-  function jumpLink() {
-    
-  }
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   p = number
   ctxid = ctx.callbackQuery.from.id
-
+  const row = await story.findOne({where: {
+    authId: ctxid,
+    release: false
+  }});
+  var r = row.id
   btnLoop();
 })
 } catch (e){

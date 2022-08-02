@@ -62,7 +62,7 @@ storyDesc.on ('text', async (ctx)=>{
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
-    authId: `${ctx.message.from.id}`,
+    //authId: `${ctx.message.from.id}`,
     release: false
   }, { transaction: t });
 })

@@ -346,39 +346,14 @@ playMech.on('callback_query', async (ctx) => {
   await ctx.reply('Ошибка!');
 }
 ctx.wizard.selectStep(1)
-//return ctx.wizard.next()
 })
-  /*bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
-    await ctx.answerCbQuery();
-    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    const row = await story.findOne({where: {
-      authId: ctx.callbackQuery.from.id,
-      release: false
-    }})
-    await ctx.reply ('Выбор сделан')
-    r = row.id
-    p = number
-    ctxid = ctx.callbackQuery.from.id
-    btnLoop();
-  }
-  )*/
-/*const playBut = new Composer()
-playBut.on('callback_query', async (ctx) => {
-  await ctx.answerCbQuery();
-    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-    ctx.wizard.state.data.playBut = number;
-    await ctx.reply ('Выбор сделан')
-    return ctx.wizard.back()
-})*/
 
 const playmenuScene = new Scenes.WizardScene('playScene', playMech)
 const staget = new Scenes.Stage([playmenuScene])
 bot.use(session())
 bot.use(staget.middleware())
-bot.command('play', (ctx) => ctx.scene.enter('play'))
-bot.command ('play', async (ctx) => {
+bot.command('play', (ctx) => ctx.scene.enter('playScene'))
 
-})
 
 bot.launch()
 

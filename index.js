@@ -280,7 +280,7 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 const playScene = new Composer()
-playScene.on(async (ctx) => {
+playScene.on('text', async (ctx) => {
   ctx.wizard.state.data = {};
   try{
     const row = await story.findOne({where: {

@@ -324,7 +324,10 @@ playMech.on('callback_query', async (ctx) => {
     release: false,
     storyblId: row.id
   }});
+
+
   await ctx.reply(`${row.bl}`);
+
   let x = count - 1;
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -342,11 +345,11 @@ playMech.on('callback_query', async (ctx) => {
 ctx.wizard.selectStep(1)
 })
 
-const playmenuScene = new Scenes.WizardScene('playScene', playMech)
+const playmenuScene = new Scenes.WizardScene('playScene', playScene, playMech)
 const staget = new Scenes.Stage([playmenuScene])
 bot.use(session())
 bot.use(staget.middleware())
-bot.command('play', (ctx) => ctx.scene.enter('playScene'))
+bot.command('play', async (ctx) => ctx.scene.enter('playScene'))
 
 
 bot.launch()

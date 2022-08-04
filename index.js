@@ -291,7 +291,7 @@ echoScene.leave((ctx) => {
   ctx.reply('Thank you for your time!');
 });
 
-greeterScene.use((ctx) => ctx.replyWithMarkdown('Что-то не так...'));
+echoScene.use((ctx) => ctx.replyWithMarkdown('Что-то не так...'));
 
 const staget = new Scenes.Stage([echoScene])
 bot.use(session())

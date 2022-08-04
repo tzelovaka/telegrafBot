@@ -289,16 +289,12 @@ playScene.on('text', async (ctx) => {
     }});
     await ctx.reply(`${row.name}`)
     await ctx.reply (`${row.desc}`)
-    //var p = ctx.session.myData.preferenceType; //linid
-    //var r = row.id
-    //var ctxid = ctx.message.from.id;
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', flagBtn.create({
         number: 0,
         action: 'true'}))]
-    ]
-    ))
+    ]))
   } catch (e){
     ctx.reply('Вы не добавили ни одной истории!')
 }
@@ -328,8 +324,6 @@ playMech.on('callback_query', async (ctx) => {
     release: false,
     storyblId: row.id
   }});
-
-
   await ctx.reply(`${row.bl}`);
   let x = count - 1;
   for (let i = 0; i <= x; i++){

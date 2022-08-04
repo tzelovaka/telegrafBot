@@ -1,4 +1,3 @@
-const TelegramBot = require('node-telegram-bot-api');
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');
@@ -281,8 +280,24 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 
+const echoScene = new Scenes.BaseScene('echo')
+echoScene.enter((ctx) => {
+  ctx.session.myData = {};
+  ctx.reply('Люблю театр')
+  return ctx.scene.leave();
+});
 
-bot.command ('play', async (ctx) => {
+echoScene.leave((ctx) => {
+  ctx.reply('Thank you for your time!');
+});
+
+greeterScene.use((ctx) => ctx.replyWithMarkdown('Что-то не так...'));
+
+const staget = new Scenes.Stage([echoScene])
+bot.use(session())
+bot.use(staget.middleware())
+bot.command('echo', (ctx) => ctx.scene.enter('echo'))
+/*bot.command ('play', async (ctx) => {
   try{
   const row = await story.findOne({where: {
     authId: ctx.message.from.id,
@@ -323,15 +338,15 @@ bot.command ('play', async (ctx) => {
 }
 bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
   await ctx.answerCbQuery();
-  const { number, action } = flagBtn.parse(ctx.inlineQuery.data);
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   const row = await story.findOne({where: {
-    authId: ctx.inlineQuery.from.id,
+    authId: ctx.callbackQuery.from.id,
     release: false
   }})
   await ctx.reply ('Выбор сделан')
   r = row.id
   p = number
-  ctxid = ctx.inlineQuery.from.id
+  ctxid = ctx.callbackQuery.from.id
   btnLoop();
 }
 )
@@ -341,7 +356,7 @@ async function endCom(){
 } catch (e){
     ctx.reply('Вы не добавили ни одной истории!')
 }
-})
+})*/
 
 bot.launch()
 

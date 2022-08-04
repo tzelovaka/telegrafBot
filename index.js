@@ -279,52 +279,59 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 
-
-const echoScene = new Scenes.BaseScene('echo')
-echoScene.enter((ctx) => {
-  ctx.session.myData = {};
-  ctx.reply('Люблю театр')
-  return ctx.scene.leave();
-});
-
-echoScene.leave((ctx) => {
-  ctx.reply('Thank you for your time!');
-});
-
-echoScene.use((ctx) => ctx.replyWithMarkdown('Что-то не так...'));
-
-const staget = new Scenes.Stage([echoScene])
-bot.use(session())
-bot.use(staget.middleware())
-bot.command('echo', (ctx) => ctx.scene.enter('echo'))
-/*bot.command ('play', async (ctx) => {
+const playScene = new Composer()
+playScene.on(async (ctx) => {
+  ctx.wizard.state.data = {};
   try{
-  const row = await story.findOne({where: {
-    authId: ctx.message.from.id,
+    const row = await story.findOne({where: {
+      authId: ctx.message.from.id,
+      release: false
+    }});
+    await ctx.reply(`${row.name}`)
+    await ctx.reply (`${row.desc}`)
+    //var p = ctx.session.myData.preferenceType; //linid
+    //var r = row.id
+    //var ctxid = ctx.message.from.id;
+    await ctx.reply('Начать читать?', Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('👆', flagBtn.create({
+        number: 0,
+        action: 'true'}))]
+    ]
+    ))
+  } catch (e){
+    ctx.reply('Вы не добавили ни одной истории!')
+}
+return ctx.wizard.next()
+})
+
+
+const playMech = new Composer()
+playMech.on('callback_query', async (ctx) => {
+  await ctx.answerCbQuery();
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.playMech = number;
+  try{
+  const ro = await story.findOne({where: {
+    authId: ctx.callbackQuery.from.id,
     release: false
   }});
-  await ctx.reply(`${row.name}`)
-  await ctx.reply (`${row.desc}`)
-  var p = 0; //linid
-  var r = row.id
-  var ctxid = ctx.message.from.id;
-  btnLoop();
-  async function btnLoop() {
   const row = await storybl.findOne({where: {
-    linid: p,
-    storyId: r,
-    authId: ctxid,
+    linid: ctx.wizard.state.data.playMech,
+    storyId: ro.id,
+    authId: ctx.callbackQuery.from.id,
     release: false
   }
 });
   const {count, rows} = await storylin.findAndCountAll ({where: {
-    authId: ctxid,
+    authId: ctx.callbackQuery.from.id,
     release: false,
     storyblId: row.id
   }});
+
+
   await ctx.reply(`${row.bl}`);
   let x = count - 1;
-  if (x<0) endCom();
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
@@ -335,28 +342,43 @@ bot.command('echo', (ctx) => ctx.scene.enter('echo'))
     )
   )
   }
+} catch(e){
+  await ctx.reply('Ошибка!');
 }
-bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
+ctx.wizard.selectStep(1)
+//return ctx.wizard.next()
+})
+  /*bot.action(flagBtn.filter({action: 'true'}), async (ctx)=>{
+    await ctx.answerCbQuery();
+    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+    const row = await story.findOne({where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }})
+    await ctx.reply ('Выбор сделан')
+    r = row.id
+    p = number
+    ctxid = ctx.callbackQuery.from.id
+    btnLoop();
+  }
+  )*/
+/*const playBut = new Composer()
+playBut.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  const row = await story.findOne({where: {
-    authId: ctx.callbackQuery.from.id,
-    release: false
-  }})
-  await ctx.reply ('Выбор сделан')
-  r = row.id
-  p = number
-  ctxid = ctx.callbackQuery.from.id
-  btnLoop();
-}
-)
-async function endCom(){
-   await ctx.reply('Вы завершили прохождение сюжетной ветки!')
-}
-} catch (e){
-    ctx.reply('Вы не добавили ни одной истории!')
-}
+    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+    ctx.wizard.state.data.playBut = number;
+    await ctx.reply ('Выбор сделан')
+    return ctx.wizard.back()
 })*/
+
+const playmenuScene = new Scenes.WizardScene('playScene', playMech)
+const staget = new Scenes.Stage([playmenuScene])
+bot.use(session())
+bot.use(staget.middleware())
+bot.command('play', (ctx) => ctx.scene.enter('play'))
+bot.command ('play', async (ctx) => {
+
+})
 
 bot.launch()
 

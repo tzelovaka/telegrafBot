@@ -230,7 +230,8 @@ const linkChoice = new Composer()
 linkChoice.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.linkChoice = number;
-  const {count, rows} = await storybl.findAndCountAll({where: {
+  try{
+  const count = await storybl.count({where: {
     linid: ctx.wizard.state.data.linkChoice,
     authId: ctx.message.from.id,
     release: false
@@ -239,6 +240,10 @@ linkChoice.on ('callback_query', async (ctx)=>{
     await ctx.reply('Ошибка! Эта ссылка уже ведёт к одному из блоков!')
     return ctx.scene.leave()
   }
+} catch(e){
+  await ctx.reply('Произошла ошибка!')
+  return ctx.scene.leave()
+}
   await ctx.reply ('Введите текст блока.');
   return ctx.wizard.next()
 })

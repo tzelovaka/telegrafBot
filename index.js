@@ -31,12 +31,10 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  const { count, rows } = await story.findAndCountAll({where: {
+  const count = await story.count({where: {
     authId: ctx.message.from.id, 
     release: false,
   }});
-  console.log(count);
-  console.log(rows);
   if (count > 0) {
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()

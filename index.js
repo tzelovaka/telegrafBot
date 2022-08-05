@@ -329,6 +329,7 @@ playMech.on('callback_query', async (ctx) => {
     release: false
   }
 });
+await ctx.reply(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
@@ -338,8 +339,6 @@ playMech.on('callback_query', async (ctx) => {
     await ctx.reply('Вы завершили прохождение истории!');
     return ctx.scene.leave()
   }
-
-  await ctx.reply(`${row.bl}`);
 
   let x = count - 1;
   for (let i = 0; i <= x; i++){

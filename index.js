@@ -121,7 +121,7 @@ try{
     release: false
   }});
   if (count <= 0) {
-    await ctx.reply ('Надо создать историю! => /make');
+    await ctx.reply ('Надо создать историю! 👉 /make');
     return ctx.scene.leave()
   }
   await ctx.reply ('Выберите блок из доступных:');
@@ -203,7 +203,7 @@ try{
     release: false
   }});
   if (row === null) {
-    await ctx.reply ('Надо создать историю!');
+    await ctx.reply ('Надо создать историю! 👉 /make');
     return ctx.scene.leave()
   }
   const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
@@ -229,6 +229,15 @@ try{
 const linkChoice = new Composer()
 linkChoice.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const {count, rows} = await storybl.findAndCountAll({where: {
+    linid: number,
+    authId: ctx.message.from.id,
+    release: false
+  }});
+  if (count > 0){
+    await ctx.reply('Ошибка! Эта ссылка уже ведёт к одному из блоков!')
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.linkChoice = number;
   await ctx.reply ('Введите текст блока.');
   return ctx.wizard.next()

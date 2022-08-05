@@ -233,7 +233,7 @@ linkChoice.on ('callback_query', async (ctx)=>{
   try{
   const count = await storybl.count({where: {
     linid: ctx.wizard.state.data.linkChoice,
-    authId: ctx.message.from.id,
+    authId: ctx.callbackQuery.from.id,
     release: false
   }});
   if (count > 0){

@@ -263,12 +263,12 @@ linkBlock.on ('text', async (ctx)=>{
     bl: `${ctx.wizard.state.data.linkBlock}`,
     authId: ctx.message.from.id,
     release: false,
-    storyId: `${row.id}`,
+    storyId: row.id,
   }, { transaction: t });
 })
 await t.commit('commit');
 } catch (error) {
-  await ctx.reply ('Ошибка! Попробуйте сначала.');
+  await ctx.reply ('Ошибка! Пожалуйста попробуйте сначала.');
   await t.rollback();
   return ctx.scene.leave()
 }
@@ -334,7 +334,10 @@ playMech.on('callback_query', async (ctx) => {
     release: false,
     storyblId: row.id
   }});
-
+  if (count < 1) {
+    await ctx.reply('Вы завершили прохождение истории!');
+    return ctx.scene.leave()
+  }
 
   await ctx.reply(`${row.bl}`);
 
@@ -352,7 +355,7 @@ playMech.on('callback_query', async (ctx) => {
 } catch(e){
   await ctx.reply('Ошибка!');
 }
-ctx.wizard.selectStep(1)
+return ctx.wizard.selectStep(1)
 })
 
 const playmenuScene = new Scenes.WizardScene('playScene', playScene, playMech)

@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -120,7 +120,7 @@ try{
     authId: ctx.message.from.id,
     release: false
   }});
-  if (count < 0) {
+  if (count <= 0) {
     await ctx.reply ('Надо создать историю! => /make');
     return ctx.scene.leave()
   }

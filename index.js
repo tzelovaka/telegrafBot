@@ -297,8 +297,8 @@ playScene.on('text', async (ctx) => {
       authId: ctx.message.from.id,
       release: false
     }});
-    await ctx.reply(`${row.name}`)
-    await ctx.reply (`${row.desc}`)
+    await ctx.reply(`🎫 ${row.name}`)
+    await ctx.reply (`📖 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', flagBtn.create({

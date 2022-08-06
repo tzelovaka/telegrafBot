@@ -315,6 +315,7 @@ return ctx.wizard.next()
 const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
+  ctx.deleteMessage(ctx.callbackQuery.message_id)
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.playMech = number;
   try{

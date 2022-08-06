@@ -384,6 +384,18 @@ deleteScene.action('Story', async (ctx) => {
       release: false
     }
   });
+  await storybl.destroy({
+    where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }
+  });
+  await storylin.destroy({
+    where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }
+  });
   return ctx.scene.leave();
 });
 

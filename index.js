@@ -364,6 +364,55 @@ bot.use(staget.middleware())
 bot.command('play', async (ctx) => ctx.scene.enter('playScene'))
 
 
+
+
+
+const deleteScene = new Scenes.BaseScene('delete')
+deleteScene.enter((ctx) => {
+  ctx.session.myData = {};
+  ctx.reply('Выберите вид удаляемого элемента:', Markup.inlineKeyboard(
+    [
+    [Markup.button.callback('Историю', 'Story'), Markup.button.callback('Выбор', 'Link'), Markup.button.callback('Блок', 'Block')]
+  ]))
+});
+deleteScene.action('Story', async (ctx) => {
+  await ctx.reply('You choose theater');
+  ctx.session.myData.preferenceType = 'Theater';
+  await story.destroy({
+    where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }
+  });
+  return ctx.scene.leave();
+});
+
+deleteScene.action('Link', (ctx) => {
+  ctx.reply('You choose movie, your loss');
+  ctx.session.myData.preferenceType = 'Movie';
+  return ctx.scene.leave();
+});
+
+deleteScene.action('Block', (ctx) => {
+  ctx.reply('You choose movie, your loss');
+  ctx.session.myData.preferenceType = 'Movie';
+  return ctx.scene.leave();
+});
+
+deleteScene.leave((ctx) => {
+  ctx.reply('Операция успешно завершена.');
+});
+greeterScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));
+
+const staged = new Scenes.Stage([deleteScene])
+bot.use(session())
+bot.use(staged.middleware())
+bot.command('delete', (ctx) => ctx.scene.enter('delete'))
+
+
+
+
+
 bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))

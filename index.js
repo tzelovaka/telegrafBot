@@ -315,7 +315,15 @@ return ctx.wizard.next()
 const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
-  ctx.deleteMessage(ctx.callbackQuery.message_id)
+    for(let i = ctx.callbackQuery.message_id; i >= 0; i--) {
+        try {
+            let res = await ctx.telegram.deleteMessage(i);
+            console.log(res);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+  //ctx.deleteMessage(ctx.callbackQuery.message_id)
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.playMech = number;
   try{

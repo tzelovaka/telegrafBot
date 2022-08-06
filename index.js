@@ -402,7 +402,7 @@ deleteScene.action('Block', (ctx) => {
 deleteScene.leave((ctx) => {
   ctx.reply('Операция успешно завершена.');
 });
-greeterScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));
+deleteScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));
 
 const staged = new Scenes.Stage([deleteScene])
 bot.use(session())

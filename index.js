@@ -323,7 +323,6 @@ playMech.on('callback_query', async (ctx) => {
       console.error(e);
   }
   }
-  ctx.deleteMessage(res.message_id)
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.playMech = number;
   try{

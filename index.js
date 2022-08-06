@@ -316,13 +316,13 @@ const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
   let res = await ctx.reply ('👇💭');
-  for (let d = res.message_id - 1; d >= 0; d--){
-    try {
-      let del = await ctx.deleteMessage(d);
-  } catch (e) {
-      console.error(e);
-  }
-  }
+  //for (let d = res.message_id - 1; d >= 0; d--){
+    //try {
+     // let del = await ctx.deleteMessage(d);
+  //} catch (e) {
+  //    console.error(e);
+  //}
+ // }
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.playMech = number;
   try{

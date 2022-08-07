@@ -86,11 +86,6 @@ await t.commit('commit');
 
 const baseSave = new Composer()
 baseSave.on ('text', async (ctx)=>{
-  if (ctx.message.text === '🔙Выйти') 
-  {
-    await ctx.reply ('Операция прошла успешно.');
-    return ctx.scene.leave()
-  }
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
   try{
@@ -397,12 +392,12 @@ deleteScene.enter((ctx) => {
   ctx.session.myData = {};
   ctx.reply('Выберите вид удаляемого элемента:', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('Историю', 'Story'), Markup.button.callback('Выбор', 'Link'), Markup.button.callback('Блок', 'Block')]
+    [Markup.button.callback('Историю', 'Story'), Markup.button.callback('Сюжетную ветку', 'branch')]
   ]))
 });
 deleteScene.action('Story', async (ctx) => {
-  await ctx.reply('You choose theater');
-  ctx.session.myData.preferenceType = 'Theater';
+  ctx.session.myData.preferenceType = 'Story';
+
   await story.destroy({
     where: {
       authId: ctx.callbackQuery.from.id,
@@ -421,20 +416,53 @@ deleteScene.action('Story', async (ctx) => {
       release: false
     }
   });
+
+  await ctx.reply('Создаваемая история была успешна удалена.');
   return ctx.scene.leave();
 });
 
-deleteScene.action('Link', (ctx) => {
-  ctx.reply('You choose movie, your loss');
-  ctx.session.myData.preferenceType = 'Movie';
+deleteScene.action('Branch', async (ctx) => {
+  ctx.session.myData.preferenceType = 'Branch';
+  try{
+    const row = await story.findOne({where: {
+      authId: ctx.message.from.id,
+      release: false
+    }});
+    if (row === null) {
+      await ctx.reply ('Требуется создать историю! 👉 /make');
+      return ctx.scene.leave()
+    }
+    const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
+    if (count < 0) {
+      await ctx.reply ('Требуется больше ссылок! 👉 /link');
+      return ctx.scene.leave()
+    }
+    await ctx.reply ('Выберите ссылку, после которой требуется удалить контент (включая ссылку):');
+      let x = count - 1;
+      for (let i=0; i<=x; i++){
+        await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
+          [
+          [Markup.button.callback('❌', flagBtn.create({
+            number: rows[i].id,
+            action: 'true'}))]
+        ]
+        )
+      )
+      }
+    } catch (e){
+      console.log(e);
+      await ctx.replyWithHTML('<i>Ошибка!</i>')
+    }
   return ctx.scene.leave();
 });
 
-deleteScene.action('Block', (ctx) => {
-  ctx.reply('You choose movie, your loss');
-  ctx.session.myData.preferenceType = 'Movie';
+deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
+  await ctx.answerCbQuery()
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.session.myData.preferenceType = number;
+  console.log(number);
   return ctx.scene.leave();
-});
+})
 
 deleteScene.leave((ctx) => {
   ctx.reply('Операция успешно завершена.');

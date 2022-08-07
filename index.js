@@ -315,7 +315,7 @@ return ctx.wizard.next()
 const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
-  let res = await ctx.reply ('↘↘↘');
+  let res = await ctx.reply ('✅');
   //for (let d = res.message_id - 1; d >= 0; d--){
     //try {
      // let del = await ctx.deleteMessage(d);

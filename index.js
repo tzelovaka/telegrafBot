@@ -41,14 +41,18 @@ baseEmpty.on ('text', async (ctx)=>{
   }
   await ctx.reply('Введите название.', Markup.keyboard(
     [
-    ['🔙Назад']
+    ['🔙Выйти']
   ]))
   return ctx.wizard.next()
 })
 
 const storyName = new Composer()
 storyName.on ('text', async (ctx)=>{
-  if (ctx.message.text === '🔙Назад') return ctx.scene.leave()
+  if (ctx.message.text === '🔙Выйти') 
+  {
+    await ctx.reply ('Операция прошла успешно.');
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
   return ctx.wizard.next()
@@ -56,6 +60,11 @@ storyName.on ('text', async (ctx)=>{
 
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
+  if (ctx.message.text === '🔙Выйти') 
+  {
+    await ctx.reply ('Операция прошла успешно.');
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.storyDesc = ctx.message.text;
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   const t = await sequelize.transaction();
@@ -77,6 +86,11 @@ await t.commit('commit');
 
 const baseSave = new Composer()
 baseSave.on ('text', async (ctx)=>{
+  if (ctx.message.text === '🔙Выйти') 
+  {
+    await ctx.reply ('Операция прошла успешно.');
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
   try{
@@ -128,7 +142,6 @@ try{
     await ctx.reply ('Надо создать историю! 👉 /make');
     return ctx.scene.leave()
   }
-  await ctx.reply ('Выберите блок из доступных:');
   let x = count - 1;
   for (let i=0; i<=x; i++){
     await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(

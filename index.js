@@ -433,7 +433,7 @@ deleteScene.action('Branch', async (ctx) => {
       return ctx.scene.leave()
     }
     const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
-    if (count < 0) {
+    if (count < 1) {
       await ctx.reply ('Требуется больше ссылок! 👉 /link');
       return ctx.scene.leave()
     }

@@ -392,7 +392,7 @@ deleteScene.enter((ctx) => {
   ctx.session.myData = {};
   ctx.reply('Выберите вид удаляемого элемента:', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('Историю', 'Story'), Markup.button.callback('Сюжетную ветку', 'branch')]
+    [Markup.button.callback('Историю', 'Story'), Markup.button.callback('Сюжетную ветку', 'Branch')]
   ]))
 });
 deleteScene.action('Story', async (ctx) => {

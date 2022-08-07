@@ -39,12 +39,16 @@ baseEmpty.on ('text', async (ctx)=>{
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
   }
-  await ctx.reply ('Введите название.');
+  await ctx.reply('Введите название.', Markup.keyboard(
+    [
+    ['🔙Назад']
+  ]))
   return ctx.wizard.next()
 })
 
 const storyName = new Composer()
 storyName.on ('text', async (ctx)=>{
+  if (ctx.message.text === '🔙Назад') return ctx.scene.leave()
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
   return ctx.wizard.next()

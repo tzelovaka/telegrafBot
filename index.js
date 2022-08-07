@@ -453,7 +453,6 @@ deleteScene.action('Branch', async (ctx) => {
       console.log(e);
       await ctx.replyWithHTML('<i>Ошибка!</i>')
     }
-  return ctx.scene.leave();
 });
 
 deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {

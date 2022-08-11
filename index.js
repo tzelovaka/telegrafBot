@@ -481,12 +481,7 @@ for (; ;){
     storyblId: null,
     //storyId: row.id
   }})
-  const {co, ro} = await storybl.findAndCountAll({where: {
-    authId: ctx.callbackQuery.from.id,
-    release: false,
-    //storyId: row.id
-  }})
-  if (co < 1 || ro === null) {
+  if (count>1){
     break
   }
   let x = count - 1;
@@ -498,16 +493,16 @@ for (; ;){
       release: false
       }
     })
-    }
-  }
     await storylin.destroy({
       where:{
+        id: rows[i].id,
         authId: ctx.callbackQuery.from.id,
-        release: false,
-        storyblId: null,
+        release: false
       }
     })
-  await ctx.reply ('Блоки удалены.')
+    }
+  }
+  await ctx.reply ('Ветка удалена.')
       
 } catch(e){
   await ctx.reply('Ошибка!')

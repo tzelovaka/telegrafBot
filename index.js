@@ -481,7 +481,7 @@ for (; ;){
     storyblId: null,
     //storyId: row.id
   }})
-  if (count>1){
+  if (count<1){
     break
   }
   let x = count - 1;

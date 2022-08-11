@@ -460,6 +460,40 @@ deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.session.myData.preferenceType = number;
   console.log(number);
+  const row = story.findOne({where: {
+    authId: ctx.callbackQuery.from.id,
+    release: false,
+  }})
+  await storybl.destroy({ 
+    where: { 
+    linid: number,
+    authId: ctx.callbackQuery.from.id,
+    release: false,
+    storyId: row.id
+}
+});
+
+for (; ;){
+  const {count, rows} = await storylin.findAndCountAll({where: {
+    authId: ctx.callbackQuery.from.id,
+    release: false,
+    storyblId: null,
+    storyId: row.id
+  }})
+  if (count = 0) break
+  let x = count - 1;
+  for (let i=0; i<=x; i++){
+  await storybl.destroy({
+    where:{
+      linid: rows[i].id,
+      authId: ctx.callbackQuery.from.id,
+      release: false
+  }
+})
+  }
+  }
+
+
   return ctx.scene.leave();
 })
 

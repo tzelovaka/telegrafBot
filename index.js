@@ -480,7 +480,7 @@ for (; ;){
     storyblId: null,
     //storyId: row.id
   }})
-  if (count = 0 || rows === null) {
+  if (count < 1) {
     await ctx.reply ('Блоки удалены.')
     break
   }

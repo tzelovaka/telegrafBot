@@ -460,6 +460,7 @@ deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
+  try{
   /*const row = story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
@@ -501,6 +502,9 @@ for (; ;){
   }
   }
   await ctx.reply ('Блоки удалены.')
+} catch(e){
+  await ctx.reply('Ошибка!')
+}
 
   return ctx.scene.leave();
 })

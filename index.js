@@ -481,6 +481,9 @@ for (; ;){
     storyblId: null,
     //storyId: row.id
   }})
+  if (count < 1 || rows === null) {
+    break
+  }
   const {co, ro} = await storybl.findAndCountAll({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,

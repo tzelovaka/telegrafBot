@@ -458,8 +458,8 @@ deleteScene.action('Branch', async (ctx) => {
 deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
   await ctx.answerCbQuery()
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  ctx.session.myData.preferenceType = number;
   console.log(number);
+  ctx.session.myData.preferenceType = number;
   const row = story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,

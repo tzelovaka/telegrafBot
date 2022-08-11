@@ -460,16 +460,16 @@ deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
-  const row = story.findOne({where: {
+  /*const row = story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
-  }})
+  }})*/
   await storybl.destroy({ 
     where: { 
     linid: ctx.session.myData.preferenceType,
     authId: ctx.callbackQuery.from.id,
     release: false,
-    storyId: row.id
+    //storyId: row.id
 }
 });
 

@@ -480,7 +480,10 @@ for (; ;){
     storyblId: null,
     storyId: row.id
   }})
-  if (count = 0) break
+  if (count = 0 || rows === null) {
+    await ctx.reply ('Блоки удалены.')
+    break
+  }
   let x = count - 1;
   for (let i=0; i<=x; i++){
   await storybl.destroy({

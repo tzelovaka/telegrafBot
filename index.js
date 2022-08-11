@@ -478,7 +478,7 @@ for (; ;){
     authId: ctx.callbackQuery.from.id,
     release: false,
     storyblId: null,
-    storyId: row.id
+    //storyId: row.id
   }})
   if (count = 0 || rows === null) {
     await ctx.reply ('Блоки удалены.')

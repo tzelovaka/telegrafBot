@@ -465,6 +465,14 @@ deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
     authId: ctx.callbackQuery.from.id,
     release: false,
   }})*/
+  await storylin.destroy({ 
+    where: { 
+    id: ctx.session.myData.preferenceType,
+    authId: ctx.callbackQuery.from.id,
+    release: false,
+    //storyId: row.id
+}
+})
   await storybl.destroy({ 
     where: { 
     linid: ctx.session.myData.preferenceType,

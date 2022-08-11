@@ -480,8 +480,7 @@ for (; ;){
     storyblId: null,
     //storyId: row.id
   }})
-  if (count < 1) {
-    await ctx.reply ('Блоки удалены.')
+  if (count < 1 || rows === null) {
     break
   }
   let x = count - 1;
@@ -495,7 +494,7 @@ for (; ;){
 })
   }
   }
-
+  await ctx.reply ('Блоки удалены.')
 
   return ctx.scene.leave();
 })

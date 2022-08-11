@@ -500,15 +500,38 @@ for (; ;){
       linid: rows[i].id,
       authId: ctx.callbackQuery.from.id,
       release: false
-  }
-})
-  }
+      }
+    })
+    }
   }
   await ctx.reply ('Блоки удалены.')
+
+  const {count, rows} = await storylin.findAndCountAll({where: {
+    authId: ctx.callbackQuery.from.id,
+    release: false
+    //storyId: row.id
+  }})
+  let x = count - 1;
+  for (let i=0; i<=x; i++){
+    const row = await storybl.findOne({where:{
+      linid: rows[i].id,
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }})
+    if (row === null){
+      await storylin.destroy({
+        where:{
+          id: rows[i].id,
+          authId: ctx.callbackQuery.from.id,
+          release: false
+        }
+      })
+      console.log('Ссылка удалена.');
+    }
+  }
 } catch(e){
   await ctx.reply('Ошибка!')
 }
-
   return ctx.scene.leave();
 })
 

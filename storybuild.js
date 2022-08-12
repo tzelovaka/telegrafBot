@@ -4,6 +4,9 @@ const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
 const sequelize = require('./db');
+require ('dotenv').config();
+const { BOT_TOKEN} = process.env;
+const bot = new Telegraf(BOT_TOKEN)
 
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{

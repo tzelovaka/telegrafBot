@@ -96,4 +96,4 @@ bot.use(session())
 bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
-module.exports = storybuild;
+module.exports = menuCreate;

@@ -3,7 +3,7 @@ const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
-const storybuild = require('./storybuild')
+const {menuCreate} = require('./storybuild')
 const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
 require ('dotenv').config();

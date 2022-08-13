@@ -583,7 +583,7 @@ const editChoiceTrue = new Composer()
       await ctx.reply('Выберите блок, который хотите отредактровать:')
       try{
         const { count, rows } = await storybl.findAndCountAll({where: {
-          authId: ctx.message.from.id,
+          authId: ctx.callbackQuery.from.id,
           release: false
         }});
         if (count <= 0) {

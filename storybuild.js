@@ -92,3 +92,4 @@ const menuCreate = new Scenes.WizardScene('sceneCreate', baseEmpty, storyName, s
 const stage = new Scenes.Stage ([menuCreate])
 bot.use(session())
 bot.use(stage.middleware())
+module.exports = bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))

@@ -28,8 +28,6 @@ story.hasMany(storybl);
 story.hasMany(storylin);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
-bot.command ('make', async (ctx) => storybuild.ctx.scene.enter('sceneCreate'))
-
 
 
 

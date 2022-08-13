@@ -591,7 +591,6 @@ editChoiceTrue.on ('callback_query', async (ctx)=>{
 })
 const editStory = new Composer()
 editStory.on ('text', async (ctx)=>{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.editStory = ctx.message.text;
   await story.update({ name: `${ctx.wizard.state.data.editStory}` }, {
     where: {

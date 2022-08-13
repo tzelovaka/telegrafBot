@@ -335,7 +335,7 @@ return ctx.wizard.next()
 const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
-  let res = await ctx.reply ('✅');
+  //let res = await ctx.reply ('✅');
   //for (let d = res.message_id - 1; d >= 0; d--){
     //try {
      // let del = await ctx.deleteMessage(d);
@@ -390,6 +390,8 @@ const staget = new Scenes.Stage([playmenuScene])
 bot.use(session())
 bot.use(staget.middleware())
 bot.command('play', async (ctx) => ctx.scene.enter('playScene'))
+
+
 
 
 
@@ -535,6 +537,76 @@ const staged = new Scenes.Stage([deleteScene])
 bot.use(session())
 bot.use(staged.middleware())
 bot.command('delete', (ctx) => ctx.scene.enter('delete'))
+
+
+
+
+
+
+
+const editChoice = new Composer()
+editChoice.on ('text', async (ctx)=>{
+  ctx.wizard.state.data = {};
+  ctx.reply('Выберите вид редактируемого элемента:', Markup.inlineKeyboard(
+    [
+    [Markup.button.callback('Название', flagBtn.create({
+      number: 1,
+      action: 'true'})), 
+      Markup.button.callback('Описание', flagBtn.create({
+        number: 2,
+        action: 'true'})
+        )],
+    [Markup.button.callback('Блок', flagBtn.create({
+      number: 3,
+      action: 'true'})), 
+      Markup.button.callback('Ссылка', flagBtn.create({
+        number: 4,
+        action: 'true'}))]
+  ]))
+  return ctx.wizard.next()
+})
+
+const editChoiceTrue = new Composer()
+editChoiceTrue.on ('callback_query', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.editChoiceTrue = number;
+  if (ctx.wizard.state.data.editChoiceTrue = 1){
+    await ctx.reply('Введите новое название')
+    ctx.wizard.selectStep(2)
+  }
+  if (ctx.wizard.state.data.editChoiceTrue = 1){
+    await ctx.reply('Введите новое описание')
+    ctx.wizard.selectStep(3)
+  }
+  if (ctx.wizard.state.data.editChoiceTrue = 1){
+    await ctx.reply('Выберите блок, который хотите отредактровать:')
+
+    ctx.wizard.selectStep(4)
+  }
+  if (ctx.wizard.state.data.editChoiceTrue = 1){
+    await ctx.reply('Выберите ссылку, который хотите отредактровать:')
+    ctx.wizard.selectStep(5)
+  }
+})
+const editStory = new Composer()
+editStory.on ('text', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.editStory = ctx.message.text;
+  await story.update({ name: `${ctx.wizard.state.data.editStory}` }, {
+    where: {
+      authId: ctx.message.from.id,
+      release: false,
+    }
+  });
+  return ctx.scene.leave()
+  })
+
+const menuEdit = new Scenes.WizardScene('editScene', editChoice, editChoiceTrue, editStory, editDesc, editBlock, editLink)
+const stageu = new Scenes.Stage ([menuEdit])
+bot.use(session())
+bot.use(stageu.middleware())
+bot.command ('edit', async (ctx) => ctx.scene.enter('editScene'))
+
 
 
 

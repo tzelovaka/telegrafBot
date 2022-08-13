@@ -39,20 +39,20 @@ baseEmpty.on ('text', async (ctx)=>{
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
   }
-  await ctx.reply('Введите название.', Markup.keyboard(
-    [
-    ['🔙Выйти']
-  ]))
+  //await ctx.reply('Введите название.', Markup.keyboard(
+    //[
+    //['🔙Выйти']
+  //]))
   return ctx.wizard.next()
 })
 
 const storyName = new Composer()
 storyName.on ('text', async (ctx)=>{
-  if (ctx.message.text === '🔙Выйти') 
-  {
-    await ctx.reply ('Операция прошла успешно.');
-    return ctx.scene.leave()
-  }
+  //if (ctx.message.text === '🔙Выйти') 
+  //{
+    //await ctx.reply ('Операция прошла успешно.');
+    //return ctx.scene.leave()
+  //}
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
   return ctx.wizard.next()
@@ -60,11 +60,11 @@ storyName.on ('text', async (ctx)=>{
 
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
-  if (ctx.message.text === '🔙Выйти') 
-  {
-    await ctx.reply ('Операция прошла успешно.');
-    return ctx.scene.leave()
-  }
+  //if (ctx.message.text === '🔙Выйти') 
+  //{
+   // await ctx.reply ('Операция прошла успешно.');
+    //return ctx.scene.leave()
+  //}
   ctx.wizard.state.data.storyDesc = ctx.message.text;
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   const t = await sequelize.transaction();
@@ -402,7 +402,7 @@ deleteScene.enter((ctx) => {
   ctx.session.myData = {};
   ctx.reply('Выберите вид удаляемого элемента:', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('Историю', 'Story'), Markup.button.callback('Сюжетную ветку', 'Branch')]
+    [Markup.button.callback('История', 'Story'), Markup.button.callback('Сюжетная ветка', 'Branch')]
   ]))
 });
 deleteScene.action('Story', async (ctx) => {
@@ -547,7 +547,7 @@ bot.command('delete', (ctx) => ctx.scene.enter('delete'))
 const editChoice = new Composer()
 editChoice.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
-  ctx.reply('Выберите вид редактируемого элемента:', Markup.inlineKeyboard(
+  await ctx.reply('Выберите вид редактируемого элемента:', Markup.inlineKeyboard(
     [
     [Markup.button.callback('Название', flagBtn.create({
       number: 1,

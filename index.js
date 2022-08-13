@@ -591,7 +591,6 @@ editChoiceTrue.on ('callback_query', async (ctx)=>{
 })
 const editStory = new Composer()
 editStory.on ('text', async (ctx)=>{
-  await ctx.answerCbQuery('Название отредактиовано');
   ctx.wizard.state.data.editStory = ctx.message.text;
   await story.update({ name: `${ctx.wizard.state.data.editStory}` }, {
     where: {
@@ -599,7 +598,7 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
-  //await ctx.reply('Выберите ссылку, который хотите отредактровать:')
+  await ctx.reply('Название отредактировано.')
   return ctx.scene.leave()
   })
 

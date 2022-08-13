@@ -598,6 +598,8 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
+  ctx.answerCbQuery('Название успешно отредактировано.');
+  //await ctx.reply('Выберите ссылку, который хотите отредактровать:')
   return ctx.scene.leave()
   })
 

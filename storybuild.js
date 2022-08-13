@@ -1,3 +1,10 @@
+const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
+const { CallbackData } = require('@bot-base/callback-data');
+const storybl = require('./modebl');
+const storylin = require('./modelink');
+const story = require ('./story');
+const sequelize = require('./db');
+
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};

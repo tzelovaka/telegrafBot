@@ -567,7 +567,7 @@ editChoice.on ('text', async (ctx)=>{
 })
 
 const editChoiceTrue = new Composer()
-editChoiceTrue.on ('callback_query', async (ctx)=>{
+  editChoiceTrue.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.editChoiceTrue = number;
   switch (ctx.wizard.state.data.editChoiceTrue) {
@@ -581,6 +581,30 @@ editChoiceTrue.on ('callback_query', async (ctx)=>{
       break;
     case '3':
       await ctx.reply('Выберите блок, который хотите отредактровать:')
+      try{
+        const { count, rows } = await storybl.findAndCountAll({where: {
+          authId: ctx.message.from.id,
+          release: false
+        }});
+        if (count <= 0) {
+          await ctx.reply ('Надо создать историю! 👉 /make');
+          return ctx.scene.leave()
+        }
+        let x = count - 1;
+        for (let i=0; i<=x; i++){
+          await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
+            [
+            [Markup.button.callback('👆', flagBtn.create({
+              number: rows[i].id,
+              action: 'true'}))]
+          ]
+          )
+        )
+        }
+      } catch (e){
+        console.log(e);
+        await ctx.replyWithHTML('<i>Ошибка!</i>')
+      }
       ctx.wizard.selectStep(4)
       break;
     case '4':
@@ -616,8 +640,25 @@ editStory.on ('text', async (ctx)=>{
   })
 
   const editBlock = new Composer()
-editBlock.on ('text', async (ctx)=>{
-  return ctx.scene.leave()
+  editBlock.on ('callback_query', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.editBlock = number;
+  await ctx.reply('Введите текст блока.')
+  return ctx.wizard.next()
+  })
+
+  const editBlockTrue = new Composer()
+  editBlock.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.editBlockTrue = ctx.message.text;
+  await storybl.update({ bl: `${ctx.wizard.state.data.editDesc}` }, {
+    where: {
+      id: ctx.wizard.state.data.editBlock,
+      authId: ctx.message.from.id,
+      release: false,
+    }
+  });
+  await ctx.reply('Описание создаваемой истории отредактировано.')
+  return ctx.wizard.next()
   })
 
   const editLink = new Composer()
@@ -625,7 +666,7 @@ editLink.on ('text', async (ctx)=>{
   return ctx.scene.leave()
   })
 
-const menuEdit = new Scenes.WizardScene('editScene', editChoice, editChoiceTrue, editStory, editDesc, editBlock, editLink)
+const menuEdit = new Scenes.WizardScene('editScene', editChoice, editChoiceTrue, editStory, editDesc, editBlock, editBlockTrue, editLink)
 const stageu = new Scenes.Stage ([menuEdit])
 bot.use(session())
 bot.use(stageu.middleware())

@@ -550,17 +550,17 @@ editChoice.on ('text', async (ctx)=>{
   await ctx.reply('Выберите вид редактируемого элемента:', Markup.inlineKeyboard(
     [
     [Markup.button.callback('Название', flagBtn.create({
-      number: 1,
+      number: '1',
       action: 'true'})), 
       Markup.button.callback('Описание', flagBtn.create({
-        number: 2,
+        number: '2',
         action: 'true'})
         )],
     [Markup.button.callback('Блок', flagBtn.create({
-      number: 3,
+      number: '3',
       action: 'true'})), 
       Markup.button.callback('Ссылка', flagBtn.create({
-        number: 4,
+        number: '4',
         action: 'true'}))]
   ]))
   return ctx.wizard.next()
@@ -571,19 +571,19 @@ editChoiceTrue.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.editChoiceTrue = number;
   switch (ctx.wizard.state.data.editChoiceTrue) {
-    case 1:
+    case '1':
       await ctx.reply('Введите новое название')
       ctx.wizard.selectStep(2)
       break;
-    case 2:
+    case '2':
       await ctx.reply('Введите новое описание')
       ctx.wizard.selectStep(3)
       break;
-    case 3:
+    case '3':
       await ctx.reply('Выберите блок, который хотите отредактровать:')
       ctx.wizard.selectStep(4)
       break;
-    case 4:
+    case '4':
       await ctx.reply('Выберите ссылку, который хотите отредактровать:')
       ctx.wizard.selectStep(5)
       break;

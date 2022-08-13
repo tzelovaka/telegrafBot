@@ -648,7 +648,7 @@ editStory.on ('text', async (ctx)=>{
   })
 
   const editBlockTrue = new Composer()
-  editBlock.on ('text', async (ctx)=>{
+  editBlockTrue.on ('text', async (ctx)=>{
   ctx.wizard.state.data.editBlockTrue = ctx.message.text;
   await storybl.update({ bl: `${ctx.wizard.state.data.editBlockTrue}` }, {
     where: {
@@ -657,7 +657,7 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
-  await ctx.reply('Описание создаваемой истории отредактировано.')
+  await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
   return ctx.wizard.next()
   })
 

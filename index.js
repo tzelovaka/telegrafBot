@@ -570,21 +570,23 @@ const editChoiceTrue = new Composer()
 editChoiceTrue.on ('callback_query', async (ctx)=>{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.editChoiceTrue = number;
-  if (ctx.wizard.state.data.editChoiceTrue = 1){
-    await ctx.reply('Введите новое название')
-    ctx.wizard.selectStep(2)
-  }
-  if (ctx.wizard.state.data.editChoiceTrue = 2){
-    await ctx.reply('Введите новое описание')
-    ctx.wizard.selectStep(3)
-  }
-  if (ctx.wizard.state.data.editChoiceTrue = 3){
-    await ctx.reply('Выберите блок, который хотите отредактровать:')
-    ctx.wizard.selectStep(4)
-  }
-  if (ctx.wizard.state.data.editChoiceTrue = 4){
-    await ctx.reply('Выберите ссылку, который хотите отредактровать:')
-    ctx.wizard.selectStep(5)
+  switch (ctx.wizard.state.data.editChoiceTrue) {
+    case 1:
+      await ctx.reply('Введите новое название')
+      ctx.wizard.selectStep(2)
+      break;
+    case 2:
+      await ctx.reply('Введите новое описание')
+      ctx.wizard.selectStep(3)
+      break;
+    case 3:
+      await ctx.reply('Выберите блок, который хотите отредактровать:')
+      ctx.wizard.selectStep(4)
+      break;
+    case 4:
+      await ctx.reply('Выберите ссылку, который хотите отредактровать:')
+      ctx.wizard.selectStep(5)
+      break;
   }
 })
 const editStory = new Composer()

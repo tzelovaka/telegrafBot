@@ -598,12 +598,20 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
-  await ctx.reply('Название отредактировано.')
+  await ctx.reply('Название создаваемой истории отредактировано.')
   return ctx.scene.leave()
   })
 
   const editDesc = new Composer()
   editDesc.on ('text', async (ctx)=>{
+    ctx.wizard.state.data.editDesc = ctx.message.text;
+  await story.update({ name: `${ctx.wizard.state.data.editDesc}` }, {
+    where: {
+      authId: ctx.message.from.id,
+      release: false,
+    }
+  });
+  await ctx.reply('Описание создаваемой истории отредактировано.')
   return ctx.scene.leave()
   })
 

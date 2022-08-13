@@ -615,12 +615,12 @@ const editChoiceTrue = new Composer()
           release: false
         }});
         if (row === null) {
-          await ctx.reply ('Надо создать историю! 👉 /make');
+          await ctx.reply ('Требуется создать историю! 👉 /make');
           return ctx.scene.leave()
         }
         const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
         if (count < 1) {
-          await ctx.reply ('Надо создать хотя бы одну ссылку! 👉 /link');
+          await ctx.reply ('Требуется создать хотя бы одну ссылку! 👉 /link');
           return ctx.scene.leave()
         }
           let x = count - 1;
@@ -638,7 +638,7 @@ const editChoiceTrue = new Composer()
           console.log(e);
           await ctx.replyWithHTML('<i>Ошибка!</i>')
         }
-      ctx.wizard.selectStep(5)
+      ctx.wizard.selectStep(6)
       break;
   }
 })
@@ -700,7 +700,7 @@ editStory.on ('text', async (ctx)=>{
       console.log(e);
       await ctx.replyWithHTML('<i>Ошибка!</i>')
     }
-  return ctx.scene.leave()
+    return ctx.wizard.next()
   })
 
   const editLinkTrue = new Composer()

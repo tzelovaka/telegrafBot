@@ -658,7 +658,7 @@ editStory.on ('text', async (ctx)=>{
     }
   });
   await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
-  return ctx.wizard.next()
+  return ctx.scene.leave()
   })
 
   const editLink = new Composer()

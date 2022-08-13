@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
-
+bot.use(sender)
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
 }

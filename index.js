@@ -574,16 +574,16 @@ editChoiceTrue.on ('callback_query', async (ctx)=>{
     await ctx.reply('Введите новое название')
     ctx.wizard.selectStep(2)
   }
-  if (ctx.wizard.state.data.editChoiceTrue = 1){
+  if (ctx.wizard.state.data.editChoiceTrue = 2){
     await ctx.reply('Введите новое описание')
     ctx.wizard.selectStep(3)
   }
-  if (ctx.wizard.state.data.editChoiceTrue = 1){
+  if (ctx.wizard.state.data.editChoiceTrue = 3){
     await ctx.reply('Выберите блок, который хотите отредактровать:')
 
     ctx.wizard.selectStep(4)
   }
-  if (ctx.wizard.state.data.editChoiceTrue = 1){
+  if (ctx.wizard.state.data.editChoiceTrue = 4){
     await ctx.reply('Выберите ссылку, который хотите отредактровать:')
     ctx.wizard.selectStep(5)
   }
@@ -598,6 +598,24 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
+  return ctx.scene.leave()
+  })
+
+  const editDesc = new Composer()
+  editDesc.on ('text', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  return ctx.scene.leave()
+  })
+
+  const editBlock = new Composer()
+editBlock.on ('text', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  return ctx.scene.leave()
+  })
+
+  const editLink = new Composer()
+editLink.on ('text', async (ctx)=>{
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   return ctx.scene.leave()
   })
 

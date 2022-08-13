@@ -611,7 +611,7 @@ const editChoiceTrue = new Composer()
       await ctx.reply('Выберите ссылку, который хотите отредактровать:')
       try{
         const row = await story.findOne({where: {
-          authId: ctx.message.from.id,
+          authId: ctx.callbackQuery.from.id,
           release: false
         }});
         if (row === null) {

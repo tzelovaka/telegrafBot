@@ -609,6 +609,35 @@ const editChoiceTrue = new Composer()
       break;
     case '4':
       await ctx.reply('Выберите ссылку, который хотите отредактровать:')
+      try{
+        const row = await story.findOne({where: {
+          authId: ctx.message.from.id,
+          release: false
+        }});
+        if (row === null) {
+          await ctx.reply ('Надо создать историю! 👉 /make');
+          return ctx.scene.leave()
+        }
+        const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
+        if (count < 1) {
+          await ctx.reply ('Надо создать хотя бы одну ссылку! 👉 /link');
+          return ctx.scene.leave()
+        }
+          let x = count - 1;
+          for (let i=0; i<=x; i++){
+            await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
+              [
+              [Markup.button.callback('👆', flagBtn.create({
+                number: rows[i].id,
+                action: 'true'}))]
+                  ]
+                )
+              )
+          }
+        } catch (e){
+          console.log(e);
+          await ctx.replyWithHTML('<i>Ошибка!</i>')
+        }
       ctx.wizard.selectStep(5)
       break;
   }
@@ -662,11 +691,38 @@ editStory.on ('text', async (ctx)=>{
   })
 
   const editLink = new Composer()
-editLink.on ('text', async (ctx)=>{
+  editLink.on ('callback_query', async (ctx)=>{
+    try{
+      const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+      ctx.wizard.state.data.editLink = number;
+      await ctx.reply('Введите текст ссылки.')
+    } catch (e){
+      console.log(e);
+      await ctx.replyWithHTML('<i>Ошибка!</i>')
+    }
   return ctx.scene.leave()
   })
 
-const menuEdit = new Scenes.WizardScene('editScene', editChoice, editChoiceTrue, editStory, editDesc, editBlock, editBlockTrue, editLink)
+  const editLinkTrue = new Composer()
+  editLinkTrue.on ('text', async (ctx)=>{
+  try{
+    ctx.wizard.state.data.editLinkTrue = ctx.message.text;
+    await storylin.update({ link: `${ctx.wizard.state.data.editLinkTrue}` }, {
+      where: {
+        id: ctx.wizard.state.data.editlink,
+        authId: ctx.message.from.id,
+        release: false,
+      }
+    });
+    await ctx.reply('Одна из ссылок создаваемой истории была отредактирована.')
+    } catch (e){
+      console.log(e);
+      await ctx.replyWithHTML('<i>Ошибка!</i>')
+    }
+  return ctx.scene.leave()
+  })
+
+const menuEdit = new Scenes.WizardScene('editScene', editChoice, editChoiceTrue, editStory, editDesc, editBlock, editBlockTrue, editLink, editLinkTrue)
 const stageu = new Scenes.Stage ([menuEdit])
 bot.use(session())
 bot.use(stageu.middleware())

@@ -709,7 +709,7 @@ editStory.on ('text', async (ctx)=>{
     ctx.wizard.state.data.editLinkTrue = ctx.message.text;
     await storylin.update({ link: `${ctx.wizard.state.data.editLinkTrue}` }, {
       where: {
-        id: ctx.wizard.state.data.editlink,
+        id: ctx.wizard.state.data.editLink,
         authId: ctx.message.from.id,
         release: false,
       }

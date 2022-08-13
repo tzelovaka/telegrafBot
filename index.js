@@ -650,7 +650,7 @@ editStory.on ('text', async (ctx)=>{
   const editBlockTrue = new Composer()
   editBlock.on ('text', async (ctx)=>{
   ctx.wizard.state.data.editBlockTrue = ctx.message.text;
-  await storybl.update({ bl: `${ctx.wizard.state.data.editDesc}` }, {
+  await storybl.update({ bl: `${ctx.wizard.state.data.editBlockTrue}` }, {
     where: {
       id: ctx.wizard.state.data.editBlock,
       authId: ctx.message.from.id,

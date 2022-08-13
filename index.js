@@ -530,6 +530,7 @@ for (; ;){
 
 deleteScene.leave((ctx) => {
   ctx.reply('Операция успешно завершена.');
+  return ctx.scene.leave();
 });
 deleteScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));
 

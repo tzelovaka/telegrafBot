@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
-bot.use(sender)
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
 }
@@ -592,6 +591,7 @@ editChoiceTrue.on ('callback_query', async (ctx)=>{
 })
 const editStory = new Composer()
 editStory.on ('text', async (ctx)=>{
+  await ctx.answerCbQuery('Название отредактиовано');
   ctx.wizard.state.data.editStory = ctx.message.text;
   await story.update({ name: `${ctx.wizard.state.data.editStory}` }, {
     where: {
@@ -599,7 +599,6 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
-  await ctx.msg.alert('Успешно изменено')
   //await ctx.reply('Выберите ссылку, который хотите отредактровать:')
   return ctx.scene.leave()
   })

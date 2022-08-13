@@ -1,5 +1,6 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
+const sender = require('telegraf-sender')
 const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
@@ -598,7 +599,7 @@ editStory.on ('text', async (ctx)=>{
       release: false,
     }
   });
-  ctx.answerCbQuery('Название успешно отредактировано.');
+  await ctx.msg.alert('Успешно изменено')
   //await ctx.reply('Выберите ссылку, который хотите отредактровать:')
   return ctx.scene.leave()
   })

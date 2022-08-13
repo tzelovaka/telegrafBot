@@ -222,13 +222,13 @@ try{
   await ctx.reply ('Выберите ссылку из доступных:');
     let x = count - 1;
     for (let i=0; i<=x; i++){
-      const row = await storybl.findOne({where:{
+      const ro = await storybl.findOne({where:{
         authId: ctx.message.from.id,
         release: false,
         linid: rows[i].id,
         storyId: row.id
       }})
-      if (row === null){
+      if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({

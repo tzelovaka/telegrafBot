@@ -348,8 +348,8 @@ playMech.on('callback_query', async (ctx) => {
     release: false
   }
 });
-await ctx.reply(`${row.bl}`);
-if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`}); //ctx.replyWithPhoto(`${row.pic}`);
+if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
+else  await ctx.reply(`${row.bl}`);//ctx.replyWithPhoto(`${row.pic}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,

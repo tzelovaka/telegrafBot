@@ -787,15 +787,15 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '2':
     const { coun, row } = await storylin.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
-      release: false
+      release: false,
     }});
     if (coun <= 0) {
-      await ctx.reply ('Треуется добавить хотя бы одну ссылку! 👉 /link');
+      await ctx.reply ('Требуется добавить хотя бы одну ссылку! 👉 /link');
       return ctx.scene.leave()
     }
     let y = coun - 1;
-    await ctx.reply('Выберите ссылку, к которой хотите добавить эмодзи:')
-    for (let i=0; i<=y; i++){
+    await ctx.reply('Выберите ссылку, к которой требуется добавить эмодзи:')
+    for (let o=0; o<=y; o++){
       await ctx.reply(`${row[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({

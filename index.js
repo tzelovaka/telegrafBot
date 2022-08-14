@@ -805,10 +805,10 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     let y = count - 1;
     await ctx.reply('Выберите ссылку, к которой требуется добавить эмодзи:')
     for (let o=0; o<=y; o++){
-      await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
+      await ctx.reply(`${rows[o].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({
-          number: `${row[i].id}`,
+          number: `${rows[o].id}`,
           action: 'true'}))]
       ]
       )

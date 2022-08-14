@@ -66,7 +66,7 @@ storyDesc.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
-  await ctx.replyWithHTML ('<i>Ошибка!</i>');
+  await ctx.replyWithHTML ('<i>Ошибка!</i>⚠');
   return ctx.scene.leave()
 }
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
@@ -94,7 +94,7 @@ baseSave.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
-  await ctx.replyWithHTML ('<i>Ошибка!</i>');
+  await ctx.replyWithHTML ('<i>Ошибка!</i>⚠');
   return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
@@ -174,7 +174,7 @@ blockLink.on ('text', async (ctx)=>{
 })
 await t.commit('commit');
 } catch (error) {
-  await ctx.reply ('Ошибка! Попробуйте сначала.');
+  await ctx.reply ('Ошибка! Попробуйте сначала.⚠');
   await t.rollback();
   return ctx.scene.leave()
 }

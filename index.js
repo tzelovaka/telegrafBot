@@ -785,7 +785,26 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     return ctx.wizard.selectStep(2)
     break;
   case '2':
-    await ctx.reply('Выберите сслыку, к которой хотите добавить смайл')
+    const { coun, row } = await storylin.findAndCountAll({where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }});
+    if (coun <= 0) {
+      await ctx.reply ('Треуется добавить хотя бы одну ссылку! 👉 /link');
+      return ctx.scene.leave()
+    }
+    let y = coun - 1;
+    await ctx.reply('Выберите ссылку, к которой хотите добавить эмодзи:')
+    for (let i=0; i<=y; i++){
+      await ctx.reply(`${row[i].link}`, Markup.inlineKeyboard(
+        [
+        [Markup.button.callback('👆', flagBtn.create({
+          number: `${row[i].id}`,
+          action: 'true'}))]
+      ]
+      )
+    )
+    }
     return ctx.wizard.selectStep(4)
     break;
     case '3':
@@ -831,10 +850,44 @@ await storybl.update({ pic: `${ctx.wizard.state.data.setBlockPicTrue}` }, {
   await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
   return ctx.scene.leave()
 }
+await ctx.reply ('Картинка успешно добавлена.')
   return ctx.scene.leave()
 })
 
-const menuVisualization = new Scenes.WizardScene('sceneVisualization', sceneVisualization, sceneVisualizationChoice, setBlockPic, setBlockPicTrue)
+const setLinkSmile = new Composer()
+setLinkSmile.on ('callback_query', async (ctx)=>{
+try{
+const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+ctx.wizard.state.data.setBlockPic = number;
+await ctx.reply('Введите эмодзи.')
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+  return ctx.wizard.next()
+})
+
+const setLinkSmileTrue = new Composer()
+setLinkSmileTrue.on ('sticker', async (ctx)=>{
+try{
+ctx.wizard.state.data.setLinkSmileTrue = ctx.message.text;
+await storylin.update({ smile: `${ctx.wizard.state.data.setLinkSmileTrue}` }, {
+  where: {
+    id: `${ctx.wizard.state.data.setLinkSmile}`,
+    authId: ctx.message.from.id,
+    release: false,
+  }
+});
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+await ctx.reply ('Эмодзи успешно добавлена.')
+  return ctx.scene.leave()
+})
+const menuVisualization = new Scenes.WizardScene('sceneVisualization', sceneVisualization, sceneVisualizationChoice, setBlockPic, setBlockPicTrue, setLinkSmile, setLinkSmileTrue)
 const stagev = new Scenes.Stage ([menuVisualization])
 bot.use(session())
 bot.use(stagev.middleware())

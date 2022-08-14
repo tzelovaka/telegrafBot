@@ -726,6 +726,9 @@ bot.command ('edit', async (ctx) => ctx.scene.enter('editScene'))
 
 
 
+
+
+
 const sceneVisualization = new Composer()
 sceneVisualization.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -773,7 +776,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback('👆', flagBtn.create({
-          number: rows[i].id,
+          number: `${rows[i].id}`,
           action: 'true'}))]
       ]
       )

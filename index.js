@@ -570,7 +570,7 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
   try{
     await storybl.update({ pic: null }, {
       where: {
-        id: ctx.session.myData.preferenceType,
+        id: number,
         authId: ctx.message.from.id,
         release: false,
       }

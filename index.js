@@ -1,6 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
-const sender = require('telegraf-sender')
 const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
@@ -539,7 +538,7 @@ deleteScene.action('Pic', async (ctx) => {
       storyId: row.id,
       authId: ctx.callbackQuery.from.id,
       release: false,
-      pic: {[op.not]: null}
+      pic: {[Op.not]: null}
     }});
     if (count < 1) {
       await ctx.reply ('Требуется больше блоков! 👉 /block');

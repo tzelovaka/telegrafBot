@@ -308,7 +308,8 @@ playScene.on('text', async (ctx) => {
       authId: ctx.message.from.id,
       release: false
     }});
-    await ctx.reply(`🎫 ${row.name}`)
+    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.name}`});
+    else  await ctx.reply(`🎫 ${row.name}`);
     await ctx.reply (`📖 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
@@ -768,7 +769,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       release: false
     }});
     if (count <= 0) {
-      await ctx.reply ('Надо создать историю! 👉 /make');
+      await ctx.reply ('Требуется создать историю! 👉 /make');
       return ctx.scene.leave()
     }
     let x = count - 1;
@@ -822,6 +823,14 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     return ctx.scene.leave()
   }
     case '3':
+      const count = story.count({where: {
+        authId: ctx.callbackQuery.from.id,
+        release: false
+      }})
+      if (count < 1) {
+        await ctx.reply ('Требуется создать историю! 👉 /make');
+        return ctx.scene.leave()
+      }
     await ctx.reply('Вставьте ссылку на картинку.')
     return ctx.wizard.selectStep(6)
     break;
@@ -897,7 +906,29 @@ await storylin.update({ smile: `${ctx.wizard.state.data.setLinkSmileTrue}` }, {
 await ctx.reply ('Символ-кнопка успешно обновлён.')
   return ctx.scene.leave()
 })
-const menuVisualization = new Scenes.WizardScene('sceneVisualization', sceneVisualization, sceneVisualizationChoice, setBlockPic, setBlockPicTrue, setLinkSmile, setLinkSmileTrue)
+
+
+const setStoryPic = new Composer()
+setStoryPic.on ('text', async (ctx)=>{
+try{
+ctx.wizard.state.data.setStoryPic = ctx.message.text;
+await story.update({ pic: `${ctx.wizard.state.data.setStoryPic}` }, {
+  where: {
+    authId: ctx.message.from.id,
+    release: false,
+  }
+});
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+await ctx.reply ('Картинка успешно добавлена.')
+  return ctx.scene.leave()
+})
+
+
+const menuVisualization = new Scenes.WizardScene('sceneVisualization', sceneVisualization, sceneVisualizationChoice, setBlockPic, setBlockPicTrue, setLinkSmile, setLinkSmileTrue, setStoryPic)
 const stagev = new Scenes.Stage ([menuVisualization])
 bot.use(session())
 bot.use(stagev.middleware())

@@ -39,20 +39,12 @@ baseEmpty.on ('text', async (ctx)=>{
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
   }
-  //await ctx.reply('Введите название.', Markup.keyboard(
-    //[
-    //['🔙Выйти']
-  //]))
+  await ctx.reply ('Введите название истории');
   return ctx.wizard.next()
 })
 
 const storyName = new Composer()
 storyName.on ('text', async (ctx)=>{
-  //if (ctx.message.text === '🔙Выйти') 
-  //{
-    //await ctx.reply ('Операция прошла успешно.');
-    //return ctx.scene.leave()
-  //}
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
   return ctx.wizard.next()
@@ -60,11 +52,6 @@ storyName.on ('text', async (ctx)=>{
 
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
-  //if (ctx.message.text === '🔙Выйти') 
-  //{
-   // await ctx.reply ('Операция прошла успешно.');
-    //return ctx.scene.leave()
-  //}
   ctx.wizard.state.data.storyDesc = ctx.message.text;
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   const t = await sequelize.transaction();

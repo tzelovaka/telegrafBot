@@ -796,6 +796,8 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       authId: ctx.callbackQuery.from.id,
       release: false,
     }});
+    console.log(count);
+    console.log(rows);
     if (count <= 0) {
       await ctx.reply ('Требуется добавить хотя бы одну ссылку! 👉 /link');
       return ctx.scene.leave()

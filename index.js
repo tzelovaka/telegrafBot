@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -349,7 +349,7 @@ playMech.on('callback_query', async (ctx) => {
   }
 });
 await ctx.reply(`${row.bl}`);
-if (row.pic != null) await ctx.replyWithPhoto(`${row.pic}`);
+if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`}); //ctx.replyWithPhoto(`${row.pic}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,

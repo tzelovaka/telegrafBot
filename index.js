@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  //sequelize.sync({ force: true })
+  sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -803,7 +803,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       return ctx.scene.leave()
     }
     let y = count - 1;
-    await ctx.reply('Выберите ссылку, к которой требуется добавить эмодзи:')
+    await ctx.reply('Выберите ссылку, к которой хотите добавить свой символ вместо 👆:')
     for (let o=0; o<=y; o++){
       await ctx.reply(`${rows[o].link}`, Markup.inlineKeyboard(
         [
@@ -869,7 +869,7 @@ setLinkSmile.on ('callback_query', async (ctx)=>{
 try{
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
 ctx.wizard.state.data.setBlockPic = number;
-await ctx.reply('Введите эмодзи.')
+await ctx.reply('Введите предпочитаемый символ.')
 } catch (e){
   console.log(e);
   await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
@@ -879,7 +879,7 @@ await ctx.reply('Введите эмодзи.')
 })
 
 const setLinkSmileTrue = new Composer()
-setLinkSmileTrue.on ('sticker', async (ctx)=>{
+setLinkSmileTrue.on ('text', async (ctx)=>{
 try{
 ctx.wizard.state.data.setLinkSmileTrue = ctx.message.text;
 await storylin.update({ smile: `${ctx.wizard.state.data.setLinkSmileTrue}` }, {
@@ -894,7 +894,7 @@ await storylin.update({ smile: `${ctx.wizard.state.data.setLinkSmileTrue}` }, {
   await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
   return ctx.scene.leave()
 }
-await ctx.reply ('Эмодзи успешно добавлена.')
+await ctx.reply ('Символ-кнопка успешно обновлён.')
   return ctx.scene.leave()
 })
 const menuVisualization = new Scenes.WizardScene('sceneVisualization', sceneVisualization, sceneVisualizationChoice, setBlockPic, setBlockPicTrue, setLinkSmile, setLinkSmileTrue)

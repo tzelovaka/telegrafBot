@@ -53,7 +53,6 @@ storyName.on ('text', async (ctx)=>{
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
   ctx.wizard.state.data.storyDesc = ctx.message.text;
-  await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
@@ -70,6 +69,7 @@ await t.commit('commit');
   await ctx.replyWithHTML ('<i>Ошибка!</i>');
   return ctx.scene.leave()
 }
+  await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   return ctx.wizard.next()
 })
 

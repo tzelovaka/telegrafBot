@@ -567,7 +567,7 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
-  try{
+  //try{
     await storybl.update({ pic: null }, {
       where: {
         id: `${number}`,
@@ -576,9 +576,9 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
       }
     });
     await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
-  }catch(e){
-    await ctx.replyWithHTML('<i>Ошибка!</i>')
-  }
+  //}catch(e){
+    //await ctx.replyWithHTML('<i>Ошибка!</i>')
+  //}
   })
 
 

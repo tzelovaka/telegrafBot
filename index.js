@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -782,15 +782,15 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       )
     )
     }
-    ctx.wizard.selectStep(2)
+    return ctx.wizard.selectStep(2)
     break;
   case '2':
     await ctx.reply('Выберите сслыку, к которой хотите добавить смайл')
-    ctx.wizard.selectStep(4)
+    return ctx.wizard.selectStep(4)
     break;
     case '3':
     await ctx.reply('Вставьте ссылку на картинку.')
-    ctx.wizard.selectStep(6)
+    return ctx.wizard.selectStep(6)
     break;
 }
 } catch (e){

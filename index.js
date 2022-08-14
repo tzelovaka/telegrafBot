@@ -757,11 +757,12 @@ try{
 
 const sceneVisualizationChoice = new Composer()
 sceneVisualizationChoice.on ('callback_query', async (ctx)=>{
-try{
+
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
 ctx.wizard.state.data.sceneVisualizationChoice = number;
 switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '1':
+    try{
     const { count, rows } = await storybl.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
       release: false
@@ -784,12 +785,18 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     }
     return ctx.wizard.selectStep(2)
     break;
+  } catch (e){
+    console.log(e);
+    await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+    return ctx.scene.leave()
+  }
   case '2':
-    const { coun, row } = await storylin.findAndCountAll({where: {
+    try{
+    const { count, rows } = await storylin.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
       release: false,
     }});
-    if (coun <= 0) {
+    if (count <= 0) {
       await ctx.reply ('Требуется добавить хотя бы одну ссылку! 👉 /link');
       return ctx.scene.leave()
     }
@@ -807,16 +814,17 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     }
     return ctx.wizard.selectStep(4)
     break;
+  } catch (e){
+    console.log(e);
+    await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+    return ctx.scene.leave()
+  }
     case '3':
     await ctx.reply('Вставьте ссылку на картинку.')
     return ctx.wizard.selectStep(6)
     break;
 }
-} catch (e){
-  console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
-  return ctx.scene.leave()
-}
+
   return ctx.wizard.next()
 })
 

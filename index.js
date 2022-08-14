@@ -868,7 +868,7 @@ const setLinkSmile = new Composer()
 setLinkSmile.on ('callback_query', async (ctx)=>{
 try{
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-ctx.wizard.state.data.setBlockPic = number;
+ctx.wizard.state.data.setLinkSmile = number;
 await ctx.reply('Введите предпочитаемый символ.')
 } catch (e){
   console.log(e);

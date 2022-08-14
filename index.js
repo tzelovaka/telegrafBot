@@ -732,7 +732,7 @@ ctx.wizard.state.data = {};
 try{
   await ctx.reply('Выберите, что требуется добавить:', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('Картинки (к блокам или истории)', flagBtn.create({
+    [Markup.button.callback('Картинки к блокам', flagBtn.create({
       number: '1',
       action: 'true'}))], 
     [Markup.button.callback('Смайлы-кнопки к ссылкам', flagBtn.create({
@@ -760,7 +760,7 @@ ctx.wizard.state.data.sceneVisualizationChoice = number;
 switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '1':
     const { count, rows } = await storybl.findAndCountAll({where: {
-      authId: ctx.message.from.id,
+      authId: ctx.callbackQuery.from.id,
       release: false
     }});
     if (count <= 0) {

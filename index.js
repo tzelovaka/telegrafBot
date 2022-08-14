@@ -67,6 +67,8 @@ storyDesc.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
+  await ctx.replyWithHTML ('<i>Ошибка!</i>');
+  return ctx.scene.leave()
 }
   return ctx.wizard.next()
 })
@@ -92,6 +94,8 @@ baseSave.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
+  await ctx.replyWithHTML ('<i>Ошибка!</i>');
+  return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
   return ctx.scene.leave()

@@ -364,7 +364,7 @@ if (row.pic != null) await ctx.replyWithPhoto(`${row.pic}`);
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback('👆', flagBtn.create({
+      [Markup.button.callback(`${rows[i].smile}`, flagBtn.create({
         number: rows[i].id,
         action: 'true'}))]
     ]

@@ -395,7 +395,9 @@ deleteScene.enter((ctx) => {
   ctx.session.myData = {};
   ctx.reply('Выберите вид удаляемого элемента:', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('История', 'Story'), Markup.button.callback('Сюжетная ветка', 'Branch')]
+    [Markup.button.callback('История', 'Story')], 
+    [Markup.button.callback('Сюжетная ветка', 'Branch')],
+    [Markup.button.callback('Картинка', 'Pic')],
   ]))
 });
 deleteScene.action('Story', async (ctx) => {
@@ -447,7 +449,7 @@ deleteScene.action('Branch', async (ctx) => {
           [
           [Markup.button.callback('❌', flagBtn.create({
             number: rows[i].id,
-            action: 'true'}))]
+            action: 'deletelink'}))]
         ]
         )
       )
@@ -458,7 +460,7 @@ deleteScene.action('Branch', async (ctx) => {
     }
 });
 
-deleteScene.action(flagBtn.filter({action: 'true'}), async (ctx) => {
+deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
   await ctx.answerCbQuery()
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
@@ -521,8 +523,67 @@ for (; ;){
   return ctx.scene.leave();
 })
 
-deleteScene.leave((ctx) => {
-  ctx.reply('Операция успешно завершена.');
+deleteScene.action('Pic', async (ctx) => {
+  ctx.session.myData.preferenceType = 'Pic';
+  try{
+    const row = await story.findOne({where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }});
+    if (row === null) {
+      await ctx.reply ('Требуется создать историю! 👉 /make');
+      return ctx.scene.leave()
+    }
+    const { count, rows } = await storybl.findAndCountAll({where: {
+      storyId: row.id,
+      authId: ctx.callbackQuery.from.id,
+      release: false,
+      [pic.not]: null
+    }});
+    if (count < 1) {
+      await ctx.reply ('Требуется больше блоков! 👉 /block');
+      return ctx.scene.leave()
+    }
+    await ctx.reply ('Выберите блок, картинку которого требуется удалить:');
+      let x = count - 1;
+      for (let i=0; i<=x; i++){
+        await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
+          [
+          [Markup.button.callback('🌆❌', flagBtn.create({
+            number: rows[i].id,
+            action: 'deleteblockpic'}))]
+        ]
+        )
+      )
+      }
+    } catch (e){
+      console.log(e);
+      await ctx.replyWithHTML('<i>Ошибка!</i>')
+    }
+});
+
+deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
+  await ctx.answerCbQuery()
+  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  console.log(number);
+  ctx.session.myData.preferenceType = number;
+  try{
+    await storybl.update({ pic: null }, {
+      where: {
+        id: ctx.session.myData.preferenceType,
+        authId: ctx.message.from.id,
+        release: false,
+      }
+    });
+    await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
+  }catch(e){
+    await ctx.replyWithHTML('<i>Ошибка!</i>')
+  }
+  })
+
+
+deleteScene.leave(async (ctx) => {
+  await ctx.reply('Операция успешно завершена.');
   return ctx.scene.leave();
 });
 deleteScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));

@@ -538,7 +538,7 @@ deleteScene.action('Pic', async (ctx) => {
       storyId: row.id,
       authId: ctx.callbackQuery.from.id,
       release: false,
-      [pic.not]: null
+      pic: {[op.not]: null}
     }});
     if (count < 1) {
       await ctx.reply ('Требуется больше блоков! 👉 /block');
@@ -562,7 +562,7 @@ deleteScene.action('Pic', async (ctx) => {
     }
 });
 
-deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
+deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
   await ctx.answerCbQuery()
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);

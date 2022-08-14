@@ -17,7 +17,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -308,7 +308,7 @@ playScene.on('text', async (ctx) => {
       authId: ctx.message.from.id,
       release: false
     }});
-    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.name}`});
+    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `🎫 ${row.name}`});
     else  await ctx.reply(`🎫 ${row.name}`);
     await ctx.reply (`📖 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(

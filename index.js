@@ -818,7 +818,7 @@ try{
 ctx.wizard.state.data.setBlockPicTrue = ctx.message.text;
 await storybl.update({ pic: `${ctx.wizard.state.data.setBlockPicTrue}` }, {
   where: {
-    id: ctx.wizard.state.data.setBlockPic,
+    id: `${ctx.wizard.state.data.setBlockPic}`,
     authId: ctx.message.from.id,
     release: false,
   }

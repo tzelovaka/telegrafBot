@@ -349,6 +349,7 @@ playMech.on('callback_query', async (ctx) => {
   }
 });
 await ctx.reply(`${row.bl}`);
+if (row.pic != null) await ctx.replyWithPhoto(`${row.pic}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
@@ -719,6 +720,122 @@ const stageu = new Scenes.Stage ([menuEdit])
 bot.use(session())
 bot.use(stageu.middleware())
 bot.command ('edit', async (ctx) => ctx.scene.enter('editScene'))
+
+
+
+
+
+
+const sceneVisualization = new Composer()
+sceneVisualization.on ('text', async (ctx)=>{
+ctx.wizard.state.data = {};
+try{
+  await ctx.reply('Выберите, что требуется добавить:', Markup.inlineKeyboard(
+    [
+    [Markup.button.callback('Картинки (к блокам или истории)', flagBtn.create({
+      number: '1',
+      action: 'true'}))], 
+    [Markup.button.callback('Смайлы-кнопки к ссылкам', flagBtn.create({
+      number: '2',
+      action: 'true'})
+      )],
+    [Markup.button.callback('Аватарка истории', flagBtn.create({
+      number: '3',
+      action: 'true'})
+      )]
+  ]))
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+  return ctx.wizard.next()
+})
+
+const sceneVisualizationChoice = new Composer()
+sceneVisualizationChoice.on ('callback_query', async (ctx)=>{
+try{
+const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+ctx.wizard.state.data.sceneVisualizationChoice = number;
+switch (ctx.wizard.state.data.sceneVisualizationChoice) {
+  case '1':
+    const { count, rows } = await storybl.findAndCountAll({where: {
+      authId: ctx.message.from.id,
+      release: false
+    }});
+    if (count <= 0) {
+      await ctx.reply ('Надо создать историю! 👉 /make');
+      return ctx.scene.leave()
+    }
+    let x = count - 1;
+    await ctx.reply('Выберите блок, к которому хотите добавить картинку:')
+    for (let i=0; i<=x; i++){
+      await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
+        [
+        [Markup.button.callback('👆', flagBtn.create({
+          number: rows[i].id,
+          action: 'true'}))]
+      ]
+      )
+    )
+    }
+    ctx.wizard.selectStep(2)
+    break;
+  case '2':
+    await ctx.reply('Выберите сслыку, к которой хотите добавить смайл')
+    ctx.wizard.selectStep(4)
+    break;
+    case '3':
+    await ctx.reply('Вставьте ссылку на картинку.')
+    ctx.wizard.selectStep(6)
+    break;
+}
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+  return ctx.wizard.next()
+})
+
+const setBlockPic = new Composer()
+setBlockPic.on ('callback_query', async (ctx)=>{
+try{
+const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+ctx.wizard.state.data.setBlockPic = number;
+await ctx.reply('Вставьте ссылку на картинку.')
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+  return ctx.wizard.next()
+})
+
+const setBlockPicTrue = new Composer()
+setBlockPicTrue.on ('text', async (ctx)=>{
+try{
+ctx.wizard.state.data.setBlockPicTrue = ctx.message.text;
+await storybl.update({ pic: `${ctx.wizard.state.data.setBlockPicTrue}` }, {
+  where: {
+    id: ctx.wizard.state.data.setBlockPic,
+    authId: ctx.message.from.id,
+    release: false,
+  }
+});
+} catch (e){
+  console.log(e);
+  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  return ctx.scene.leave()
+}
+  return ctx.scene.leave()
+})
+
+const menuVisualization = new Scenes.WizardScene('sceneVisualization', sceneVisualization, sceneVisualizationChoice, setBlockPic, setBlockPicTrue)
+const stagev = new Scenes.Stage ([menuVisualization])
+bot.use(session())
+bot.use(stagev.middleware())
+bot.command ('visualization', async (ctx) => ctx.scene.enter('sceneVisualization'))
 
 
 

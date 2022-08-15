@@ -921,7 +921,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
         release: false
       }})
       console.log(count);
-      if (count <= 0) {
+      if (rows === null || count < 1) {
         await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }

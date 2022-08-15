@@ -398,6 +398,7 @@ deleteScene.enter((ctx) => {
     [Markup.button.callback('История', 'Story')], 
     [Markup.button.callback('Сюжетная ветка', 'Branch')],
     [Markup.button.callback('Картинка', 'Pic')],
+    [Markup.button.callback('Обложка', 'Avatar')],
   ]))
 });
 deleteScene.action('Story', async (ctx) => {
@@ -581,6 +582,20 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
   //}
   })
 
+
+  deleteScene.action('Avatar', async (ctx) => {
+    ctx.session.myData.preferenceType = 'Story';
+  
+    await story.update ({pic: null},{
+      where:{
+        authId: ctx.callbackQuery.from.id,
+        release: false,
+      }
+    })
+  
+    await ctx.reply('Создаваемая история была успешна удалена.');
+    return ctx.scene.leave();
+  });
 
 deleteScene.leave(async (ctx) => {
   await ctx.reply('Операция успешно завершена.');

@@ -982,7 +982,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     for (let o=0; o<=y; o++){
       await ctx.reply(`${rows[o].link}`, Markup.inlineKeyboard(
         [
-        [Markup.button.callback('👆', flagBtn.create({
+        [Markup.button.callback(`${rows[o].smile}`, flagBtn.create({
           number: `${rows[o].id}`,
           action: 'true'}))]
       ]

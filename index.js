@@ -6,6 +6,7 @@ const story = require ('./story');
 const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
 const { Op } = require("sequelize");
+const story = require('./story');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
@@ -403,7 +404,14 @@ deleteScene.enter((ctx) => {
 });
 deleteScene.action('Story', async (ctx) => {
   ctx.session.myData.preferenceType = 'Story';
-
+  answerCbQuery('Привет')
+  const row = await story.findOne({where:{
+    authId: ctx.callbackQuery.from.id,
+    release: false
+  }})
+  if (row === null) {
+    await ctx.reply ('Для этой функции треубется создать историю!')
+    return ctx.scene.leave();}
   await story.destroy({
     where: {
       authId: ctx.callbackQuery.from.id,

@@ -402,14 +402,14 @@ deleteScene.enter((ctx) => {
   ]))
 });
 deleteScene.action('Story', async (ctx) => {
-  await ctx.answerCbQuery('dsfkj');
   ctx.session.myData.preferenceType = 'Story';
   const row = await story.findOne({where:{
     authId: ctx.callbackQuery.from.id,
     release: false
   }})
   if (row === null) {
-    await ctx.replyWithHTML ('<i>Для этой функции треубется создать историю!</i>⚠')
+    await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+    //await ctx.replyWithHTML ('<i></i>⚠')
     return ctx.scene.leave();}
   await story.destroy({
     where: {

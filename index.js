@@ -609,7 +609,6 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
         release: false,
       }
     })
-  
     await ctx.answerCbQuery('Обложка истории была удалена.');
     return ctx.scene.leave();
   });
@@ -633,6 +632,7 @@ bot.command('delete', (ctx) => ctx.scene.enter('delete'))
 
 const editChoice = new Composer()
 editChoice.on ('text', async (ctx)=>{
+  try{
   ctx.wizard.state.data = {};
   await ctx.reply('Выберите вид редактируемого элемента:', Markup.inlineKeyboard(
     [
@@ -650,33 +650,50 @@ editChoice.on ('text', async (ctx)=>{
         number: '4',
         action: 'true'}))]
   ]))
+} catch(e){
+  await ctx.reply('Ошибка!⚠');
+  return ctx.scene.leave();
+}
   return ctx.wizard.next()
 })
 
 const editChoiceTrue = new Composer()
   editChoiceTrue.on ('callback_query', async (ctx)=>{
+  try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.editChoiceTrue = number;
   switch (ctx.wizard.state.data.editChoiceTrue) {
     case '1':
+       const row = await story.findOne({where:{
+        authId: ctx.callbackQuery.from.id,
+        release: false,
+      }});
+      if (row === null) {
+        await ctx.answerCbQuery('Требуется создать историю!');
+        return ctx.scene.leave();
+      }
       await ctx.reply('Введите новое название')
       ctx.wizard.selectStep(2)
       break;
     case '2':
+      if (row === null) {
+        await ctx.answerCbQuery('Требуется создать историю!');
+        return ctx.scene.leave();
+      }
       await ctx.reply('Введите новое описание')
       ctx.wizard.selectStep(3)
       break;
     case '3':
-      await ctx.reply('Выберите блок, который хотите отредактровать:')
       try{
         const { count, rows } = await storybl.findAndCountAll({where: {
           authId: ctx.callbackQuery.from.id,
           release: false
         }});
-        if (count <= 0) {
-          await ctx.reply ('Надо создать историю! 👉 /make');
-          return ctx.scene.leave()
-        }
+      if (rows === null || count < 1) {
+        await ctx.answerCbQuery('Требуется создать минимум один блок!');
+        return ctx.scene.leave();
+      }
+      await ctx.reply('Выберите блок, который требуется отредактровать:')
         let x = count - 1;
         for (let i=0; i<=x; i++){
           await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
@@ -695,19 +712,12 @@ const editChoiceTrue = new Composer()
       ctx.wizard.selectStep(4)
       break;
     case '4':
-      await ctx.reply('Выберите ссылку, который хотите отредактровать:')
-      try{
-        const row = await story.findOne({where: {
+      await ctx.reply('Выберите ссылку, которую требуется отредактровать:');
+        const { count, rows } = await storylin.findAndCountAll({where: {
           authId: ctx.callbackQuery.from.id,
-          release: false
-        }});
-        if (row === null) {
-          await ctx.reply ('Требуется создать историю! 👉 /make');
-          return ctx.scene.leave()
-        }
-        const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
+        release: false}});
         if (count < 1) {
-          await ctx.reply ('Требуется создать хотя бы одну ссылку! 👉 /link');
+          await ctx.answerCbQuery('Требуется создать минимум одну ссылку! 👉 /link');
           return ctx.scene.leave()
         }
           let x = count - 1;
@@ -721,16 +731,19 @@ const editChoiceTrue = new Composer()
                 )
               )
           }
-        } catch (e){
-          console.log(e);
-          await ctx.replyWithHTML('<i>Ошибка!</i>')
-        }
       ctx.wizard.selectStep(6)
       break;
-  }
+  }}
+catch(e){
+  await ctx.answerCbQuery('Ошибка!⚠')
+  return ctx.scene.leave()
+}
 })
+
+
 const editStory = new Composer()
 editStory.on ('text', async (ctx)=>{
+  try{
   ctx.wizard.state.data.editStory = ctx.message.text;
   await story.update({ name: `${ctx.wizard.state.data.editStory}` }, {
     where: {
@@ -739,32 +752,47 @@ editStory.on ('text', async (ctx)=>{
     }
   });
   await ctx.reply('Название создаваемой истории отредактировано.')
+}catch(e){
+  await ctx.reply('Ошибка!⚠')
   return ctx.scene.leave()
+}
+return ctx.scene.leave()
   })
 
   const editDesc = new Composer()
   editDesc.on ('text', async (ctx)=>{
+    try{
     ctx.wizard.state.data.editDesc = ctx.message.text;
-  await story.update({ desc: `${ctx.wizard.state.data.editDesc}` }, {
+    await story.update({ desc: `${ctx.wizard.state.data.editDesc}` }, {
     where: {
       authId: ctx.message.from.id,
       release: false,
     }
   });
   await ctx.reply('Описание создаваемой истории отредактировано.')
+} catch(e){
+  await ctx.reply('Ошибка!⚠')
+  return ctx.scene.leave()
+}
   return ctx.scene.leave()
   })
 
   const editBlock = new Composer()
   editBlock.on ('callback_query', async (ctx)=>{
+    try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.editBlock = number;
   await ctx.reply('Введите текст блока.')
+    }catch(e){
+    await ctx.answerCbQuery('Ошибка!⚠')
+    return ctx.scene.leave()
+    }
   return ctx.wizard.next()
   })
 
   const editBlockTrue = new Composer()
   editBlockTrue.on ('text', async (ctx)=>{
+    try{
   ctx.wizard.state.data.editBlockTrue = ctx.message.text;
   await storybl.update({ bl: `${ctx.wizard.state.data.editBlockTrue}` }, {
     where: {
@@ -774,6 +802,10 @@ editStory.on ('text', async (ctx)=>{
     }
   });
   await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
+}catch(e){
+  await ctx.reply('Ошибка!⚠')
+  return ctx.scene.leave()
+}
   return ctx.scene.leave()
   })
 
@@ -784,8 +816,8 @@ editStory.on ('text', async (ctx)=>{
       ctx.wizard.state.data.editLink = number;
       await ctx.reply('Введите текст ссылки.')
     } catch (e){
-      console.log(e);
-      await ctx.replyWithHTML('<i>Ошибка!</i>')
+      await ctx.answerCbQuery('<i>Ошибка!</i>')
+      return ctx.scene.leave()
     }
     return ctx.wizard.next()
   })
@@ -803,8 +835,8 @@ editStory.on ('text', async (ctx)=>{
     });
     await ctx.reply('Одна из ссылок создаваемой истории была отредактирована.')
     } catch (e){
-      console.log(e);
-      await ctx.replyWithHTML('<i>Ошибка!</i>')
+      await ctx.reply('Ошибка!')
+      return ctx.scene.leave()
     }
   return ctx.scene.leave()
   })
@@ -916,15 +948,6 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
     case '3':
       try{
-      /*const {count, rows} = story.findAndCountAll ({where: {
-        authId: ctx.callbackQuery.from.id,
-        release: false
-      }})
-      console.log(count);
-      if (count <= 0) {
-        await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
-        return ctx.scene.leave()
-      }*/
       const { count, rows } = await story.findAndCountAll({where: {
         authId: ctx.callbackQuery.from.id,
         release: false

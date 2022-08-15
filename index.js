@@ -11,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN)
 const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
+const makeStory = require('./storybuild');
+const baseEmpty = require('')
+
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
 }
@@ -27,6 +30,7 @@ story.hasMany(storybl);
 story.hasMany(storylin);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
+
 
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
@@ -100,13 +104,11 @@ await t.commit('commit');
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
   return ctx.scene.leave()
 })
-
 const menuCreate = new Scenes.WizardScene('sceneCreate', baseEmpty, storyName, storyDesc, baseSave)
 const stage = new Scenes.Stage ([menuCreate])
 bot.use(session())
 bot.use(stage.middleware())
 bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
-
 
 
 
@@ -832,11 +834,11 @@ try{
     [Markup.button.callback('Картинки к блокам', flagBtn.create({
       number: '1',
       action: 'true'}))], 
-    [Markup.button.callback('Смайлы-кнопки к ссылкам', flagBtn.create({
+    [Markup.button.callback('Настраиваемые символы к ссылкам', flagBtn.create({
       number: '2',
       action: 'true'})
       )],
-    [Markup.button.callback('Аватарка истории', flagBtn.create({
+    [Markup.button.callback('Обложка истории', flagBtn.create({
       number: '3',
       action: 'true'})
       )]
@@ -853,6 +855,7 @@ const sceneVisualizationChoice = new Composer()
 sceneVisualizationChoice.on ('callback_query', async (ctx)=>{
 
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+try{
 ctx.wizard.state.data.sceneVisualizationChoice = number;
 switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '1':
@@ -862,7 +865,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       release: false
     }});
     if (count <= 0) {
-      await ctx.reply ('Требуется создать историю! 👉 /make');
+      await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
       return ctx.scene.leave()
     }
     let x = count - 1;
@@ -890,14 +893,12 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       authId: ctx.callbackQuery.from.id,
       release: false,
     }});
-    console.log(count);
-    console.log(rows);
     if (count <= 0) {
-      await ctx.reply ('Требуется добавить хотя бы одну ссылку! 👉 /link');
+      await ctx.answerCbQuery('Для выполнения требуется минимум одна ссылка! 👉 /link');
       return ctx.scene.leave()
     }
     let y = count - 1;
-    await ctx.reply('Выберите ссылку, к которой хотите добавить свой символ вместо 👆:')
+    await ctx.reply('Выберите ссылку, к которой требуется добавить свой символ вместо 👆:')
     for (let o=0; o<=y; o++){
       await ctx.reply(`${rows[o].link}`, Markup.inlineKeyboard(
         [
@@ -912,24 +913,34 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     break;
   } catch (e){
     console.log(e);
-    await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+    await ctx.answerCbQuery('Ошибка!⚠')
     return ctx.scene.leave()
   }
     case '3':
+      try{
       const count = story.count({where: {
         authId: ctx.callbackQuery.from.id,
         release: false
       }})
       if (count < 1) {
-        await ctx.reply ('Требуется создать историю! 👉 /make');
+        await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }
     await ctx.reply('Вставьте ссылку на картинку.')
     return ctx.wizard.selectStep(6)
     break;
+      } catch (e){
+        console.log(e);
+        await ctx.answerCbQuery('Ошибка!⚠')
+        return ctx.scene.leave()
+      }
 }
-
-  return ctx.wizard.next()
+}catch (e){
+  console.log(e);
+  await ctx.answerCbQuery('Ошибка!⚠')
+  return ctx.scene.leave()
+}
+  return ctx.scene.leave()
 })
 
 const setBlockPic = new Composer()
@@ -940,7 +951,7 @@ ctx.wizard.state.data.setBlockPic = number;
 await ctx.reply('Вставьте ссылку на картинку.')
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  await ctx.answerCbQuery('Ошибка!⚠')
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -959,7 +970,7 @@ await storybl.update({ pic: `${ctx.wizard.state.data.setBlockPicTrue}` }, {
 });
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  await ctx.reply('Ошибка!⚠')
   return ctx.scene.leave()
 }
 await ctx.reply ('Картинка успешно добавлена.')
@@ -974,7 +985,7 @@ ctx.wizard.state.data.setLinkSmile = number;
 await ctx.reply('Введите предпочитаемый символ.')
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  await ctx.answerCbQuery('Ошибка!⚠')
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -993,7 +1004,7 @@ await storylin.update({ smile: `${ctx.wizard.state.data.setLinkSmileTrue}` }, {
 });
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  await ctx.reply('Ошибка!⚠')
   return ctx.scene.leave()
 }
 await ctx.reply ('Символ-кнопка успешно обновлён.')
@@ -1013,7 +1024,7 @@ await story.update({ pic: `${ctx.wizard.state.data.setStoryPic}` }, {
 });
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  await ctx.reply('Ошибка!⚠')
   return ctx.scene.leave()
 }
 await ctx.reply ('Картинка успешно добавлена.')
@@ -1026,10 +1037,6 @@ const stagev = new Scenes.Stage ([menuVisualization])
 bot.use(session())
 bot.use(stagev.middleware())
 bot.command ('visualization', async (ctx) => ctx.scene.enter('sceneVisualization'))
-
-
-
-
 
 
 bot.launch()

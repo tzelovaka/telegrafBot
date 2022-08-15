@@ -1,4 +1,4 @@
-const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
+/*const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
 const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');
 const storylin = require('./modelink');
@@ -15,7 +15,7 @@ const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
 }
-
+function makeStory() {
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   ctx.wizard.state.data = {};
@@ -27,20 +27,12 @@ baseEmpty.on ('text', async (ctx)=>{
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
   }
-  await ctx.reply('Введите название.', Markup.keyboard(
-    [
-    ['🔙Выйти']
-  ]))
+  await ctx.reply ('Введите название истории');
   return ctx.wizard.next()
 })
 
 const storyName = new Composer()
 storyName.on ('text', async (ctx)=>{
-  if (ctx.message.text === '🔙Выйти') 
-  {
-    await ctx.reply ('Операция прошла успешно.');
-    return ctx.scene.leave()
-  }
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
   return ctx.wizard.next()
@@ -48,13 +40,7 @@ storyName.on ('text', async (ctx)=>{
 
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
-  if (ctx.message.text === '🔙Выйти') 
-  {
-    await ctx.reply ('Операция прошла успешно.');
-    return ctx.scene.leave()
-  }
   ctx.wizard.state.data.storyDesc = ctx.message.text;
-  await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   const t = await sequelize.transaction();
   try{
     const result = await sequelize.transaction(async (t) => {
@@ -68,7 +54,10 @@ storyDesc.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
+  await ctx.replyWithHTML ('<i>Ошибка!</i>⚠');
+  return ctx.scene.leave()
 }
+  await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
   return ctx.wizard.next()
 })
 
@@ -93,14 +82,12 @@ baseSave.on ('text', async (ctx)=>{
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
+  await ctx.replyWithHTML ('<i>Ошибка!</i>⚠');
+  return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
   return ctx.scene.leave()
 })
+}
 
-
-const menuCreate = new Scenes.WizardScene('sceneCreate', baseEmpty, storyName, storyDesc, baseSave)
-const stage = new Scenes.Stage ([menuCreate])
-bot.use(session())
-bot.use(stage.middleware())
-module.exports = bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
+module.exports = makeStory*/

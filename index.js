@@ -925,7 +925,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
         await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }*/
-      const { count, rows } = await storybl.findAndCountAll({where: {
+      const { count, rows } = await story.findAndCountAll({where: {
         authId: ctx.callbackQuery.from.id,
         release: false
       }});

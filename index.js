@@ -896,7 +896,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       return ctx.scene.leave()
     }
     let y = count - 1;
-    await ctx.reply('Выберите ссылку, к которой требуется добавить свой символ вместо 👆:')
+    await ctx.reply('Выберите ссылку, символ которой требуется заменить:')
     for (let o=0; o<=y; o++){
       await ctx.reply(`${rows[o].link}`, Markup.inlineKeyboard(
         [
@@ -916,7 +916,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
     case '3':
       try{
-      const count = story.count({where: {
+      const {count, rows} = story.findAndCountAll ({where: {
         authId: ctx.callbackQuery.from.id,
         release: false
       }})
@@ -1025,7 +1025,7 @@ await story.update({ pic: `${ctx.wizard.state.data.setStoryPic}` }, {
   await ctx.reply('Ошибка!⚠')
   return ctx.scene.leave()
 }
-await ctx.reply ('Картинка успешно добавлена.')
+  await ctx.reply ('Обложка успешно добавлена.')
   return ctx.scene.leave()
 })
 

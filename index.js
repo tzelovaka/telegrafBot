@@ -920,13 +920,14 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
         authId: ctx.callbackQuery.from.id,
         release: false
       }})
+      console.log(count);
       if (count <= 0) {
         await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }
-    await ctx.reply('Вставьте ссылку на картинку.')
-    return ctx.wizard.selectStep(6)
-    break;
+      await ctx.reply('Вставьте ссылку на картинку.')
+      return ctx.wizard.selectStep(6)
+      break;
       } catch (e){
         console.log(e);
         await ctx.answerCbQuery('Ошибка!⚠')

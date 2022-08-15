@@ -920,7 +920,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
         authId: ctx.callbackQuery.from.id,
         release: false
       }})
-      if (count < 1) {
+      if (count <= 0) {
         await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }

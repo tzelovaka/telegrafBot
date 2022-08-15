@@ -420,7 +420,7 @@ deleteScene.enter(async (ctx) => {
     [
     [Markup.button.callback('История', 'Story')], 
     [Markup.button.callback('Сюжетная ветка', 'Branch')],
-    [Markup.button.callback('Картинка', 'Pic')],
+    [Markup.button.callback('Картинка блока', 'Pic')],
     [Markup.button.callback('Обложка', 'Avatar')],
   ]))
 }
@@ -582,7 +582,7 @@ deleteScene.action('Pic', async (ctx) => {
       pic: {[Op.not]: null}
     }});
     if (count < 1) {
-      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      await ctx.answerCbQuery('Для этой функции требуется добавить минимум одну картинку к блоку!⚠');
       return ctx.scene.leave();
     }
     await ctx.reply ('Выберите блок, картинку которого требуется удалить:');

@@ -343,7 +343,6 @@ const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   try{
   await ctx.answerCbQuery('Выбор сделан');
-console.log(i);
   //let res = await ctx.reply ('✅');
   //for (let d = res.message_id - 1; d >= 0; d--){
     //try {

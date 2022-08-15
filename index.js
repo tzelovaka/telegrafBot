@@ -409,8 +409,8 @@ deleteScene.action('Story', async (ctx) => {
   }})
   if (row === null) {
     await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
-    //await ctx.replyWithHTML ('<i></i>⚠')
-    return ctx.scene.leave();}
+    return ctx.scene.leave();
+  }
   await story.destroy({
     where: {
       authId: ctx.callbackQuery.from.id,
@@ -442,13 +442,13 @@ deleteScene.action('Branch', async (ctx) => {
       release: false
     }});
     if (row === null) {
-      await ctx.reply ('Требуется создать историю! 👉 /make');
-      return ctx.scene.leave()
+      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      return ctx.scene.leave();
     }
     const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
     if (count < 1) {
-      await ctx.reply ('Требуется больше ссылок! 👉 /link');
-      return ctx.scene.leave()
+      await ctx.answerCbQuery('Для этой функции треубется создать как минимум одну ссылку!⚠');
+      return ctx.scene.leave();
     }
     await ctx.reply ('Выберите ссылку, после которой требуется удалить контент (включая ссылку):');
       let x = count - 1;
@@ -523,8 +523,7 @@ for (; ;){
     })
     }
   }
-  await ctx.reply ('Ветка удалена.')
-      
+  await ctx.answerCbQuery('Ветка удалена.');
 } catch(e){
   await ctx.reply('Ошибка!')
 }
@@ -539,8 +538,8 @@ deleteScene.action('Pic', async (ctx) => {
       release: false
     }});
     if (row === null) {
-      await ctx.reply ('Требуется создать историю! 👉 /make');
-      return ctx.scene.leave()
+      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      return ctx.scene.leave();
     }
     const { count, rows } = await storybl.findAndCountAll({where: {
       storyId: row.id,
@@ -549,8 +548,8 @@ deleteScene.action('Pic', async (ctx) => {
       pic: {[Op.not]: null}
     }});
     if (count < 1) {
-      await ctx.reply ('Требуется больше блоков! 👉 /block');
-      return ctx.scene.leave()
+      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      return ctx.scene.leave();
     }
     await ctx.reply ('Выберите блок, картинку которого требуется удалить:');
       let x = count - 1;
@@ -566,12 +565,11 @@ deleteScene.action('Pic', async (ctx) => {
       }
     } catch (e){
       console.log(e);
-      await ctx.replyWithHTML('<i>Ошибка!</i>')
+      await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
     }
 });
 
 deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
-  await ctx.answerCbQuery()
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
@@ -583,7 +581,8 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
         release: false,
       }
     });
-    await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
+    await ctx.answerCbQuery('Картинка выбранного блока была удалена.');
+      return ctx.scene.leave();
   //}catch(e){
     //await ctx.replyWithHTML('<i>Ошибка!</i>')
   //}
@@ -591,8 +590,19 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
 
 
   deleteScene.action('Avatar', async (ctx) => {
-    ctx.session.myData.preferenceType = 'Story';
-  
+    ctx.session.myData.preferenceType = 'Avatar';
+    const row = await story.findOne({where: {
+      authId: ctx.callbackQuery.from.id,
+      release: false
+    }});
+    if (row === null) {
+      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      return ctx.scene.leave();
+    }
+    if (row.pic === null) {
+      await ctx.answerCbQuery('Для этой функции треубется добавить обложку!⚠');
+      return ctx.scene.leave();
+    }
     await story.update ({pic: null},{
       where:{
         authId: ctx.callbackQuery.from.id,
@@ -600,7 +610,7 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
       }
     })
   
-    await ctx.reply('Создаваемая история была успешна удалена.');
+    await ctx.answerCbQuery('Обложка истории была удалена.');
     return ctx.scene.leave();
   });
 

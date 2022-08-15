@@ -343,7 +343,7 @@ const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   try{
   await ctx.answerCbQuery('Выбор сделан');
-
+console.log(i);
   //let res = await ctx.reply ('✅');
   //for (let d = res.message_id - 1; d >= 0; d--){
     //try {
@@ -365,8 +365,13 @@ playMech.on('callback_query', async (ctx) => {
     release: false
   }
 });
-if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
-else await ctx.reply(`${row.bl}`);
+if (row.pic != null) {
+  let res = await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
+
+}
+else {
+  let res = await ctx.reply(`${row.bl}`);
+}
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,

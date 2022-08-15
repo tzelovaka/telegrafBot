@@ -393,7 +393,9 @@ else {
   )
   }
 } catch(e){
-  await ctx.reply('Ошибка!');
+  await ctx.answerCbQuery('Ошибка!⚠');
+  await ctx.reply('Вы завершили прохождение истории!');
+  return ctx.scene.leave()
 }
 return ctx.wizard.selectStep(1)
 })

@@ -32,7 +32,8 @@ bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx
 
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
-  ctx.wizard.state.data = {};
+  try {
+    ctx.wizard.state.data = {};
   const count = await story.count({where: {
     authId: ctx.message.from.id, 
     release: false,
@@ -42,21 +43,31 @@ baseEmpty.on ('text', async (ctx)=>{
     return ctx.scene.leave()
   }
   await ctx.reply ('Введите название истории');
+  } catch (e) {
+  await ctx.reply ('Ошибка!⚠');
+  return ctx.scene.leave()
+  }
   return ctx.wizard.next()
 })
 
 const storyName = new Composer()
 storyName.on ('text', async (ctx)=>{
+  try{
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
+  }catch (e) {
+    await ctx.reply ('Ошибка!⚠');
+    return ctx.scene.leave()
+    }
   return ctx.wizard.next()
 })
 
 const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
-  ctx.wizard.state.data.storyDesc = ctx.message.text;
-  const t = await sequelize.transaction();
   try{
+  ctx.wizard.state.data.storyDesc = ctx.message.text;
+  try{
+  const t = await sequelize.transaction();
     const result = await sequelize.transaction(async (t) => {
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,
@@ -72,14 +83,18 @@ await t.commit('commit');
   return ctx.scene.leave()
 }
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
+}catch (e) {
+  await ctx.reply ('Ошибка!⚠');
+  return ctx.scene.leave()
+  }
   return ctx.wizard.next()
 })
 
 const baseSave = new Composer()
 baseSave.on ('text', async (ctx)=>{
+  try{
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
-  try{
     const { count, rows } = await story.findAndCountAll({where: {
       authId: ctx.message.from.id,
       release: false}});

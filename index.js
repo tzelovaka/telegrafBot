@@ -402,7 +402,7 @@ deleteScene.enter((ctx) => {
   ]))
 });
 deleteScene.action('Story', async (ctx) => {
-  answerCbQuery('Привет');
+  answerCbQuery();
   ctx.session.myData.preferenceType = 'Story';
   const row = await story.findOne({where:{
     authId: ctx.callbackQuery.from.id,

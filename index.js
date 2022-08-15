@@ -411,7 +411,8 @@ bot.command('play', async (ctx) => ctx.scene.enter('playScene'))
 
 
 const deleteScene = new Scenes.BaseScene('delete')
-deleteScene.enter((ctx) => {
+deleteScene.enter(async (ctx) => {
+  try{
   ctx.session.myData = {};
   ctx.reply('Выберите вид удаляемого элемента:', Markup.inlineKeyboard(
     [
@@ -420,8 +421,15 @@ deleteScene.enter((ctx) => {
     [Markup.button.callback('Картинка', 'Pic')],
     [Markup.button.callback('Обложка', 'Avatar')],
   ]))
+}
+catch(e){
+  await ctx.reply('Ошибка!⚠');
+  return ctx.scene.leave();
+}
 });
+
 deleteScene.action('Story', async (ctx) => {
+  try{
   ctx.session.myData.preferenceType = 'Story';
   const row = await story.findOne({where:{
     authId: ctx.callbackQuery.from.id,
@@ -449,14 +457,17 @@ deleteScene.action('Story', async (ctx) => {
       release: false
     }
   });
-
   await ctx.reply('Создаваемая история была успешна удалена.');
+}catch(e){
+  await ctx.answerCbQuery('Ошибка!⚠');
+  return ctx.scene.leave();
+}
   return ctx.scene.leave();
 });
 
 deleteScene.action('Branch', async (ctx) => {
-  ctx.session.myData.preferenceType = 'Branch';
   try{
+  ctx.session.myData.preferenceType = 'Branch';
     const row = await story.findOne({where: {
       authId: ctx.callbackQuery.from.id,
       release: false
@@ -483,17 +494,17 @@ deleteScene.action('Branch', async (ctx) => {
       )
       }
     } catch (e){
-      console.log(e);
-      await ctx.replyWithHTML('<i>Ошибка!</i>')
+      await ctx.answerCbQuery('Ошибка!⚠')
+      return ctx.scene.leave();
     }
 });
 
 deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
   await ctx.answerCbQuery()
+  try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
-  try{
   /*const row = story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
@@ -545,14 +556,15 @@ for (; ;){
   }
   await ctx.answerCbQuery('Ветка удалена.');
 } catch(e){
-  await ctx.reply('Ошибка!')
+  await ctx.answerCbQuery('Ошибка!⚠')
+  return ctx.scene.leave();
 }
   return ctx.scene.leave();
 })
 
 deleteScene.action('Pic', async (ctx) => {
-  ctx.session.myData.preferenceType = 'Pic';
   try{
+  ctx.session.myData.preferenceType = 'Pic';
     const row = await story.findOne({where: {
       authId: ctx.callbackQuery.from.id,
       release: false
@@ -584,16 +596,16 @@ deleteScene.action('Pic', async (ctx) => {
       )
       }
     } catch (e){
-      console.log(e);
-      await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+      await ctx.answerCbQuery('Ошибка!⚠')
+      return ctx.scene.leave();
     }
 });
 
 deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
+  try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
-  //try{
     await storybl.update({ pic: null }, {
       where: {
         id: `${number}`,
@@ -602,14 +614,16 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
       }
     });
     await ctx.answerCbQuery('Картинка выбранного блока была удалена.');
+    }catch(e){
+    await ctx.answerCbQuery('Ошибка!⚠')
+    return ctx.scene.leave();
+  }
       return ctx.scene.leave();
-  //}catch(e){
-    //await ctx.replyWithHTML('<i>Ошибка!</i>')
-  //}
   })
 
 
   deleteScene.action('Avatar', async (ctx) => {
+    try{
     ctx.session.myData.preferenceType = 'Avatar';
     const row = await story.findOne({where: {
       authId: ctx.callbackQuery.from.id,
@@ -630,12 +644,19 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
       }
     })
     await ctx.answerCbQuery('Обложка истории была удалена.');
+  } catch(e){
+    await ctx.answerCbQuery('Ошибка!⚠');
+    return ctx.scene.leave();
+  }
     return ctx.scene.leave();
   });
 
 deleteScene.leave(async (ctx) => {
+  try{
   await ctx.reply('Операция успешно завершена.');
-  return ctx.scene.leave();
+  }catch(e){
+    await ctx.answerCbQuery('Ошибка!⚠')
+  }
 });
 deleteScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));
 

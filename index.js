@@ -341,7 +341,9 @@ return ctx.wizard.next()
 
 const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
-  await ctx.answerCbQuery();
+  try{
+  await ctx.answerCbQuery('Выбор сделан');
+
   //let res = await ctx.reply ('✅');
   //for (let d = res.message_id - 1; d >= 0; d--){
     //try {
@@ -352,7 +354,6 @@ playMech.on('callback_query', async (ctx) => {
  // }
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.playMech = number;
-  try{
   const ro = await story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false
@@ -365,7 +366,7 @@ playMech.on('callback_query', async (ctx) => {
   }
 });
 if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
-else  await ctx.reply(`${row.bl}`);//ctx.replyWithPhoto(`${row.pic}`);
+else await ctx.reply(`${row.bl}`);
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
@@ -763,8 +764,6 @@ catch(e){
   return ctx.scene.leave()
 }
 })
-
-
 const editStory = new Composer()
 editStory.on ('text', async (ctx)=>{
   try{

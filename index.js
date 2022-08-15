@@ -676,12 +676,21 @@ const editChoiceTrue = new Composer()
       ctx.wizard.selectStep(2)
       break;
     case '2':
+      try{
+      const row = await story.findOne({where:{
+          authId: ctx.callbackQuery.from.id,
+          release: false,
+      }});
       if (row === null) {
         await ctx.answerCbQuery('Требуется создать историю!');
         return ctx.scene.leave();
       }
       await ctx.reply('Введите новое описание')
       ctx.wizard.selectStep(3)
+    } catch(e){
+      await ctx.answerCbQuery('Ошибка!⚠')
+  return ctx.scene.leave()
+    }
       break;
     case '3':
       try{
@@ -712,14 +721,14 @@ const editChoiceTrue = new Composer()
       ctx.wizard.selectStep(4)
       break;
     case '4':
+      const { count, rows } = await storylin.findAndCountAll({where: {
+        authId: ctx.callbackQuery.from.id,
+      release: false}});
+      if (count < 1) {
+        await ctx.answerCbQuery('Требуется создать минимум одну ссылку! 👉 /link');
+        return ctx.scene.leave()
+      }
       await ctx.reply('Выберите ссылку, которую требуется отредактровать:');
-        const { count, rows } = await storylin.findAndCountAll({where: {
-          authId: ctx.callbackQuery.from.id,
-        release: false}});
-        if (count < 1) {
-          await ctx.answerCbQuery('Требуется создать минимум одну ссылку! 👉 /link');
-          return ctx.scene.leave()
-        }
           let x = count - 1;
           for (let i=0; i<=x; i++){
             await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(

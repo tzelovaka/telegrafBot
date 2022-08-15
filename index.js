@@ -409,9 +409,9 @@ deleteScene.action('Story', async (ctx) => {
     authId: ctx.callbackQuery.from.id,
     release: false
   }})
-  if (row === null) {
-    await ctx.reply ('Для этой функции треубется создать историю!')
-    return ctx.scene.leave();}
+  //if (row === null) {
+    //await ctx.reply ('Для этой функции треубется создать историю!')
+    //return ctx.scene.leave();}
   await story.destroy({
     where: {
       authId: ctx.callbackQuery.from.id,

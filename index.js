@@ -916,12 +916,20 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
     case '3':
       try{
-      const {count, rows} = story.findAndCountAll ({where: {
+      /*const {count, rows} = story.findAndCountAll ({where: {
         authId: ctx.callbackQuery.from.id,
         release: false
       }})
       console.log(count);
-      if (rows === null || count < 1) {
+      if (count <= 0) {
+        await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
+        return ctx.scene.leave()
+      }*/
+      const { count, rows } = await storybl.findAndCountAll({where: {
+        authId: ctx.callbackQuery.from.id,
+        release: false
+      }});
+      if (count <= 0) {
         await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }

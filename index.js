@@ -224,9 +224,13 @@ try{
     await ctx.reply ('Надо создать историю! 👉 /make');
     return ctx.scene.leave()
   }
-  const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
+  const { count, rows } = await storylin.findAndCountAll({where: {
+    authId: ctx.message.from.id,
+    release: false,
+    storyId: row.id
+  }});
   if (count < 1) {
-    await ctx.reply ('Надо создать ссылку! 👉 /make');
+    await ctx.reply ('Надо создать ссылку! 👉 /link');
     return ctx.scene.leave()
   }
   await ctx.reply ('Выберите ссылку из доступных:');

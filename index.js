@@ -946,9 +946,8 @@ try{
 
 const sceneVisualizationChoice = new Composer()
 sceneVisualizationChoice.on ('callback_query', async (ctx)=>{
+  try{const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
 
-const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-try{
 ctx.wizard.state.data.sceneVisualizationChoice = number;
 switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '1':
@@ -997,7 +996,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
         [
         [Markup.button.callback(`${rows[o].smile}`, flagBtn.create({
           number: `${rows[o].id}`,
-          action: 'true'}))]
+          action: 'smilechoice'}))]
       ]
       )
     )
@@ -1074,6 +1073,10 @@ const setLinkSmile = new Composer()
 setLinkSmile.on ('callback_query', async (ctx)=>{
 try{
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+if (action != 'smilechoice'){
+  await ctx.answerCbQuery('Ошибка!⚠')
+  return ctx.scene.leave()
+}
 ctx.wizard.state.data.setLinkSmile = number;
 await ctx.reply('Введите предпочитаемый символ.')
 } catch (e){

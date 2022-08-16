@@ -225,6 +225,10 @@ try{
     return ctx.scene.leave()
   }
   const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
+  if (count < 1) {
+    await ctx.reply ('Надо создать ссылку! 👉 /make');
+    return ctx.scene.leave()
+  }
   await ctx.reply ('Выберите ссылку из доступных:');
     let x = count - 1;
     for (let i=0; i<=x; i++){
@@ -237,7 +241,7 @@ try{
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
-        [Markup.button.callback('👆', flagBtn.create({
+        [Markup.button.callback(`${rows[i].smile}`, flagBtn.create({
           number: rows[i].id,
           action: 'true'}))]
             ]
@@ -263,7 +267,7 @@ linkChoice.on ('callback_query', async (ctx)=>{
     release: false
   }});
   if (count > 0){
-    await ctx.reply('Ошибка! Эта ссылка уже ведёт к одному из блоков!')
+    await ctx.answerCbQuery('Ошибка!⚠')
     return ctx.scene.leave()
   }
 } catch(e){
@@ -366,7 +370,6 @@ playMech.on('callback_query', async (ctx) => {
 });
 if (row.pic != null) {
   let res = await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
-
 }
 else {
   let res = await ctx.reply(`${row.bl}`);

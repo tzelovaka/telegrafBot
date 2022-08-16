@@ -221,7 +221,7 @@ try{
     release: false
   }});
   if (row === null) {
-    await ctx.reply ('Надо создать историю! 👉 /make');
+    await ctx.reply ('Требуется создать создать историю! 👉 /make');
     return ctx.scene.leave()
   }
   const { count, rows } = await storylin.findAndCountAll({where: {
@@ -230,7 +230,7 @@ try{
     storyId: row.id
   }});
   if (count < 1) {
-    await ctx.reply ('Надо создать ссылку! 👉 /link');
+    await ctx.reply ('Требуется создать ссылку! 👉 /link');
     return ctx.scene.leave()
   }
   await ctx.reply ('Выберите ссылку из доступных:');

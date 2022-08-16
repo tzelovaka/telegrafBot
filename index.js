@@ -214,8 +214,8 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
-ctx.wizard.state.data = {};
-try{
+  try{
+  ctx.wizard.state.data = {};
   const row = await story.findOne({where: {
     authId: ctx.message.from.id,
     release: false
@@ -229,12 +229,13 @@ try{
     release: false,
     storyId: row.id
   }});
-  if (count < 1) {
+  if (count < 1 || rows === null) {
     await ctx.reply ('Требуется создать ссылку! 👉 /link');
     return ctx.scene.leave()
   }
   await ctx.reply ('Выберите ссылку из доступных:');
     let x = count - 1;
+    let p = 0;
     for (let i=0; i<=x; i++){
       const ro = await storybl.findOne({where:{
         authId: ctx.message.from.id,
@@ -251,6 +252,11 @@ try{
             ]
           )
         )
+        p++
+      }
+      if ((i = x) && (p = 0)){
+        await ctx.reply ('Доступных ссылок нет!⚠');
+        return ctx.scene.leave()
       }
     }
   } catch (e){

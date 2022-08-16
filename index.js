@@ -926,19 +926,19 @@ try{
     [
     [Markup.button.callback('Картинки к блокам', flagBtn.create({
       number: '1',
-      action: 'true'}))], 
+      action: 'pics'}))], 
     [Markup.button.callback('Настраиваемые символы к ссылкам', flagBtn.create({
       number: '2',
-      action: 'true'})
+      action: 'symbols'})
       )],
     [Markup.button.callback('Обложка истории', flagBtn.create({
       number: '3',
-      action: 'true'})
+      action: 'skin'})
       )]
   ]))
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>⚠')
+  await ctx.replyWithHTML('Ошибка!⚠')
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -946,12 +946,16 @@ try{
 
 const sceneVisualizationChoice = new Composer()
 sceneVisualizationChoice.on ('callback_query', async (ctx)=>{
-  try{const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-
+  try{
+    const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
 ctx.wizard.state.data.sceneVisualizationChoice = number;
 switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '1':
     try{
+      if (action != 'pics'){
+        await ctx.answerCbQuery('Ошибка!⚠')
+        return ctx.scene.leave()
+      }
     const { count, rows } = await storybl.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
       release: false
@@ -981,6 +985,10 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
   case '2':
     try{
+      if (action != 'symbols'){
+        await ctx.answerCbQuery('Ошибка!⚠')
+        return ctx.scene.leave()
+      }
     const { count, rows } = await storylin.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
       release: false,
@@ -1010,6 +1018,10 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
     case '3':
       try{
+        if (action != 'skin'){
+          await ctx.answerCbQuery('Ошибка!⚠')
+          return ctx.scene.leave()
+        }
       const { count, rows } = await story.findAndCountAll({where: {
         authId: ctx.callbackQuery.from.id,
         release: false

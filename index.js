@@ -124,7 +124,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
 
-const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'bl', 'pic', 'storyid', 'action']);
+const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'bl', 'storyid', 'action']);
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -145,7 +145,6 @@ try{
         id: rows[i].id,
         linid: rows[i].linid,
         bl: rows[i].bl,
-        pic: rows[i].pic,
         storyid: rows[i].storyId,
         action: 'blockchoice'}))]
     ]
@@ -172,7 +171,6 @@ blockChoice.on ('callback_query', async (ctx)=>{
     id: id,
     linid: linid,
     bl: bl,
-    pic: pic,
     storyId: storyid,
     authId: ctx.callbackQuery.from.id,
     release: false,

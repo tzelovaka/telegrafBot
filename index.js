@@ -228,7 +228,7 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 
 
-
+const linkBtn = new CallbackData('linkBtn', ['id', 'smile', 'storyblid', 'storyid']);
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
   try{
@@ -263,10 +263,13 @@ linkEmpty.on ('text', async (ctx)=>{
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
-        [Markup.button.callback(`${rows[i].smile}`, flagBtn.create({
-          number: rows[i].id,
-          action: 'true'}))]
-            ]
+        [Markup.button.callback(`${rows[i].smile}`, linkBtn.create({
+          id: rows[i].id,
+          smile: rows[i].smile,
+          storyblid: rows[i].storyblId,
+          storyid: rows[i].storyId
+        }))]
+          ]
           )
         )
         p++
@@ -285,16 +288,26 @@ linkEmpty.on ('text', async (ctx)=>{
 
 const linkChoice = new Composer()
 linkChoice.on ('callback_query', async (ctx)=>{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
-  ctx.wizard.state.data.linkChoice = number;
   try{
+  const { id, smile, storyblid, storyid} = linkBtn.parse(ctx.callbackQuery.data);
+  const row = await storylin.findOne({where:{
+    id: id,
+    smile: smile,
+    storyblId: storyblid,
+    storyId: storyid
+  }})
+  if (row === null) {
+    await ctx.answerCbQuery('Ошибка! Такой ссылки нет в базе данных!⚠');
+    return ctx.scene.leave()
+  }
+  ctx.wizard.state.data.linkChoice = id;
   const count = await storybl.count({where: {
     linid: ctx.wizard.state.data.linkChoice,
     authId: ctx.callbackQuery.from.id,
     release: false
   }});
   if (count > 0){
-    await ctx.answerCbQuery('Ошибка!⚠')
+    await ctx.answerCbQuery('Ошибка! Ссылка уже ведёт к одному из блоков!⚠')
     return ctx.scene.leave()
   }
 } catch(e){

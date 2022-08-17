@@ -255,9 +255,9 @@ linkEmpty.on ('text', async (ctx)=>{
     let p = 0;
     for (let i=0; i<=x; i++){
       const row = await storybl.findOne({where:{
+        linid: rows[i].id,
         authId: ctx.message.from.id,
-        release: false,
-        linid: rows[i].id
+        release: false
       }})
       if (row === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(

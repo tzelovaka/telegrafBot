@@ -254,13 +254,12 @@ linkEmpty.on ('text', async (ctx)=>{
     let x = count - 1;
     let p = 0;
     for (let i=0; i<=x; i++){
-      const ro = await storybl.findOne({where:{
+      const row = await storybl.findOne({where:{
         authId: ctx.message.from.id,
         release: false,
-        linid: rows[i].id,
-        storyId: row.id
+        linid: rows[i].id
       }})
-      if (ro === null){
+      if (row === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback(`${rows[i].smile}`, linkBtn.create({

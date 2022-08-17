@@ -138,6 +138,7 @@ try{
     return ctx.scene.leave()
   }
   let x = count - 1;
+  await ctx.reply ('Выберите блок, который будет предлагать ссылку.');
   for (let i=0; i<=x; i++){
     await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
       [
@@ -314,11 +315,11 @@ linkChoice.on ('callback_query', async (ctx)=>{
     return ctx.scene.leave()
   }
   ctx.wizard.state.data.linkChoice = id;
+  await ctx.reply('Введите текст блока.');
 } catch(e){
   await ctx.answerCbQuery('Произошла ошибка!')
   return ctx.scene.leave()
 }
-  await ctx.reply('Введите текст блока.');
   return ctx.wizard.next()
 })
 

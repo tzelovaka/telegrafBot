@@ -124,7 +124,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
 
-const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'bl', 'storyid', 'action']);
+const blockBtn = new CallbackData('blockBtn', ['id', 'bl', 'storyid', 'action']);
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -143,7 +143,6 @@ try{
       [
       [Markup.button.callback('👆', blockBtn.create({
         id: rows[i].id,
-        linid: rows[i].linid,
         bl: rows[i].bl,
         storyid: rows[i].storyId,
         action: 'blockchoice'}))]
@@ -162,14 +161,13 @@ try{
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, linid, bl, pic, storyid, action } = blockBtn.parse(ctx.callbackQuery.data);
+  const { id, bl, storyid, action } = blockBtn.parse(ctx.callbackQuery.data);
   if (action != 'blockchoice'){
     await ctx.answerCbQuery('Ошибка!⚠');
     return ctx.scene.leave()
   }
   const row = await storybl.findOne({where: {
     id: id,
-    linid: linid,
     bl: bl,
     storyId: storyid,
     authId: ctx.callbackQuery.from.id,

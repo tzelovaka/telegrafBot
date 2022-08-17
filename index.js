@@ -291,7 +291,7 @@ linkChoice.on ('callback_query', async (ctx)=>{
   try{
   const { id, smile, storyblid, storyid} = linkBtn.parse(ctx.callbackQuery.data);
   const count = await storybl.count({where: {
-    linid: ctx.wizard.state.data.linkChoice,
+    linid: id,
     authId: ctx.callbackQuery.from.id,
     release: false,
     storyId: storyid

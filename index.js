@@ -145,7 +145,7 @@ try{
         id: rows[i].id,
         linid: rows[i].linid,
         storyid: rows[i].storyId,
-        updatedAt: rows[i].updatedAt}))]
+        updatedAt: `${rows[i].updatedAt}`}))]
     ]
     )
   )
@@ -166,7 +166,7 @@ blockChoice.on ('callback_query', async (ctx)=>{
     id: id,
     linid: linid,
     storyId: storyid,
-    updatedAt: updatedAt,
+    updatedAt: `${updatedAt}`,
     authId: ctx.callbackQuery.from.id,
     release: false,
   }});

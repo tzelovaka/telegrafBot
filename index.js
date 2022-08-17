@@ -254,6 +254,7 @@ linkEmpty.on ('text', async (ctx)=>{
     let x = count - 1;
     let p = 0;
     for (let i=0; i<=x; i++){
+      console.log(rows[i].id);
       const row = await storybl.findOne({where:{
         linid: rows[i].id,
         authId: ctx.message.from.id,

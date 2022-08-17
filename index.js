@@ -254,13 +254,13 @@ linkEmpty.on ('text', async (ctx)=>{
     let x = count - 1;
     let p = 0;
     for (let i=0; i<=x; i++){
-      const ro = await storybl.findOne({where:{
+      /*const ro = await storybl.findOne({where:{
         authId: ctx.message.from.id,
         release: false,
         linid: rows[i].id,
         storyId: row.id
       }})
-      if (ro === null){
+      if (ro === null){*/
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback(`${rows[i].smile}`, linkBtn.create({
@@ -273,12 +273,12 @@ linkEmpty.on ('text', async (ctx)=>{
           ]
           )
         )
-        p++
+       /* p++
       }
       if (i = x && p < 1){
         await ctx.reply ('Доступных ссылок нет!⚠');
         return ctx.scene.leave()
-      }
+      }*/
     }
   } catch (e){
     console.log(e);

@@ -163,6 +163,15 @@ blockChoice.on ('callback_query', async (ctx)=>{
     await ctx.answerCbQuery('Ошибка!⚠');
     return ctx.scene.leave()
   }
+  const row = await storybl.findOne({where: {
+    id: number,
+    authId: ctx.message.from.id,
+    release: false,
+  }});
+  if (row === null){
+    await ctx.answerCbQuery('Ошибка!⚠');
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.blockChoice = number;
   await ctx.reply ('Введите текст ссылки.');
 } catch(e){

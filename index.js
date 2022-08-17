@@ -258,8 +258,7 @@ linkEmpty.on ('text', async (ctx)=>{
       const ro = await storybl.findOne({where:{
         linid: rows[i].id,
         authId: ctx.message.from.id,
-        release: false,
-        //storyId: row[0].id
+        release: false
       }})
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(

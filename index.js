@@ -260,6 +260,7 @@ linkEmpty.on ('text', async (ctx)=>{
         linid: rows[i].id,
         storyId: row.id
       }})
+      console.log(ro);
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [

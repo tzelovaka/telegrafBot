@@ -9,7 +9,7 @@ const { Op } = require("sequelize");
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
-const bot = new Telegraf(BOT_TOKEN)
+const bot = new Telegraf(BOT_TOKEN);
 const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
 
 if (BOT_TOKEN === undefined) {
@@ -34,7 +34,7 @@ const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   try {
     ctx.wizard.state.data = {};
-  const count = await story.count({where: {
+    const count = await story.count({where: {
     authId: ctx.message.from.id, 
     release: false,
   }});
@@ -66,22 +66,6 @@ const storyDesc = new Composer()
 storyDesc.on ('text', async (ctx)=>{
   try{
   ctx.wizard.state.data.storyDesc = ctx.message.text;
-  try{
-  const t = await sequelize.transaction();
-    const result = await sequelize.transaction(async (t) => {
-    const query = await story.create({
-    name: `${ctx.wizard.state.data.storyName}`,
-    desc: `${ctx.wizard.state.data.storyDesc}`,
-    authId: ctx.message.from.id,
-    release: false
-  }, { transaction: t });
-})
-await t.commit('commit');
-} catch (error) {
-  await t.rollback();
-  await ctx.replyWithHTML ('<i>Ошибка!</i>⚠');
-  return ctx.scene.leave()
-}
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
 }catch (e) {
   await ctx.reply ('Ошибка!⚠');
@@ -95,6 +79,15 @@ baseSave.on ('text', async (ctx)=>{
   try{
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
+  const res = await sequelize.transaction(async (t) => {
+    const query = await story.create({
+    name: `${ctx.wizard.state.data.storyName}`,
+    desc: `${ctx.wizard.state.data.storyDesc}`,
+    authId: ctx.message.from.id,
+    release: false
+  }, { transaction: t });
+})
+await t.commit('commit');
     const { count, rows } = await story.findAndCountAll({where: {
       authId: ctx.message.from.id,
       release: false}});

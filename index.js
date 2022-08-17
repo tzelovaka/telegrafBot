@@ -133,7 +133,7 @@ try{
     release: false
   }});
   if (count <= 0) {
-    await ctx.reply ('Надо создать историю! 👉 /make');
+    await ctx.reply ('Требуется создать историю! 👉 /make');
     return ctx.scene.leave()
   }
   let x = count - 1;
@@ -142,28 +142,39 @@ try{
       [
       [Markup.button.callback('👆', flagBtn.create({
         number: rows[i].id,
-        action: 'true'}))]
+        action: 'blockchoice'}))]
     ]
     )
   )
   }
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('<i>Ошибка!</i>')
+  await ctx.replyWithHTML('Ошибка!⚠')
+  return ctx.scene.leave() 
 }
   return ctx.wizard.next()
 })
 
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
+  try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  if (action != 'blockchoice'){
+    await ctx.answerGameQuery('Ошибка!⚠');
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.blockChoice = number;
   await ctx.reply ('Введите текст ссылки.');
+} catch(e){
+  await ctx.answerGameQuery('Ошибка!⚠');
+  return ctx.scene.leave()
+}
   return ctx.wizard.next()
 })
 
 const blockLink = new Composer()
 blockLink.on ('text', async (ctx)=>{
+  try{
   ctx.wizard.state.data.blockLink = ctx.message.text;
   const {count, rows} = await storybl.findAndCountAll({where: {
     authId: ctx.message.from.id,
@@ -187,6 +198,10 @@ await t.commit('commit');
   return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили ссылку.');
+}catch(e){
+  await ctx.reply ('⚠Ошибка! Попробуйте сначала.');
+  return ctx.scene.leave()
+}
   return ctx.scene.leave()
 })
 

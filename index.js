@@ -124,7 +124,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
 
-const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'storyid', 'updatedAt']);
+const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'storyid']);
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -144,8 +144,7 @@ try{
       [Markup.button.callback('👆', blockBtn.create({
         id: rows[i].id,
         linid: rows[i].linid,
-        storyid: rows[i].storyId,
-        updatedAt: `${rows[i].updatedAt}`}))]
+        storyid: rows[i].storyId}))]
     ]
     )
   )
@@ -161,12 +160,11 @@ try{
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, linid, storyid, updatedAt} = blockBtn.parse(ctx.callbackQuery.data);
+  const { id, linid, storyid} = blockBtn.parse(ctx.callbackQuery.data);
   const row = await storybl.findOne({where: {
     id: id,
     linid: linid,
     storyId: storyid,
-    updatedAt: `${updatedAt}`,
     authId: ctx.callbackQuery.from.id,
     release: false,
   }});
@@ -174,7 +172,7 @@ blockChoice.on ('callback_query', async (ctx)=>{
     await ctx.answerCbQuery('Ошибка! Начните заново⚠');
     return ctx.scene.leave()
   }
-  ctx.wizard.state.data.blockChoice = number;
+  ctx.wizard.state.data.blockChoice = id;
   await ctx.reply ('Введите текст ссылки.');
 } catch(e){
   await ctx.answerCbQuery('Ошибка!⚠');

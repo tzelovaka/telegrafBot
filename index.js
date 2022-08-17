@@ -228,7 +228,7 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 
 
-const linkBtn = new CallbackData('linkBtn', ['id', 'action'/*'smile', 'storyblid', 'storyid'*/]);
+const linkBtn = new CallbackData('linkBtn', ['id', 'smile', 'storyblid', 'storyid']);
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
   try{
@@ -265,10 +265,9 @@ linkEmpty.on ('text', async (ctx)=>{
         [
         [Markup.button.callback(`${rows[i].smile}`, linkBtn.create({
           id: rows[i].id,
-          action: 'true',
-          //smile: rows[i].smile,
-          //storyblid: rows[i].storyblId,
-          //storyid: rows[i].storyId
+          smile: rows[i].smile,
+          storyblid: rows[i].storyblId,
+          storyid: rows[i].storyId
         }))]
           ]
           )
@@ -290,22 +289,23 @@ linkEmpty.on ('text', async (ctx)=>{
 const linkChoice = new Composer()
 linkChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, action} = linkBtn.parse(ctx.callbackQuery.data);
-  ctx.wizard.state.data.linkChoice = id;
+  const { id, smile, storyblid, storyid} = linkBtn.parse(ctx.callbackQuery.data);
   const count = await storybl.count({where: {
     linid: ctx.wizard.state.data.linkChoice,
     authId: ctx.callbackQuery.from.id,
-    release: false
+    release: false,
+    storyId: storyid
   }});
   if (count > 0){
     await ctx.answerCbQuery('Ошибка!⚠')
     return ctx.scene.leave()
   }
+  ctx.wizard.state.data.linkChoice = id;
 } catch(e){
-  await ctx.reply('Произошла ошибка!')
+  await ctx.answerCbQuery('Произошла ошибка!')
   return ctx.scene.leave()
 }
-  await ctx.reply ('Введите текст блока.');
+  await ctx.reply('Введите текст блока.');
   return ctx.wizard.next()
 })
 

@@ -12,6 +12,7 @@ const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN);
 const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
 
+
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
 }
@@ -123,7 +124,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
 
-
+const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'bl', 'pic', 'storyid', 'action']);
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -141,7 +142,11 @@ try{
     await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', flagBtn.create({
-        number: rows[i].id,
+        id: rows[i].id,
+        linid: rows[i].linid,
+        bl: rows[i].bl,
+        pic: rows[i].pic,
+        storyid: rows[i].storyId,
         action: 'blockchoice'}))]
     ]
     )
@@ -158,18 +163,22 @@ try{
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const { id, linid, bl, pic, storyid, action } = flagBtn.parse(ctx.callbackQuery.data);
   if (action != 'blockchoice'){
     await ctx.answerCbQuery('Ошибка!⚠');
     return ctx.scene.leave()
   }
   const row = await storybl.findOne({where: {
-    id: number,
+    id: id,
+    linid: linid,
+    bl: bl,
+    pic: pic,
+    storyId: storyid,
     authId: ctx.message.from.id,
     release: false,
   }});
   if (row === null){
-    await ctx.answerCbQuery('Ошибка!⚠');
+    await ctx.answerCbQuery('Ошибка! Начните заново⚠');
     return ctx.scene.leave()
   }
   ctx.wizard.state.data.blockChoice = number;

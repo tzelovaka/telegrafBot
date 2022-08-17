@@ -124,7 +124,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
 
-const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'storyid', 'action']);
+const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'storyid', 'updatedAt']);
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -145,7 +145,7 @@ try{
         id: rows[i].id,
         linid: rows[i].linid,
         storyid: rows[i].storyId,
-        action: 'blockchoice'}))]
+        updatedAt: rows[i].updatedAt}))]
     ]
     )
   )
@@ -170,6 +170,7 @@ blockChoice.on ('callback_query', async (ctx)=>{
     id: id,
     linid: linid,
     storyId: storyid,
+    updatedAt: updatedAt,
     authId: ctx.callbackQuery.from.id,
     release: false,
   }});

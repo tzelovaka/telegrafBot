@@ -161,11 +161,7 @@ try{
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, linid, storyid, action } = blockBtn.parse(ctx.callbackQuery.data);
-  if (action != 'blockchoice'){
-    await ctx.answerCbQuery('Ошибка!⚠');
-    return ctx.scene.leave()
-  }
+  const { id, linid, storyid, updatedAt} = blockBtn.parse(ctx.callbackQuery.data);
   const row = await storybl.findOne({where: {
     id: id,
     linid: linid,

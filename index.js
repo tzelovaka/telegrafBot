@@ -228,23 +228,23 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 
 
-const linkBtn = new CallbackData('linkBtn', ['id', 'storyid']);
+const linkBtn = new CallbackData('linkBtn', ['id', 'smile', 'storyblid', 'storyid']);
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
   try{
   ctx.wizard.state.data = {};
-  //const row = await story.findOne({where: {
-    //authId: ctx.message.from.id,
-    //release: false
-  //}});
-  //if (row === null) {
-    //await ctx.reply ('Требуется создать создать историю! 👉 /make');
-    //return ctx.scene.leave()
-  //}
+  const row = await story.findOne({where: {
+    authId: ctx.message.from.id,
+    release: false
+  }});
+  if (row === null) {
+    await ctx.reply ('Требуется создать создать историю! 👉 /make');
+    return ctx.scene.leave()
+  }
   const { count, rows } = await storylin.findAndCountAll({where: {
     authId: ctx.message.from.id,
     release: false,
-    //storyId: row.id
+    storyId: row.id
   }});
   if (count < 1 || rows === null) {
     await ctx.reply ('Требуется создать ссылку! 👉 /link');
@@ -255,16 +255,19 @@ linkEmpty.on ('text', async (ctx)=>{
     let p = 0;
     for (let i=0; i<=x; i++){
       console.log(rows[i].id);
-      const row = await storybl.findOne({where:{
+      const ro = await storybl.findOne({where:{
         linid: rows[i].id,
         authId: ctx.message.from.id,
-        release: false
+        release: false,
+        storyId: row.id
       }})
-      if (row === null){
+      if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
         [
         [Markup.button.callback(`${rows[i].smile}`, linkBtn.create({
           id: rows[i].id,
+          smile: rows[i].smile,
+          storyblid: rows[i].storyblId,
           storyid: rows[i].storyId
         }))]
           ]
@@ -288,7 +291,19 @@ linkEmpty.on ('text', async (ctx)=>{
 const linkChoice = new Composer()
 linkChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, storyid} = linkBtn.parse(ctx.callbackQuery.data);
+  const { id, smile, storyblid, storyid} = linkBtn.parse(ctx.callbackQuery.data);
+    const row = await storylin.findOne({where:{
+      id: id,
+      smile: smile,
+      storyblId: storyblid,
+      storyId: storyid,
+      release: false,
+      authId: ctx.callbackQuery.from.id
+    }})
+    if (row === null){
+      await ctx.answerCbQuery('Ошибка! Начните заново⚠');
+      return ctx.scene.leave()
+    }
   const count = await storybl.count({where: {
     linid: id,
     authId: ctx.callbackQuery.from.id,

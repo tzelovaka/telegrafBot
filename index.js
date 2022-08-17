@@ -160,13 +160,13 @@ blockChoice.on ('callback_query', async (ctx)=>{
   try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   if (action != 'blockchoice'){
-    await ctx.answerGameQuery('Ошибка!⚠');
+    await ctx.answerCbQuery('Ошибка!⚠');
     return ctx.scene.leave()
   }
   ctx.wizard.state.data.blockChoice = number;
   await ctx.reply ('Введите текст ссылки.');
 } catch(e){
-  await ctx.answerGameQuery('Ошибка!⚠');
+  await ctx.answerCbQuery('Ошибка!⚠');
   return ctx.scene.leave()
 }
   return ctx.wizard.next()

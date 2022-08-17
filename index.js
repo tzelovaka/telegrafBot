@@ -259,7 +259,7 @@ linkEmpty.on ('text', async (ctx)=>{
         linid: rows[i].id,
         authId: ctx.message.from.id,
         release: false,
-        storyId: row.id
+        //storyId: row[0].id
       }})
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(

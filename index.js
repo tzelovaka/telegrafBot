@@ -233,18 +233,18 @@ const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
   try{
   ctx.wizard.state.data = {};
-  const row = await story.findOne({where: {
-    authId: ctx.message.from.id,
-    release: false
-  }});
-  if (row === null) {
-    await ctx.reply ('Требуется создать создать историю! 👉 /make');
-    return ctx.scene.leave()
-  }
+  //const row = await story.findOne({where: {
+    //authId: ctx.message.from.id,
+    //release: false
+  //}});
+  //if (row === null) {
+    //await ctx.reply ('Требуется создать создать историю! 👉 /make');
+    //return ctx.scene.leave()
+  //}
   const { count, rows } = await storylin.findAndCountAll({where: {
     authId: ctx.message.from.id,
     release: false,
-    storyId: row.id
+    //storyId: row.id
   }});
   if (count < 1 || rows === null) {
     await ctx.reply ('Требуется создать ссылку! 👉 /link');

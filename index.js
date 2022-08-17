@@ -274,7 +274,7 @@ linkEmpty.on ('text', async (ctx)=>{
         )
         p++
       }
-      let l = i++
+      let l = i + 1;
       if (l > x && p < 1){
         await ctx.reply ('Доступных ссылок нет!⚠');
         return ctx.scene.leave()

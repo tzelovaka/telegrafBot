@@ -174,7 +174,7 @@ blockChoice.on ('callback_query', async (ctx)=>{
     bl: bl,
     pic: pic,
     storyId: storyid,
-    authId: ctx.message.from.id,
+    authId: ctx.callbackQuery.from.id,
     release: false,
   }});
   if (row === null){

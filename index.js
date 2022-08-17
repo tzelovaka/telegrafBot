@@ -141,7 +141,7 @@ try{
   for (let i=0; i<=x; i++){
     await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback('👆', flagBtn.create({
+      [Markup.button.callback('👆', blockBtn.create({
         id: rows[i].id,
         linid: rows[i].linid,
         bl: rows[i].bl,
@@ -163,7 +163,7 @@ try{
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, linid, bl, pic, storyid, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const { id, linid, bl, pic, storyid, action } = blockBtn.parse(ctx.callbackQuery.data);
   if (action != 'blockchoice'){
     await ctx.answerCbQuery('Ошибка!⚠');
     return ctx.scene.leave()

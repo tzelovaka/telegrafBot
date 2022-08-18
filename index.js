@@ -713,9 +713,12 @@ deleteScene.leave(async (ctx) => {
   await ctx.reply('Операция успешно завершена.');
   }catch(e){
     await ctx.answerCbQuery('Ошибка!⚠')
+    return ctx.scene.leave();
   }
 });
-deleteScene.use((ctx) => ctx.replyWithMarkdown('Пожалуйста выберите, что нужно удалить.'));
+deleteScene.use(async (ctx) =>{ 
+await ctx.answerCbQuery('Ошибка!⚠')
+return ctx.scene.leave()});
 
 const staged = new Scenes.Stage([deleteScene])
 bot.use(session())

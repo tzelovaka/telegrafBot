@@ -374,7 +374,7 @@ bot.command ('block', async (ctx) => ctx.scene.enter('sceneBlock'))
 
 
 
-
+const playBtn = new CallbackData('playBtn', ['number', 'action']);
 const playScene = new Composer()
 playScene.on('text', async (ctx) => {
   ctx.wizard.state.data = {};
@@ -388,9 +388,9 @@ playScene.on('text', async (ctx) => {
     await ctx.reply (`📖 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
-      [Markup.button.callback('👆', flagBtn.create({
+      [Markup.button.callback('👆', playBtn.create({
         number: 0,
-        action: 'true'}))]
+        action: 'play'}))]
     ]))
   } catch (e){
     ctx.reply('Вы не добавили ни одной истории!')
@@ -402,16 +402,12 @@ return ctx.wizard.next()
 const playMech = new Composer()
 playMech.on('callback_query', async (ctx) => {
   try{
+    const { number, action } = playBtn.parse(ctx.callbackQuery.data);
+    if (action != 'play'){
+      await ctx.answerCbQuery('Ошибка! Начните заново!⚠');
+      return ctx.scene.leave()
+    }
   await ctx.answerCbQuery('Выбор сделан');
-  //let res = await ctx.reply ('✅');
-  //for (let d = res.message_id - 1; d >= 0; d--){
-    //try {
-     // let del = await ctx.deleteMessage(d);
-  //} catch (e) {
-  //    console.error(e);
-  //}
- // }
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.playMech = number;
   const ro = await story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
@@ -444,9 +440,9 @@ else {
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback(`${rows[i].smile}`, flagBtn.create({
+      [Markup.button.callback(`${rows[i].smile}`, playBtn.create({
         number: rows[i].id,
-        action: 'true'}))]
+        action: 'play'}))]
     ]
     )
   )

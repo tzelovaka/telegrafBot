@@ -124,7 +124,7 @@ bot.command ('make', async (ctx) => ctx.scene.enter('sceneCreate'))
 
 
 
-const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'storyid']);
+const blockBtn = new CallbackData('blockBtn', ['id', 'linid', 'storyid', 'action']);
 const blockEmpty = new Composer()
 blockEmpty.on ('text', async (ctx)=>{
 ctx.wizard.state.data = {};
@@ -145,7 +145,9 @@ try{
       [Markup.button.callback('👆', blockBtn.create({
         id: rows[i].id,
         linid: rows[i].linid,
-        storyid: rows[i].storyId}))]
+        storyid: rows[i].storyId,
+        action: 'blockchoice'
+      }))]
     ]
     )
   )
@@ -161,7 +163,11 @@ try{
 const blockChoice = new Composer()
 blockChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, linid, storyid} = blockBtn.parse(ctx.callbackQuery.data);
+  const { id, linid, storyid, action} = blockBtn.parse(ctx.callbackQuery.data);
+  if (action != 'blockchoice'){
+    await ctx.answerCbQuery('Ошибка! Начните заново⚠');
+    return ctx.scene.leave()
+  }
   const row = await storybl.findOne({where: {
     id: id,
     linid: linid,
@@ -229,7 +235,7 @@ bot.command ('link', async (ctx) => ctx.scene.enter('sceneLink'))
 
 
 
-const linkBtn = new CallbackData('linkBtn', ['id', 'smile', 'storyblid', 'storyid']);
+const linkBtn = new CallbackData('linkBtn', ['id', 'smile', 'storyblid', 'storyid', 'action']);
 const linkEmpty = new Composer()
 linkEmpty.on ('text', async (ctx)=>{
   try{
@@ -259,7 +265,8 @@ linkEmpty.on ('text', async (ctx)=>{
       const ro = await storybl.findOne({where:{
         linid: rows[i].id,
         authId: ctx.message.from.id,
-        release: false
+        release: false,
+        action: 'linkchoice'
       }})
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -291,7 +298,11 @@ linkEmpty.on ('text', async (ctx)=>{
 const linkChoice = new Composer()
 linkChoice.on ('callback_query', async (ctx)=>{
   try{
-  const { id, smile, storyblid, storyid} = linkBtn.parse(ctx.callbackQuery.data);
+  const { id, smile, storyblid, storyid, action} = linkBtn.parse(ctx.callbackQuery.data);
+  if (action != 'linkchoice'){
+    await ctx.answerCbQuery('Ошибка! Начните заново⚠');
+    return ctx.scene.leave()
+  }
     const row = await storylin.findOne({where:{
       id: id,
       smile: smile,

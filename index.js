@@ -562,16 +562,16 @@ deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
-  const row = story.findOne({where: {
+  /*const row = story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
-  }})
+  }})*/
   await storylin.destroy({ 
     where: { 
     id: ctx.session.myData.preferenceType,
     authId: ctx.callbackQuery.from.id,
     release: false,
-    storyId: row.id
+    //storyId: row.id
 }
 })
   await storybl.destroy({ 
@@ -579,7 +579,7 @@ deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
     linid: ctx.session.myData.preferenceType,
     authId: ctx.callbackQuery.from.id,
     release: false,
-    storyId: row.id
+    //storyId: row.id
 }
 });
 
@@ -588,7 +588,7 @@ for (; ;){
     authId: ctx.callbackQuery.from.id,
     release: false,
     storyblId: null,
-    storyId: row.id
+    //storyId: row.id
   }})
   if (count<1){
     break

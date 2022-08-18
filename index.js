@@ -265,8 +265,7 @@ linkEmpty.on ('text', async (ctx)=>{
       const ro = await storybl.findOne({where:{
         linid: rows[i].id,
         authId: ctx.message.from.id,
-        release: false,
-        action: 'linkchoice'
+        release: false
       }})
       if (ro === null){
       await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
@@ -275,7 +274,8 @@ linkEmpty.on ('text', async (ctx)=>{
           id: rows[i].id,
           smile: rows[i].smile,
           storyblid: rows[i].storyblId,
-          storyid: rows[i].storyId
+          storyid: rows[i].storyId,
+          action: 'linkchoice'
         }))]
           ]
           )
@@ -290,7 +290,7 @@ linkEmpty.on ('text', async (ctx)=>{
     }
   } catch (e){
     console.log(e);
-    await ctx.replyWithHTML('<i>Ошибка!</i>')
+    await ctx.replyWithHTML('Ошибка!')
   }
   return ctx.wizard.next()
 })

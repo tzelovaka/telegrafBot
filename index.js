@@ -466,7 +466,7 @@ bot.command('play', async (ctx) => ctx.scene.enter('playScene'))
 
 
 
-
+const deletelinkBtn = new CallbackData('deletelinkBtn', ['number', 'smile', 'action']);
 const deleteScene = new Scenes.BaseScene('delete')
 deleteScene.enter(async (ctx) => {
   try{
@@ -480,7 +480,7 @@ deleteScene.enter(async (ctx) => {
   ]))
 }
 catch(e){
-  await ctx.reply('Ошибка!⚠');
+  await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave();
 }
 });
@@ -516,7 +516,7 @@ deleteScene.action('Story', async (ctx) => {
   });
   await ctx.reply('Создаваемая история была успешна удалена.');
 }catch(e){
-  await ctx.answerCbQuery('Ошибка!⚠');
+  await ctx.answerCbQuery('⚠Ошибка!');
   return ctx.scene.leave();
 }
   return ctx.scene.leave();
@@ -530,12 +530,12 @@ deleteScene.action('Branch', async (ctx) => {
       release: false
     }});
     if (row === null) {
-      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      await ctx.answerCbQuery('⚠Для этой функции требуется создать историю!');
       return ctx.scene.leave();
     }
     const { count, rows } = await storylin.findAndCountAll({where: {storyId: row.id}});
     if (count < 1) {
-      await ctx.answerCbQuery('Для этой функции треубется создать как минимум одну ссылку!⚠');
+      await ctx.answerCbQuery('⚠Требуется больше ссылок!');
       return ctx.scene.leave();
     }
     await ctx.reply ('Выберите ссылку, после которой требуется удалить контент (включая ссылку):');
@@ -543,29 +543,40 @@ deleteScene.action('Branch', async (ctx) => {
       for (let i=0; i<=x; i++){
         await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
           [
-          [Markup.button.callback('❌', flagBtn.create({
+          [Markup.button.callback('❌', deletelinkBtn.create({
             number: rows[i].id,
+            smile: rows[i].smile,
             action: 'deletelink'}))]
         ]
         )
       )
       }
     } catch (e){
-      await ctx.answerCbQuery('Ошибка!⚠')
+      await ctx.answerCbQuery('⚠Ошибка!')
       return ctx.scene.leave();
     }
 });
 
-deleteScene.action(flagBtn.filter({action: 'deletelink'}), async (ctx) => {
+deleteScene.action(deletelinkBtn.filter({action: 'deletelink'}), async (ctx) => {
   await ctx.answerCbQuery()
   try{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const { number, smile, action } = deletelinkBtn.parse(ctx.callbackQuery.data);
   console.log(number);
   ctx.session.myData.preferenceType = number;
-  /*const row = story.findOne({where: {
+  /*const row = await story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
     release: false,
   }})*/
+  const row = await storylin.findOne({where:{
+    id: number,
+    smile: smile,
+    authId: ctx.callbackQuery.from.id,
+    release: false,
+  }})
+  if (row === null){
+    await ctx.answerCbQuery('⚠Ошибка!')
+    return ctx.scene.leave();
+  }
   await storylin.destroy({ 
     where: { 
     id: ctx.session.myData.preferenceType,
@@ -613,7 +624,7 @@ for (; ;){
   }
   await ctx.answerCbQuery('Ветка удалена.');
 } catch(e){
-  await ctx.answerCbQuery('Ошибка!⚠')
+  await ctx.answerCbQuery('⚠Ошибка!')
   return ctx.scene.leave();
 }
   return ctx.scene.leave();
@@ -627,7 +638,7 @@ deleteScene.action('Pic', async (ctx) => {
       release: false
     }});
     if (row === null) {
-      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      await ctx.answerCbQuery('Для этой функции требуется создать историю!⚠');
       return ctx.scene.leave();
     }
     const { count, rows } = await storybl.findAndCountAll({where: {
@@ -653,7 +664,7 @@ deleteScene.action('Pic', async (ctx) => {
       )
       }
     } catch (e){
-      await ctx.answerCbQuery('Ошибка!⚠')
+      await ctx.answerCbQuery('⚠Ошибка!')
       return ctx.scene.leave();
     }
 });
@@ -662,6 +673,15 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
   try{
   const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
   console.log(number);
+  const row = await storybl.findOne({where:{
+    id: number,
+    authId: ctx.callbackQuery.from.id,
+    release: false
+  }})
+  if (row === null){
+    await ctx.answerCbQuery('⚠Ошибка!')
+    return ctx.scene.leave();
+  }
   ctx.session.myData.preferenceType = number;
     await storybl.update({ pic: null }, {
       where: {
@@ -672,7 +692,7 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
     });
     await ctx.answerCbQuery('Картинка выбранного блока была удалена.');
     }catch(e){
-    await ctx.answerCbQuery('Ошибка!⚠')
+    await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave();
   }
       return ctx.scene.leave();
@@ -687,11 +707,11 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
       release: false
     }});
     if (row === null) {
-      await ctx.answerCbQuery('Для этой функции треубется создать историю!⚠');
+      await ctx.answerCbQuery('⚠Для этой функции требуется создать историю!');
       return ctx.scene.leave();
     }
     if (row.pic === null) {
-      await ctx.answerCbQuery('Для этой функции треубется добавить обложку!⚠');
+      await ctx.answerCbQuery('⚠Для этой функции требуется добавить обложку!');
       return ctx.scene.leave();
     }
     await story.update ({pic: null},{
@@ -702,7 +722,7 @@ deleteScene.action(flagBtn.filter({action: 'deleteblockpic'}), async (ctx) => {
     })
     await ctx.answerCbQuery('Обложка истории была удалена.');
   } catch(e){
-    await ctx.answerCbQuery('Ошибка!⚠');
+    await ctx.answerCbQuery('⚠Ошибка!');
     return ctx.scene.leave();
   }
     return ctx.scene.leave();
@@ -712,12 +732,12 @@ deleteScene.leave(async (ctx) => {
   try{
   await ctx.reply('Операция успешно завершена.');
   }catch(e){
-    await ctx.answerCbQuery('Ошибка!⚠')
+    await ctx.reply('⚠Ошибка!')
     return ctx.scene.leave();
   }
 });
 deleteScene.use(async (ctx) =>{ 
-await ctx.answerCbQuery('Ошибка!⚠')
+await ctx.answerCbQuery('⚠Ошибка!')
 return ctx.scene.leave()});
 
 const staged = new Scenes.Stage([deleteScene])
@@ -730,26 +750,26 @@ bot.command('delete', (ctx) => ctx.scene.enter('delete'))
 
 
 
-
+const editBtn = new CallbackData('editBtn', ['number', 'action']);
 const editChoice = new Composer()
 editChoice.on ('text', async (ctx)=>{
   try{
   ctx.wizard.state.data = {};
   await ctx.reply('Выберите вид редактируемого элемента:', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('Название', flagBtn.create({
+    [Markup.button.callback('Название', editBtn.create({
       number: '1',
-      action: 'true'})), 
-      Markup.button.callback('Описание', flagBtn.create({
+      action: 'edit'})), 
+      Markup.button.callback('Описание', editBtn.create({
         number: '2',
-        action: 'true'})
+        action: 'edit'})
         )],
-    [Markup.button.callback('Блок', flagBtn.create({
+    [Markup.button.callback('Блок', editBtn.create({
       number: '3',
-      action: 'true'})), 
-      Markup.button.callback('Ссылка', flagBtn.create({
+      action: 'edit'})), 
+      Markup.button.callback('Ссылка', editBtn.create({
         number: '4',
-        action: 'true'}))]
+        action: 'edit'}))]
   ]))
 } catch(e){
   await ctx.reply('Ошибка!⚠');
@@ -761,7 +781,11 @@ editChoice.on ('text', async (ctx)=>{
 const editChoiceTrue = new Composer()
   editChoiceTrue.on ('callback_query', async (ctx)=>{
   try{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const { number, action } = editBtn.parse(ctx.callbackQuery.data);
+  if (action != 'edit'){
+    await ctx.answerCbQuery('⚠Ошибка!');
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.editChoiceTrue = number;
   switch (ctx.wizard.state.data.editChoiceTrue) {
     case '1':
@@ -770,7 +794,7 @@ const editChoiceTrue = new Composer()
         release: false,
       }});
       if (row === null) {
-        await ctx.answerCbQuery('Требуется создать историю!');
+        await ctx.answerCbQuery('⚠Требуется создать историю!');
         return ctx.scene.leave();
       }
       await ctx.reply('Введите новое название')
@@ -783,14 +807,14 @@ const editChoiceTrue = new Composer()
           release: false,
       }});
       if (row === null) {
-        await ctx.answerCbQuery('Требуется создать историю!');
+        await ctx.answerCbQuery('⚠Требуется создать историю!');
         return ctx.scene.leave();
       }
       await ctx.reply('Введите новое описание')
       ctx.wizard.selectStep(3)
     } catch(e){
-      await ctx.answerCbQuery('Ошибка!⚠')
-  return ctx.scene.leave()
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave()
     }
       break;
     case '3':
@@ -800,7 +824,7 @@ const editChoiceTrue = new Composer()
           release: false
         }});
       if (rows === null || count < 1) {
-        await ctx.answerCbQuery('Требуется создать минимум один блок!');
+        await ctx.answerCbQuery('⚠Требуется больше блоков!');
         return ctx.scene.leave();
       }
       await ctx.reply('Выберите блок, который требуется отредактровать:')
@@ -808,9 +832,9 @@ const editChoiceTrue = new Composer()
         for (let i=0; i<=x; i++){
           await ctx.reply(`${rows[i].bl}`, Markup.inlineKeyboard(
             [
-            [Markup.button.callback('👆', flagBtn.create({
+            [Markup.button.callback('👆', editBtn.create({
               number: rows[i].id,
-              action: 'true'}))]
+              action: 'editblock'}))]
           ]
           )
         )
@@ -826,7 +850,7 @@ const editChoiceTrue = new Composer()
         authId: ctx.callbackQuery.from.id,
       release: false}});
       if (count < 1) {
-        await ctx.answerCbQuery('Требуется создать минимум одну ссылку! 👉 /link');
+        await ctx.answerCbQuery('Требуется больше ссылок! 👉 /link');
         return ctx.scene.leave()
       }
       await ctx.reply('Выберите ссылку, которую требуется отредактровать:');
@@ -834,9 +858,9 @@ const editChoiceTrue = new Composer()
           for (let i=0; i<=x; i++){
             await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
               [
-              [Markup.button.callback('👆', flagBtn.create({
+              [Markup.button.callback(`${rows[i].smile}`, editBtn.create({
                 number: rows[i].id,
-                action: 'true'}))]
+                action: 'editlink'}))]
                   ]
                 )
               )
@@ -861,7 +885,7 @@ editStory.on ('text', async (ctx)=>{
   });
   await ctx.reply('Название создаваемой истории отредактировано.')
 }catch(e){
-  await ctx.reply('Ошибка!⚠')
+  await ctx.reply('⚠Ошибка!')
   return ctx.scene.leave()
 }
 return ctx.scene.leave()
@@ -888,11 +912,24 @@ return ctx.scene.leave()
   const editBlock = new Composer()
   editBlock.on ('callback_query', async (ctx)=>{
     try{
-  const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+  const { number, action } = editBtn.parse(ctx.callbackQuery.data);
+  if (action != 'editblock'){
+    await ctx.answerCbQuery('⚠Ошибка!')
+    return ctx.scene.leave()
+  }
+  const row = await storybl.findOne({where:{
+    id: number,
+    authId: ctx.callbackQuery.from.id,
+    release: false
+  }})
+  if (row === null){
+    await ctx.answerCbQuery('⚠Ошибка!')
+    return ctx.scene.leave()
+  }
   ctx.wizard.state.data.editBlock = number;
   await ctx.reply('Введите текст блока.')
     }catch(e){
-    await ctx.answerCbQuery('Ошибка!⚠')
+    await ctx.reply('⚠Ошибка!')
     return ctx.scene.leave()
     }
   return ctx.wizard.next()
@@ -911,7 +948,7 @@ return ctx.scene.leave()
   });
   await ctx.reply('Один из блоков создаваемой истории был отредактирован.')
 }catch(e){
-  await ctx.reply('Ошибка!⚠')
+  await ctx.reply('⚠Ошибка!')
   return ctx.scene.leave()
 }
   return ctx.scene.leave()
@@ -920,11 +957,24 @@ return ctx.scene.leave()
   const editLink = new Composer()
   editLink.on ('callback_query', async (ctx)=>{
     try{
-      const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+      const { number, action } = editBtn.parse(ctx.callbackQuery.data);
+      if (action != 'editlink'){
+        await ctx.answerCbQuery('⚠Ошибка!')
+        return ctx.scene.leave()
+      }
+      const row = await storylin.findOne({where:{
+        id: number,
+        authId: ctx.callbackQuery.from.id,
+        release: false
+      }})
+      if (row === null) {
+        await ctx.answerCbQuery('⚠Ошибка!')
+        return ctx.scene.leave()
+      }
       ctx.wizard.state.data.editLink = number;
       await ctx.reply('Введите текст ссылки.')
     } catch (e){
-      await ctx.answerCbQuery('<i>Ошибка!</i>')
+      await ctx.answerCbQuery('Ошибка!')
       return ctx.scene.leave()
     }
     return ctx.wizard.next()
@@ -971,14 +1021,14 @@ try{
     [
     [Markup.button.callback('Картинки к блокам', flagBtn.create({
       number: '1',
-      action: 'pics'}))], 
+      action: 'vis'}))], 
     [Markup.button.callback('Настраиваемые символы к ссылкам', flagBtn.create({
       number: '2',
-      action: 'symbols'})
+      action: 'vis'})
       )],
     [Markup.button.callback('Обложка истории', flagBtn.create({
       number: '3',
-      action: 'skin'})
+      action: 'vis'})
       )]
   ]))
 } catch (e){
@@ -993,14 +1043,14 @@ const sceneVisualizationChoice = new Composer()
 sceneVisualizationChoice.on ('callback_query', async (ctx)=>{
   try{
     const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+    if (action != 'vis'){
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave()
+    }
 ctx.wizard.state.data.sceneVisualizationChoice = number;
 switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   case '1':
     try{
-      if (action != 'pics'){
-        await ctx.answerCbQuery('Ошибка!⚠')
-        return ctx.scene.leave()
-      }
     const { count, rows } = await storybl.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
       release: false
@@ -1016,7 +1066,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
         [
         [Markup.button.callback('👆', flagBtn.create({
           number: `${rows[i].id}`,
-          action: 'true'}))]
+          action: 'setblockpic'}))]
       ]
       )
     )
@@ -1030,10 +1080,6 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
   case '2':
     try{
-      if (action != 'symbols'){
-        await ctx.answerCbQuery('Ошибка!⚠')
-        return ctx.scene.leave()
-      }
     const { count, rows } = await storylin.findAndCountAll({where: {
       authId: ctx.callbackQuery.from.id,
       release: false,
@@ -1063,15 +1109,11 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
   }
     case '3':
       try{
-        if (action != 'skin'){
-          await ctx.answerCbQuery('Ошибка!⚠')
-          return ctx.scene.leave()
-        }
-      const { count, rows } = await story.findAndCountAll({where: {
+      const row = await story.findOne({where: {
         authId: ctx.callbackQuery.from.id,
         release: false
       }});
-      if (count <= 0) {
+      if (row === null) {
         await ctx.answerCbQuery('Требуется создать историю! 👉 /make');
         return ctx.scene.leave()
       }
@@ -1086,7 +1128,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
 }
 }catch (e){
   console.log(e);
-  await ctx.answerCbQuery('Ошибка!⚠')
+  await ctx.answerCbQuery('⚠Ошибка!')
   return ctx.scene.leave()
 }
   return ctx.scene.leave()
@@ -1096,6 +1138,19 @@ const setBlockPic = new Composer()
 setBlockPic.on ('callback_query', async (ctx)=>{
 try{
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
+if (action != 'setblockpic') {
+  await ctx.answerCbQuery('⚠Ошибка!')
+  return ctx.scene.leave()
+}
+const row = await storybl.findOne({where:{
+  id: number,
+  authId: ctx.callbackQuery.from.id,
+  release: false
+}})
+if (row === null){
+  await ctx.answerCbQuery('⚠Ошибка!')
+  return ctx.scene.leave()
+}
 ctx.wizard.state.data.setBlockPic = number;
 await ctx.reply('Вставьте ссылку на картинку.')
 } catch (e){
@@ -1122,7 +1177,7 @@ await storybl.update({ pic: `${ctx.wizard.state.data.setBlockPicTrue}` }, {
   await ctx.reply('Ошибка!⚠')
   return ctx.scene.leave()
 }
-await ctx.reply ('Картинка успешно добавлена.')
+  await ctx.reply('Картинка успешно добавлена.')
   return ctx.scene.leave()
 })
 
@@ -1131,14 +1186,23 @@ setLinkSmile.on ('callback_query', async (ctx)=>{
 try{
 const { number, action } = flagBtn.parse(ctx.callbackQuery.data);
 if (action != 'smilechoice'){
-  await ctx.answerCbQuery('Ошибка!⚠')
+  await ctx.answerCbQuery('⚠Ошибка!')
+  return ctx.scene.leave()
+}
+const row = await storylin.findOne({where:{
+  id: number,
+  authId: ctx.callbackQuery.from.id,
+  release: false
+}})
+if (row === null){
+  await ctx.answerCbQuery('⚠Ошибка!')
   return ctx.scene.leave()
 }
 ctx.wizard.state.data.setLinkSmile = number;
 await ctx.reply('Введите предпочитаемый символ.')
 } catch (e){
   console.log(e);
-  await ctx.answerCbQuery('Ошибка!⚠')
+  await ctx.answerCbQuery('⚠Ошибка!')
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -1157,7 +1221,7 @@ await storylin.update({ smile: `${ctx.wizard.state.data.setLinkSmileTrue}` }, {
 });
 } catch (e){
   console.log(e);
-  await ctx.reply('Ошибка!⚠')
+  await ctx.reply('⚠Ошибка!')
   return ctx.scene.leave()
 }
 await ctx.reply ('Символ-кнопка успешно обновлён.')
@@ -1177,7 +1241,7 @@ await story.update({ pic: `${ctx.wizard.state.data.setStoryPic}` }, {
 });
 } catch (e){
   console.log(e);
-  await ctx.reply('Ошибка!⚠')
+  await ctx.reply('⚠Ошибка!')
   return ctx.scene.leave()
 }
   await ctx.reply ('Обложка успешно добавлена.')

@@ -85,7 +85,7 @@ baseSave.on ('text', async (ctx)=>{
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
     authId: ctx.message.from.id,
-  //release: false
+    release: false
   }, { transaction: t });
 })
 } catch (error) {
@@ -93,7 +93,7 @@ baseSave.on ('text', async (ctx)=>{
   await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
 }
-await t.commit('commit');
+await t.commit(`${ctx.wizard.state.data.storyName}`);
 const f = await sequelize.transaction();
 try{
     const { count, rows } = await story.findAndCountAll({where: {
@@ -115,7 +115,7 @@ try{
   await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
 }
-await f.commit('commit');
+await f.commit(`${ctx.wizard.state.data.storyName}`);
 
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
   return ctx.scene.leave()

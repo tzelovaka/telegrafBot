@@ -82,7 +82,6 @@ baseSave.on ('text', async (ctx)=>{
   ctx.wizard.state.data.baseSave = ctx.message.text;
   const res = await sequelize.transaction(async (t) => {
     const query = await story.create({
-    pic: null,
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
     authId: ctx.message.from.id,
@@ -99,7 +98,6 @@ await t.commit('commit');
     const result = await sequelize.transaction(async (t) => {
     const query = await storybl.create({
     linid: 0,
-    pic: null,
     bl: `${ctx.wizard.state.data.baseSave}`,
     authId: ctx.message.from.id,
     storyId: rows[c].id,

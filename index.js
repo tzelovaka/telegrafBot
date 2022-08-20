@@ -93,18 +93,19 @@ await t.commit('commit');
       authId: ctx.message.from.id,
       release: false}});
     let c = count - 1;
-    const result = await sequelize.transaction(async (t) => {
+    const f = await sequelize.transaction();
+    const result = await sequelize.transaction(async (f) => {
     const query = await storybl.create({
     linid: 0,
     bl: `${ctx.wizard.state.data.baseSave}`,
     authId: ctx.message.from.id,
     storyId: rows[c].id,
     release: false
-  }, { transaction: t });
+  }, { transaction: f });
 })
-await t.commit('commit');
+await f.commit('commit');
 } catch (error) {
-  await t.rollback();
+  await f.rollback();
   await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
 }

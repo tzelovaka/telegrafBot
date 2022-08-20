@@ -30,7 +30,7 @@ story.hasMany(storylin);
 
 bot.start ((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 
-const exitBtn = new CallbackData('exitBtn', ['action']);
+
 const baseEmpty = new Composer()
 baseEmpty.on ('text', async (ctx)=>{
   try {
@@ -43,11 +43,7 @@ baseEmpty.on ('text', async (ctx)=>{
     await ctx.reply ('История уже создаётся!');
     return ctx.scene.leave()
   }
-  await ctx.reply('Введите название истории', Markup.inlineKeyboard(
-    [
-    [Markup.button.callback('🏠Выйти', ctx.scene.leave())]
-  ]
-  ))
+  await ctx.reply ('Введите название истории');
   } catch (e) {
   await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()

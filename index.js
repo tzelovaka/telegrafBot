@@ -85,7 +85,7 @@ baseSave.on ('text', async (ctx)=>{
     name: `${ctx.wizard.state.data.storyName}`,
     desc: `${ctx.wizard.state.data.storyDesc}`,
     authId: ctx.message.from.id,
-    release: false
+  //release: false
   }, { transaction: t });
 })
 } catch (error) {

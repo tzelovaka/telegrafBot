@@ -88,12 +88,11 @@ baseSave.on ('text', async (ctx)=>{
     release: false
   }, { transaction: t });
 })
-} catch (error) {
+} catch (e) {
   await t.rollback();
   await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
 }
-await t.commit(`${ctx.wizard.state.data.storyName}`);
 const f = await sequelize.transaction();
 try{
     const { count, rows } = await story.findAndCountAll({where: {
@@ -115,7 +114,6 @@ try{
   await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
 }
-await f.commit(`${ctx.wizard.state.data.storyName}`);
 
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
   return ctx.scene.leave()

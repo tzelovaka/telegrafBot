@@ -6,7 +6,7 @@ const story = sequelize.define ('story', {
     pic: {type: DataTypes.STRING, allowNull: true, defaultValue: null},
     name: {type: DataTypes.STRING},
     desc: {type: DataTypes.STRING},
-    authId: {type: DataTypes.BIGINT},
+    authId: {type: DataTypes.BIGINT, unique: false},
     release: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
 

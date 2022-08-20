@@ -45,7 +45,7 @@ baseEmpty.on ('text', async (ctx)=>{
   }
   await ctx.reply ('Введите название истории');
   } catch (e) {
-  await ctx.reply ('Ошибка!⚠');
+  await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
   }
   return ctx.wizard.next()
@@ -322,7 +322,7 @@ linkChoice.on ('callback_query', async (ctx)=>{
     storyId: storyid
   }});
   if (count > 0){
-    await ctx.answerCbQuery('Ошибка!⚠')
+    await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave()
   }
   ctx.wizard.state.data.linkChoice = id;
@@ -383,6 +383,10 @@ playScene.on('text', async (ctx) => {
       authId: ctx.message.from.id,
       release: false
     }});
+    if (row===null){
+      await ctx.reply('Вы не добавили ни одной истории!')
+      return ctx.scene.leave()
+    }
     if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `🎫 ${row.name}`});
     else  await ctx.reply(`🎫 ${row.name}`);
     await ctx.reply (`📖 ${row.desc}`)
@@ -393,7 +397,8 @@ playScene.on('text', async (ctx) => {
         action: 'play'}))]
     ]))
   } catch (e){
-    ctx.reply('Вы не добавили ни одной истории!')
+    await ctx.reply('⚠Ошибка!')
+    return ctx.scene.leave()
 }
 return ctx.wizard.next()
 })
@@ -404,7 +409,7 @@ playMech.on('callback_query', async (ctx) => {
   try{
     const { number, action } = playBtn.parse(ctx.callbackQuery.data);
     if (action != 'play'){
-      await ctx.answerCbQuery('Ошибка! Начните заново!⚠');
+      await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
   await ctx.answerCbQuery('Выбор сделан');
@@ -448,7 +453,7 @@ else {
   )
   }
 } catch(e){
-  await ctx.answerCbQuery('Ошибка!⚠');
+  await ctx.answerCbQuery('⚠Ошибка!');
   await ctx.reply('Вы завершили прохождение истории!');
   return ctx.scene.leave()
 }
@@ -772,7 +777,7 @@ editChoice.on ('text', async (ctx)=>{
         action: 'edit'}))]
   ]))
 } catch(e){
-  await ctx.reply('Ошибка!⚠');
+  await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave();
 }
   return ctx.wizard.next()
@@ -869,7 +874,7 @@ const editChoiceTrue = new Composer()
       break;
   }}
 catch(e){
-  await ctx.answerCbQuery('Ошибка!⚠')
+  await ctx.answerCbQuery('⚠Ошибка!')
   return ctx.scene.leave()
 }
 })
@@ -903,7 +908,7 @@ return ctx.scene.leave()
   });
   await ctx.reply('Описание создаваемой истории отредактировано.')
 } catch(e){
-  await ctx.reply('Ошибка!⚠')
+  await ctx.reply('⚠Ошибка!')
   return ctx.scene.leave()
 }
   return ctx.scene.leave()
@@ -1033,7 +1038,7 @@ try{
   ]))
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('Ошибка!⚠')
+  await ctx.replyWithHTML('⚠Ошибка!')
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -1104,7 +1109,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
     break;
   } catch (e){
     console.log(e);
-    await ctx.answerCbQuery('Ошибка!⚠')
+    await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave()
   }
     case '3':
@@ -1122,7 +1127,7 @@ switch (ctx.wizard.state.data.sceneVisualizationChoice) {
       break;
       } catch (e){
         console.log(e);
-        await ctx.answerCbQuery('Ошибка!⚠')
+        await ctx.answerCbQuery('⚠Ошибка!')
         return ctx.scene.leave()
       }
 }
@@ -1155,7 +1160,7 @@ ctx.wizard.state.data.setBlockPic = number;
 await ctx.reply('Вставьте ссылку на картинку.')
 } catch (e){
   console.log(e);
-  await ctx.answerCbQuery('Ошибка!⚠')
+  await ctx.answerCbQuery('⚠Ошибка!')
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -1174,7 +1179,7 @@ await storybl.update({ pic: `${ctx.wizard.state.data.setBlockPicTrue}` }, {
 });
 } catch (e){
   console.log(e);
-  await ctx.reply('Ошибка!⚠')
+  await ctx.reply('⚠Ошибка!')
   return ctx.scene.leave()
 }
   await ctx.reply('Картинка успешно добавлена.')

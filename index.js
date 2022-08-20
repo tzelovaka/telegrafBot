@@ -1296,6 +1296,7 @@ bot.command ('public', async (ctx) => {
       release: false,
     }
 });
+await ctx.reply('История опубликована')
   }
   }catch(e){
     await ctx.reply('⚠Ошибка!')

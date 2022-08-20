@@ -57,7 +57,7 @@ storyName.on ('text', async (ctx)=>{
   ctx.wizard.state.data.storyName = ctx.message.text;
   await ctx.reply ('Введите описание истории');
   }catch (e) {
-    await ctx.reply ('Ошибка!⚠');
+    await ctx.reply ('⚠Ошибка!');
     return ctx.scene.leave()
     }
   return ctx.wizard.next()
@@ -69,7 +69,7 @@ storyDesc.on ('text', async (ctx)=>{
   ctx.wizard.state.data.storyDesc = ctx.message.text;
   await ctx.reply ('Введите текст открывающего блока (блок, за которым последует первый выбор).');
 }catch (e) {
-  await ctx.reply ('Ошибка!⚠');
+  await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
   }
   return ctx.wizard.next()
@@ -105,7 +105,7 @@ await t.commit('commit');
 await t.commit('commit');
 } catch (error) {
   await t.rollback();
-  await ctx.replyWithHTML ('<i>Ошибка!</i>⚠');
+  await ctx.reply ('⚠Ошибка!');
   return ctx.scene.leave()
 }
   await ctx.reply ('Вы успешно добавили первый блок своей будущей истории.');
@@ -154,7 +154,7 @@ try{
   }
 } catch (e){
   console.log(e);
-  await ctx.replyWithHTML('Ошибка!⚠')
+  await ctx.replyWithHTML('⚠Ошибка!')
   return ctx.scene.leave() 
 }
   return ctx.wizard.next()
@@ -182,7 +182,7 @@ blockChoice.on ('callback_query', async (ctx)=>{
   ctx.wizard.state.data.blockChoice = id;
   await ctx.reply ('Введите текст ссылки.');
 } catch(e){
-  await ctx.answerCbQuery('Ошибка!⚠');
+  await ctx.answerCbQuery('⚠Ошибка!');
   return ctx.scene.leave()
 }
   return ctx.wizard.next()
@@ -209,7 +209,7 @@ blockLink.on ('text', async (ctx)=>{
 })
 await t.commit('commit');
 } catch (error) {
-  await ctx.reply ('Ошибка! Попробуйте сначала.⚠');
+  await ctx.reply ('⚠Ошибка! Попробуйте сначала.');
   await t.rollback();
   return ctx.scene.leave()
 }
@@ -284,7 +284,7 @@ linkEmpty.on ('text', async (ctx)=>{
       }
       let l = i + 1;
       if (l > x && p < 1){
-        await ctx.reply ('Доступных ссылок нет!⚠');
+        await ctx.reply ('⚠Доступных ссылок нет!');
         return ctx.scene.leave()
       }
     }
@@ -300,7 +300,7 @@ linkChoice.on ('callback_query', async (ctx)=>{
   try{
   const { id, smile, storyblid, storyid, action} = linkBtn.parse(ctx.callbackQuery.data);
   if (action != 'linkchoice'){
-    await ctx.answerCbQuery('Ошибка! Начните заново⚠');
+    await ctx.answerCbQuery('⚠Ошибка! Начните заново');
     return ctx.scene.leave()
   }
     const row = await storylin.findOne({where:{
@@ -312,7 +312,7 @@ linkChoice.on ('callback_query', async (ctx)=>{
       authId: ctx.callbackQuery.from.id
     }})
     if (row === null){
-      await ctx.answerCbQuery('Ошибка! Начните заново⚠');
+      await ctx.answerCbQuery('⚠Ошибка! Начните заново');
       return ctx.scene.leave()
     }
   const count = await storybl.count({where: {
@@ -543,7 +543,7 @@ deleteScene.action('Branch', async (ctx) => {
       for (let i=0; i<=x; i++){
         await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
           [
-          [Markup.button.callback('❌', deletelinkBtn.create({
+          [Markup.button.callback(`${rows[i].smile}❌`, deletelinkBtn.create({
             number: rows[i].id,
             smile: rows[i].smile,
             action: 'deletelink'}))]
@@ -1254,6 +1254,56 @@ const stagev = new Scenes.Stage ([menuVisualization])
 bot.use(session())
 bot.use(stagev.middleware())
 bot.command ('visualization', async (ctx) => ctx.scene.enter('sceneVisualization'))
+
+
+
+
+bot.command ('public', async (ctx) => {
+  try{
+  const {count, rows} = await storylin.findAndCountAll({where:{
+    authId: ctx.message.from.id,
+    release: false
+  }})
+  let p = 0;
+  let x = count - 1;
+  for (let i = 0; i<=x; i++){
+    const block = await storybl.findOne({where:{
+      linid: rows[i].id,
+      authId: ctx.message.from.id,
+      release: false
+    }})
+    if (block === null){
+      await ctx.reply('⚠Ошибка! Не все сюжетные ветви кончаются блоками!')
+      p = p + 1;
+      break;
+    }
+  }
+  if (p<1){
+  await story.update({ release: true }, {
+    where: {
+      authId: ctx.message.from.id,
+      release: false,
+    }})
+    await storylin.update({ release: true }, {
+      where: {
+        authId: ctx.message.from.id,
+        release: false,
+      }
+  });
+  await storybl.update({ release: true }, {
+    where: {
+      authId: ctx.message.from.id,
+      release: false,
+    }
+});
+  }
+  }catch(e){
+    await ctx.reply('⚠Ошибка!')
+    return ctx.scene.leave()
+  }
+})
+
+
 
 
 bot.launch()

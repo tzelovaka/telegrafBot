@@ -77,9 +77,9 @@ storyDesc.on ('text', async (ctx)=>{
 
 const baseSave = new Composer()
 baseSave.on ('text', async (ctx)=>{
+  ctx.wizard.state.data.baseSave = ctx.message.text;
   const t = await sequelize.transaction();
   try{
-  ctx.wizard.state.data.baseSave = ctx.message.text;
   const res = await sequelize.transaction(async (t) => {
     const query = await story.create({
     name: `${ctx.wizard.state.data.storyName}`,

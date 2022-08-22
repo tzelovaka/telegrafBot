@@ -34,7 +34,7 @@ playScene.on('text', async (ctx) => {
   try{
     const row = await story.findOne({where: {
       authId: ctx.message.from.id,
-      release: false
+      release: true
     }});
     if (row===null){
       await ctx.reply('Вы не добавили ни одной истории!')
@@ -69,13 +69,13 @@ playMech.on('callback_query', async (ctx) => {
   ctx.wizard.state.data.playMech = number;
   const ro = await story.findOne({where: {
     authId: ctx.callbackQuery.from.id,
-    release: false
+    release: true
   }});
   const row = await storybl.findOne({where: {
     linid: ctx.wizard.state.data.playMech,
     storyId: ro.id,
     authId: ctx.callbackQuery.from.id,
-    release: false
+    release: true
   }
 });
 if (row.pic != null) {
@@ -86,7 +86,7 @@ else {
 }
   const {count, rows} = await storylin.findAndCountAll ({where: {
     authId: ctx.callbackQuery.from.id,
-    release: false,
+    release: true,
     storyblId: row.id
   }});
   if (count < 1) {

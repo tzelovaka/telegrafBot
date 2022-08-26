@@ -237,7 +237,7 @@ else {
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback(`${rows[i].smile}`, playBtn.create({
+      [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
         action: 'storyreadtrue'}))]
     ]

@@ -155,7 +155,7 @@ choiceScene.on('text', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: `${rows[i].name}`,
-      action: 'storysearch'}))
+      action: 'storyread'}))
         ]
         ])
     )
@@ -192,7 +192,7 @@ readScene.on('callback_query', async (ctx) => {
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
-        action: 'storyreadtrue'}))]
+        action: 'storyread'}))]
     ]))
   } catch (e){
     await ctx.reply('⚠Ошибка!')

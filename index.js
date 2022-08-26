@@ -192,6 +192,7 @@ readScene.on('callback_query', async (ctx) => {
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
+        name: row.name,
         action: 'storyread'}))]
     ]))
   } catch (e){

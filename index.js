@@ -239,6 +239,7 @@ else {
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
+        name: null,
         action: 'storyreadtrue'}))]
     ]
     )

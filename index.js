@@ -150,12 +150,16 @@ choiceScene.on('text', async (ctx) => {
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    await ctx.reply (`📚 ${rows[i].name}`, searchBtn.create({
+    await ctx.reply (`📚 ${rows[i].name}`, Markup.inlineKeyboard(
+      [
+        [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: `${rows[i].name}`,
       action: 'storysearch'}))
+        ]
+        ])
+    )
   }
-  await ctx.reply('Введите название искомой истории');
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

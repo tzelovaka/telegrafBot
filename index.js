@@ -170,7 +170,7 @@ return ctx.wizard.next()
 const readScene = new Composer()
 readScene.on('callback_query', async (ctx) => {
   try{
-  const { number, name, action } = playBtn.parse(ctx.callbackQuery.data);
+  const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
     if (action != 'storyread'){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()

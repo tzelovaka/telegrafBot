@@ -176,9 +176,9 @@ readScene.on('callback_query', async (ctx) => {
       return ctx.scene.leave()
     }
   await ctx.answerCbQuery(`Вы выбрали историю "${name}"`);
-  ctx.wizard.state.data.choiceScene = number;
+  ctx.wizard.state.data.readScene = number;
     const row = await story.findOne({where: {
-      id: ctx.wizard.state.data.choiceScene,
+      id: ctx.wizard.state.data.readScene,
       release: true,
     }});
     if (row===null){

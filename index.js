@@ -193,7 +193,7 @@ readScene.on('callback_query', async (ctx) => {
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
         name: row.name,
-        action: 'storyread'}))]
+        action: 'storyreadtrue'}))]
     ]))
   } catch (e){
     await ctx.reply('⚠Ошибка!')
@@ -206,7 +206,7 @@ return ctx.wizard.next()
 const readSceneTrue = new Composer()
 readSceneTrue.on('callback_query', async (ctx) => {
   try{
-    const { number, name, action } = playBtn.parse(ctx.callbackQuery.data);
+    const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
     ctx.wizard.state.data.readSceneTrue = number;
     if (action != 'storyreadtrue'){
       await ctx.answerCbQuery('⚠Ошибка!');
@@ -214,7 +214,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
     }
   const row = await storybl.findOne({where: {
     linid: ctx.wizard.state.data.readSceneTrue,
-    storyId: ctx.wizard.state.data.choiceScene,
+    storyId: ctx.wizard.state.data.readScene,
     release: true
   }
 });
@@ -227,7 +227,7 @@ else {
   const {count, rows} = await storylin.findAndCountAll ({where: {
     release: true,
     storyblId: row.id,
-    storyId: ctx.wizard.state.data.choiceScene
+    storyId: ctx.wizard.state.data.readScene
   }});
   if (count < 1) {
     await ctx.reply('Вы завершили прохождение истории!');
@@ -239,7 +239,7 @@ else {
       [
       [Markup.button.callback(`${rows[i].smile}`, playBtn.create({
         number: rows[i].id,
-        action: 'play'}))]
+        action: 'storyreadtrue'}))]
     ]
     )
   )

@@ -120,6 +120,143 @@ bot.use(staget.middleware())
 bot.command('play', async (ctx) => ctx.scene.enter('playScene'))
 
 
+
+
+
+const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
+const searchScene = new Composer()
+searchScene.on('text', async (ctx) => {
+  try{
+  ctx.wizard.state.data = {};
+  await ctx.reply('Введите название искомой истории');
+} catch(e){
+  await ctx.reply('⚠Ошибка!');
+  return ctx.scene.leave()
+}
+return ctx.wizard.next()
+})
+
+const choiceScene = new Composer()
+choiceScene.on('text', async (ctx) => {
+  try{
+  ctx.wizard.state.data.choiceScene = ctx.message.text;
+  const {count, rows} = await story.findAndCountAll({where:{
+    name: ctx.wizard.state.data.choiceScene,
+    release: true,
+  }})
+  if (rows === null){
+    await ctx.reply('⚠Историй с таким названием нет!');
+    return ctx.scene.leave()
+  }
+  let x = count - 1;
+  for (let i = 0; i <= x; i++) {
+    await ctx.reply (`📚 ${rows[i].name}`, searchBtn.create({
+      number: rows[i].id,
+      name: `${rows[i].name}`,
+      action: 'storysearch'}))
+  }
+  await ctx.reply('Введите название искомой истории');
+} catch(e){
+  await ctx.reply('⚠Ошибка!');
+  return ctx.scene.leave()
+}
+return ctx.wizard.next()
+})
+
+const readScene = new Composer()
+readScene.on('callback_query', async (ctx) => {
+  try{
+  const { number, name, action } = playBtn.parse(ctx.callbackQuery.data);
+    if (action != 'storyread'){
+      await ctx.answerCbQuery('⚠Ошибка!');
+      return ctx.scene.leave()
+    }
+  await ctx.answerCbQuery(`Вы выбрали историю "${name}"`);
+  ctx.wizard.state.data.choiceScene = number;
+    const row = await story.findOne({where: {
+      id: ctx.wizard.state.data.choiceScene,
+      release: true,
+    }});
+    if (row===null){
+      await ctx.reply('Вы не добавили ни одной истории!')
+      return ctx.scene.leave()
+    }
+    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `🎫 ${row.name}`});
+    else  await ctx.reply(`🎫 ${row.name}`);
+    await ctx.reply (`📜 ${row.desc}`)
+    await ctx.reply('Начать читать?', Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('👆', searchBtn.create({
+        number: 0,
+        action: 'storyreadtrue'}))]
+    ]))
+  } catch (e){
+    await ctx.reply('⚠Ошибка!')
+    return ctx.scene.leave()
+}
+return ctx.wizard.next()
+})
+
+
+const readSceneTrue = new Composer()
+readSceneTrue.on('callback_query', async (ctx) => {
+  try{
+    const { number, name, action } = playBtn.parse(ctx.callbackQuery.data);
+    ctx.wizard.state.data.readSceneTrue = number;
+    if (action != 'storyreadtrue'){
+      await ctx.answerCbQuery('⚠Ошибка!');
+      return ctx.scene.leave()
+    }
+  const row = await storybl.findOne({where: {
+    linid: ctx.wizard.state.data.readSceneTrue,
+    storyId: ctx.wizard.state.data.choiceScene,
+    release: true
+  }
+});
+if (row.pic != null) {
+  let res = await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
+}
+else {
+  let res = await ctx.reply(`${row.bl}`);
+}
+  const {count, rows} = await storylin.findAndCountAll ({where: {
+    release: true,
+    storyblId: row.id,
+    storyId: ctx.wizard.state.data.choiceScene
+  }});
+  if (count < 1) {
+    await ctx.reply('Вы завершили прохождение истории!');
+    return ctx.scene.leave()
+  }
+  let x = count - 1;
+  for (let i = 0; i <= x; i++){
+    await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
+      [
+      [Markup.button.callback(`${rows[i].smile}`, playBtn.create({
+        number: rows[i].id,
+        action: 'play'}))]
+    ]
+    )
+  )
+  }
+} catch(e){
+  await ctx.answerCbQuery('⚠Ошибка!');
+  await ctx.reply('Вы завершили прохождение истории!');
+  return ctx.scene.leave()
+}
+return ctx.wizard.selectStep(3)
+})
+
+
+
+const readmenuScene = new Scenes.WizardScene('readScene', searchScene, choiceScene, readScene, readSceneTrue)
+const stager = new Scenes.Stage([readmenuScene])
+bot.use(session())
+bot.use(stager.middleware())
+bot.command('search', async (ctx) => ctx.scene.enter('readScene'))
+
+
+
 bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))

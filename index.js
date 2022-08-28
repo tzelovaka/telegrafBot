@@ -68,7 +68,7 @@ choiceScene.on('text', async (ctx) => {
       storyId: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${row.view}, 👍: +${row.rating}</i>`, Markup.inlineKeyboard(
+<i>👓 ${row.view}, 👍 +${row.rating}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,

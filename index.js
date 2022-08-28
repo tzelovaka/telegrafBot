@@ -155,10 +155,10 @@ else {
     await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
       [
       [Markup.button.callback('👍', likeBtn.create({
-        number: row.id,
+        number: row.storyId,
         action: 'storylike'}))],
         [Markup.button.callback('Пропустить', likeBtn.create({
-          number: row.id,
+          number: row.storyId,
           action: 'storylikenull'}))]
         ],
     )

@@ -19,7 +19,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -152,16 +152,11 @@ else {
       [
       [Markup.button.callback('💓', likeBtn.create({
         number: row.id,
-        action: 'storylike'}))], 
-        [Markup.button.callback('💔', likeBtn.create({
-          number: row.id,
-          action: 'storydislike'}))],
-      ],
-      [
+        action: 'storylike'}))],
         [Markup.button.callback('Пропустить', likeBtn.create({
           number: row.id,
           action: 'storylikenull'}))]
-        ]
+        ],
     )
   );
     return ctx.wizard.next()
@@ -189,20 +184,12 @@ return ctx.wizard.selectStep(3)
 const likeScene = new Composer()
 likeScene.on('callback_query', async (ctx) => {
   try{
-  const { number, like, action } = likeBtn.parse(ctx.callbackQuery.data);
+  const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;
   switch (ctx.wizard.state.data.likeScene) {
     case 'storylike':
       await ctx.answerCbQuery('💓');
       await storyrate.increment({ rating: 1 }, {
-        where: {
-          storyId: number,
-        }
-    })
-    break;
-    case 'storydislike':
-      await ctx.answerCbQuery('💔');
-      await storyrate.increment({ rating: -1 }, {
         where: {
           storyId: number,
         }

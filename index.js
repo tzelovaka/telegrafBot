@@ -67,8 +67,8 @@ choiceScene.on('text', async (ctx) => {
     const row = await storyrate.findOne({where:{
       storyId: rows[i].id
     }})
-    await ctx.replyWithHTML (`<s>№${rows[i].id}</s> 📚 ${rows[i].name}
-    <i>👓 ${row.view}, 👍 ${row.rating}</i>`, Markup.inlineKeyboard(
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+    <i>👓 ${row.view}, 👍: +${row.rating}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,

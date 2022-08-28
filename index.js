@@ -64,7 +64,11 @@ choiceScene.on('text', async (ctx) => {
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    await ctx.replyWithHTML (`<s>№${rows[i].id}</s> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
+    const row = await storyrate.findOne({where:{
+      storyId: rows[i].id
+    }})
+    await ctx.replyWithHTML (`<s>№${rows[i].id}</s> 📚 ${rows[i].name}
+    <i>👓 ${row.view}, 👍 ${row.rating}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -150,7 +154,7 @@ else {
   if (count < 1) {
     await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
       [
-      [Markup.button.callback('💓', likeBtn.create({
+      [Markup.button.callback('👍', likeBtn.create({
         number: row.id,
         action: 'storylike'}))],
         [Markup.button.callback('Пропустить', likeBtn.create({

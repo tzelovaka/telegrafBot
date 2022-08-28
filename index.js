@@ -64,7 +64,7 @@ choiceScene.on('text', async (ctx) => {
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    await ctx.replyWithHTML (`<s>(№${rows[i].id})</s> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
+    await ctx.replyWithHTML (`<font color="grey">(№${rows[i].id})</font> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,

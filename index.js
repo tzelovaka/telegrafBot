@@ -11,7 +11,6 @@ require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN);
-const flagBtn = new CallbackData('flagBtn', ['number', 'action']);
 
 
 if (BOT_TOKEN === undefined) {
@@ -20,7 +19,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  //sequelize.sync({ force: true })
+  sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -38,6 +37,7 @@ bot.start ((ctx) => ctx.reply(`Здравия желаю, ${ctx.message.from.fir
 
 
 const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
+const likeBtn = new CallbackData('searchBtn', ['number', 'action']);
 const searchScene = new Composer()
 searchScene.on('text', async (ctx) => {
   try{
@@ -58,13 +58,14 @@ choiceScene.on('text', async (ctx) => {
     name: ctx.wizard.state.data.choiceScene,
     release: true,
   }})
+
   if (rows === null){
     await ctx.reply('⚠Историй с таким названием нет!');
     return ctx.scene.leave()
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    await ctx.replyWithHTML (`<font color="grey">(№${rows[i].id})</font> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
+    await ctx.replyWithHTML (`<s>(№${rows[i].id})</s> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -89,6 +90,10 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
+    await storyrate.increment({ view: 1}, {
+      where: {
+        storyId: number
+      }}),
   await ctx.answerCbQuery(`Вы выбрали историю "${name}"`);
   ctx.wizard.state.data.readScene = number;
     const row = await story.findOne({where: {
@@ -144,8 +149,23 @@ else {
     storyId: ctx.wizard.state.data.readScene
   }});
   if (count < 1) {
-    await ctx.reply('Вы завершили прохождение истории!');
-    return ctx.scene.leave()
+    await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('💓', likeBtn.create({
+        number: row.id,
+        action: 'storylike'}))], 
+        [Markup.button.callback('💔', likeBtn.create({
+          number: row.id,
+          action: 'storydislike'}))],
+      ],
+      [
+        [Markup.button.callback('Пропустить', likeBtn.create({
+          number: row.id,
+          action: 'storylikenull'}))]
+        ]
+    )
+  );
+    return ctx.wizard.next()
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++){
@@ -167,9 +187,40 @@ else {
 return ctx.wizard.selectStep(3)
 })
 
+const likeScene = new Composer()
+likeScene.on('callback_query', async (ctx) => {
+  try{
+  const { number, like, action } = likeBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.likeScene = action;
+  switch (ctx.wizard.state.data.likeScene) {
+    case 'storylike':
+      await ctx.answerCbQuery('💓');
+      await storyrate.increment({ rating: 1 }, {
+        where: {
+          storyId: number,
+        }
+    })
+    break;
+    case 'storydislike':
+      await ctx.answerCbQuery('💔');
+      await storyrate.increment({ rating: -1 }, {
+        where: {
+          storyId: number,
+        }
+    })
+    break;
+    case 'storylikenull':
+      await ctx.answerCbQuery('Выбор сделан, прохождение истории завершено');
+    break;
+  }
+  } catch (e){
+    await ctx.reply('⚠Ошибка!')
+    return ctx.scene.leave()
+}
+return ctx.wizard.next()
+})
 
-
-const readmenuScene = new Scenes.WizardScene('readScene', searchScene, choiceScene, readScene, readSceneTrue)
+const readmenuScene = new Scenes.WizardScene('readScene', searchScene, choiceScene, readScene, readSceneTrue, likeScene)
 const stager = new Scenes.Stage([readmenuScene])
 bot.use(session())
 bot.use(stager.middleware())

@@ -194,9 +194,11 @@ likeScene.on('callback_query', async (ctx) => {
           storyId: number,
         }
     })
+    return ctx.scene.leave()
     break;
     case 'storylikenull':
       await ctx.answerCbQuery('Выбор сделан, прохождение истории завершено');
+      return ctx.scene.leave()
     break;
   }
   } catch (e){

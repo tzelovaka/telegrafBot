@@ -58,18 +58,17 @@ choiceScene.on('text', async (ctx) => {
     name: ctx.wizard.state.data.choiceScene,
     release: true,
   }})
-
   if (rows === null){
     await ctx.reply('⚠Историй с таким названием нет!');
     return ctx.scene.leave()
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    await ctx.replyWithHTML (`<s>(№${rows[i].id})</s> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
+    await ctx.replyWithHTML (`<s>№${rows[i].id}</s> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: `${rows[i].name}`,
+      name: rows[i].name,
       action: 'storyread'}))
         ]
         ])

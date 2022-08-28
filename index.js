@@ -3,6 +3,7 @@ const { CallbackData } = require('@bot-base/callback-data');
 const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
+const storyrate = require ('./storyrate');
 const {DataTypes} = require('sequelize');
 const sequelize = require('./db');
 const { Op } = require("sequelize");
@@ -24,6 +25,11 @@ try {
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
+
+
+story.hasOne(storyrate);
+
+
 
 bot.start ((ctx) => ctx.reply(`Здравия желаю, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец!'}`))
 
@@ -58,7 +64,7 @@ choiceScene.on('text', async (ctx) => {
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    await ctx.reply (`📚 ${rows[i].name} (№${rows[i].id})`, Markup.inlineKeyboard(
+    await ctx.replyWithHTML (`<s>(№${rows[i].id})</s> 📚 ${rows[i].name}`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,

@@ -19,7 +19,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -149,11 +149,11 @@ else {
     storyId: ctx.wizard.state.data.readScene
   }});
   if (count < 1) {
-    const r = like.findOne({where:{
+    const rov = like.findOne({where:{
         authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene
     }})
-    if (r != null){
+    if (rov != null){
       await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
         [
         [Markup.button.callback('👎', likeBtn.create({

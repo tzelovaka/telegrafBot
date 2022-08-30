@@ -149,11 +149,11 @@ else {
     storyId: ctx.wizard.state.data.readScene
   }});
   if (count < 1) {
-    const row = like.findOne({where:{
+    const r = like.findOne({where:{
         authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene
     }})
-    if (row != null){
+    if (r != null){
       await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
         [
         [Markup.button.callback('👎', likeBtn.create({

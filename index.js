@@ -34,7 +34,7 @@ bot.start ((ctx) => ctx.reply(`Здравия желаю, ${ctx.message.from.fir
 
 
 const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
-const likeBtn = new CallbackData('searchBtn', ['number', 'action']);
+const likeBtn = new CallbackData('likeBtn', ['number', 'action']);
 const searchScene = new Composer()
 searchScene.on('text', async (ctx) => {
   try{
@@ -209,10 +209,20 @@ likeScene.on('callback_query', async (ctx) => {
   switch (ctx.wizard.state.data.likeScene) {
     case 'storylike':
       await ctx.answerCbQuery('👍');
-      await like.create ({
+      const t = await sequelize.transaction();
+  try{
+    const resul = await sequelize.transaction(async (t) => {
+      const likeCr = await like.create ({
+        authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene,
-        authId: ctx.callbackQuery.from.id
-      })
+      }, { transaction: t })
+    })
+    await t.commit('commit');
+  } catch (error) {
+    await ctx.reply ('Ошибка! Пожалуйста попробуйте сначала.');
+    await t.rollback();
+    return ctx.scene.leave()
+  }
     return ctx.scene.leave()
     break;
     case 'storydislike':

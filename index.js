@@ -149,7 +149,7 @@ else {
     storyId: ctx.wizard.state.data.readScene
   }});
   if (count < 1) {
-    const rov = like.findOne({where:{
+    const rov = await like.findOne({where:{
         authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene
     }})

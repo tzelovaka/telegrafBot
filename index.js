@@ -153,12 +153,12 @@ else {
         authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene
     }})
-    if (rov != null){
+    if (rov === null){
       await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
         [
-        [Markup.button.callback('👎', likeBtn.create({
+        [Markup.button.callback('👍', likeBtn.create({
           number: ctx.wizard.state.data.readScene,
-          action: 'storydislike'}))],
+          action: 'storylike'}))],
         [Markup.button.callback('Пропустить', likeBtn.create({
           number: ctx.wizard.state.data.readScene,
           action: 'storylikenull'}))]
@@ -169,9 +169,9 @@ else {
     }
     await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
       [
-      [Markup.button.callback('👍', likeBtn.create({
+      [Markup.button.callback('👎', likeBtn.create({
         number: ctx.wizard.state.data.readScene,
-        action: 'storylike'}))],
+        action: 'storydislike'}))],
       [Markup.button.callback('Пропустить', likeBtn.create({
         number: ctx.wizard.state.data.readScene,
         action: 'storylikenull'}))]

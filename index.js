@@ -84,12 +84,12 @@ searchScene.on('callback_query', async (ctx) => {
   }})
   let x = count - 1;
   let y = count - 5;
-  for (let i = x; i >= y; i--){
+  for (let i = x; i >= y || i>=0; i--){
     const coun = await like.count({where:{
       story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, 👍 +${coun}</i>`, Markup.inlineKeyboard(
+<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,

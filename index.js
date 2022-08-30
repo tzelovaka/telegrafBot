@@ -19,7 +19,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -42,13 +42,13 @@ searchChoiceScene.on('text', async (ctx) => {
   ctx.wizard.state.data = {};
   await ctx.reply('Фильтр поиска', Markup.inlineKeyboard(
     [
-    [Markup.button.callback('По названию', searchBtn.create({
+    [Markup.button.callback('По названию', searchChoiceBtn.create({
     number: '1',
     action: 'filter'}))],
-    [Markup.button.callback('По номеру', searchBtn.create({
+    [Markup.button.callback('По номеру', searchChoiceBtn.create({
       number: '2',
       action: 'filter'}))],
-    [Markup.button.callback('Последнее🔥', searchBtn.create({
+    [Markup.button.callback('Последнее🔥', searchChoiceBtn.create({
       number: '3',
       action: 'filter'}))]
       ])

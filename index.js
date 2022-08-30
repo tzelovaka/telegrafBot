@@ -153,6 +153,7 @@ else {
         authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene
     }})
+    console.log(rov);
     if (rov === null){
       await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
         [

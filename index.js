@@ -84,7 +84,7 @@ searchScene.on('callback_query', async (ctx) => {
   }})
   let x = count - 1;
   let y = count - 5;
-  for (let i = x; i >= y || i>=0; i--){
+  for (let i = x; i >= y && i>=0; i--){
     const coun = await like.count({where:{
       story: rows[i].id
     }})

@@ -65,7 +65,7 @@ choiceScene.on('text', async (ctx) => {
       storyId: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].view}, 👍 +${count}</i>`, Markup.inlineKeyboard(
+<i>👓 ${rows[i].views}, 👍 +${count}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -90,7 +90,7 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
-    await story.increment({ view: 1}, {
+    await story.increment({ views: 1}, {
       where: {
         id: number
       }}),

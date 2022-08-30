@@ -32,19 +32,81 @@ bot.start ((ctx) => ctx.reply(`Здравия желаю, ${ctx.message.from.fir
 
 
 
-
+const searchChoiceBtn = new CallbackData('searchChoiceBtn', ['number', 'action']);
 const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
 const likeBtn = new CallbackData('likeBtn', ['number', 'action']);
-const searchScene = new Composer()
-searchScene.on('text', async (ctx) => {
+
+const searchChoiceScene = new Composer()
+searchChoiceScene.on('text', async (ctx) => {
   try{
   ctx.wizard.state.data = {};
-  await ctx.reply('Введите название искомой истории');
+  await ctx.reply('Фильтр поиска', Markup.inlineKeyboard(
+    [
+    [Markup.button.callback('По названию', searchBtn.create({
+    number: '1',
+    action: 'filter'}))],
+    [Markup.button.callback('По номеру', searchBtn.create({
+      number: '2',
+      action: 'filter'}))],
+    [Markup.button.callback('Последнее🔥', searchBtn.create({
+      number: '3',
+      action: 'filter'}))]
+      ])
+  );
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()
 }
 return ctx.wizard.next()
+})
+
+const searchScene = new Composer()
+searchScene.on('callback_query', async (ctx) => {
+  try{
+  const { number, action } = searchChoiceBtn.parse(ctx.callbackQuery.data);
+  if (action != 'filter'){
+    await ctx.answerCbQuery('⚠Ошибка!');
+    return ctx.scene.leave()
+  }
+  ctx.wizard.state.data.searchScene = number;
+  switch (ctx.wizard.state.data.searchScene) {
+    case '1':
+  await ctx.reply('Введите название искомой истории');
+  return ctx.wizard.next()
+  break;
+    case '2':
+  await ctx.reply('Введите номер искомой истории');
+  return ctx.wizard.selectStep(3)
+      break;
+    case '3':
+  const {count, rows} = await story.findAndCountAll({where:{
+    release: true
+  }})
+  let x = count - 1;
+  let y = count - 5;
+  for (let i = x; i >= y; i--){
+    const coun = await like.count({where:{
+      story: rows[i].id
+    }})
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+<i>👓 ${rows[i].views}, 👍 +${coun}</i>`, Markup.inlineKeyboard(
+      [
+        [Markup.button.callback('👆', searchBtn.create({
+      number: rows[i].id,
+      name: rows[i].name,
+      action: 'storyread'}))
+        ]
+        ])
+    ) 
+  }
+  return ctx.wizard.selectStep(4)
+      break;
+  }
+  return ctx.scene.leave()
+} catch(e){
+  await ctx.reply('⚠Ошибка!');
+  return ctx.scene.leave()
+}
 })
 
 const choiceScene = new Composer()
@@ -65,7 +127,42 @@ choiceScene.on('text', async (ctx) => {
       story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, 👍 +${coun}</i>`, Markup.inlineKeyboard(
+<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
+      [
+        [Markup.button.callback('👆', searchBtn.create({
+      number: rows[i].id,
+      name: rows[i].name,
+      action: 'storyread'}))
+        ]
+        ])
+    )
+  }
+} catch(e){
+  await ctx.reply('⚠Ошибка!');
+  return ctx.scene.leave()
+}
+return ctx.wizard.selectStep(4)
+})
+
+const numberScene = new Composer()
+numberScene.on('text', async (ctx) => {
+  try{
+  ctx.wizard.state.data.numberScene = ctx.message.text;
+  const {count, rows} = await story.findAndCountAll({where:{
+    id: ctx.wizard.state.data.numberScene,
+    release: true,
+  }})
+  if (rows === null){
+    await ctx.reply('⚠Историй с таким номером нет!');
+    return ctx.scene.leave()
+  }
+  let x = count - 1;
+  for (let i = 0; i <= x; i++) {
+    const coun = await like.count({where:{
+      story: rows[i].id
+    }})
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -198,7 +295,7 @@ else {
   await ctx.reply('Вы завершили прохождение истории!');
   return ctx.scene.leave()
 }
-return ctx.wizard.selectStep(3)
+return ctx.wizard.selectStep(5)
 })
 
 const likeScene = new Composer()
@@ -245,7 +342,7 @@ likeScene.on('callback_query', async (ctx) => {
 return ctx.wizard.next()
 })
 
-const readmenuScene = new Scenes.WizardScene('readScene', searchScene, choiceScene, readScene, readSceneTrue, likeScene)
+const readmenuScene = new Scenes.WizardScene('readScene', searchChoiceScene, searchScene, choiceScene, numberScene, readScene, readSceneTrue, likeScene)
 const stager = new Scenes.Stage([readmenuScene])
 bot.use(session())
 bot.use(stager.middleware())

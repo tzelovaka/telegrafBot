@@ -61,11 +61,11 @@ choiceScene.on('text', async (ctx) => {
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    const count = await like.count({where:{
+    const c = await like.count({where:{
       storyId: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, 👍 +${count}</i>`, Markup.inlineKeyboard(
+<i>👓 ${rows[i].views}, 👍 +${c}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -153,19 +153,6 @@ else {
         authId: ctx.callbackQuery.from.id,
         storyId: ctx.wizard.state.data.readScene
     }})
-    if (row === null){
-    await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
-      [
-      [Markup.button.callback('👍', likeBtn.create({
-        number: ctx.wizard.state.data.readScene,
-        action: 'storylike'}))],
-      [Markup.button.callback('Пропустить', likeBtn.create({
-        number: ctx.wizard.state.data.readScene,
-        action: 'storylikenull'}))]
-      ],
-    )
-  );
-    }
     if (row != null){
       await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
         [
@@ -178,7 +165,19 @@ else {
         ],
       )
     );
+    return ctx.wizard.next()
     }
+    await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
+      [
+      [Markup.button.callback('👍', likeBtn.create({
+        number: ctx.wizard.state.data.readScene,
+        action: 'storylike'}))],
+      [Markup.button.callback('Пропустить', likeBtn.create({
+        number: ctx.wizard.state.data.readScene,
+        action: 'storylikenull'}))]
+      ],
+    )
+  );
     return ctx.wizard.next()
   }
   let x = count - 1;

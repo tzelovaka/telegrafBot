@@ -61,11 +61,11 @@ choiceScene.on('text', async (ctx) => {
   }
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
-    const c = await like.count({where:{
+    const coun = await like.count({where:{
       storyId: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, 👍 +${c}</i>`, Markup.inlineKeyboard(
+<i>👓 ${rows[i].views}, 👍 +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,

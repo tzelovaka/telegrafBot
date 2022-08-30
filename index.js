@@ -19,7 +19,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  //sequelize.sync({ force: true })
+  sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -62,7 +62,7 @@ choiceScene.on('text', async (ctx) => {
   let x = count - 1;
   for (let i = 0; i <= x; i++) {
     const coun = await like.count({where:{
-      storyId: rows[i].id
+      story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
 <i>👓 ${rows[i].views}, 👍 +${coun}</i>`, Markup.inlineKeyboard(
@@ -214,7 +214,7 @@ likeScene.on('callback_query', async (ctx) => {
     const resul = await sequelize.transaction(async (t) => {
       const likeCr = await like.create ({
         authId: ctx.callbackQuery.from.id,
-        storyId: ctx.wizard.state.data.readScene,
+        story: ctx.wizard.state.data.readScene,
       }, { transaction: t })
     })
     await t.commit('commit');
@@ -228,7 +228,7 @@ likeScene.on('callback_query', async (ctx) => {
     case 'storydislike':
       await ctx.answerCbQuery('👎');
       await like.destroy ({where:{
-        storyId: ctx.wizard.state.data.readScene,
+        story: ctx.wizard.state.data.readScene,
         authId: ctx.callbackQuery.from.id
       }})
       return ctx.scene.leave()

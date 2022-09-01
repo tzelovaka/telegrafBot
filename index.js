@@ -48,7 +48,7 @@ searchChoiceScene.on('text', async (ctx) => {
     [Markup.button.callback('По номеру', searchChoiceBtn.create({
       number: '2',
       action: 'filter'}))],
-    [Markup.button.callback('Последнее🔥', searchChoiceBtn.create({
+    [Markup.button.callback('Актуальное🔴', searchChoiceBtn.create({
       number: '3',
       action: 'filter'}))]
       ])
@@ -348,6 +348,94 @@ bot.use(session())
 bot.use(stager.middleware())
 bot.command('search', async (ctx) => ctx.scene.enter('readScene'))
 
+
+const profileBtn = new CallbackData('profileBtn', ['number', 'action']);
+const profileScene = new Scenes.BaseScene('profile')
+profileScene.enter(async (ctx) => {
+  try{
+  ctx.session.myData = {};
+  ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
+    [
+    [Markup.button.callback('📚Мои истории', 'mystory')], 
+    [Markup.button.callback('💜Любимые истории', 'likedstory')],
+  ]))
+}
+catch(e){
+  await ctx.reply('⚠Ошибка!');
+  return ctx.scene.leave();
+}
+});
+
+profileScene.action('mystory', async (ctx) => {
+  try{
+  ctx.session.myData.preferenceType = 'story';
+  const {count, rows} = await story.findAndCountAll({where:{
+    authId: ctx.callbackQuery.from.id,
+    release: true,
+  }})
+  if (count < 1) {
+    await ctx.answerCbQuery('⚠Для этой функции треубется опубликовать историю!');
+    return ctx.scene.leave();
+  }
+  let x = count - 1;
+  for (let i = 0; i <= x; i++) {
+    const coun = await like.count({where:{
+      story: rows[i].id
+    }})
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
+      [
+        [Markup.button.callback('Удалить историю❌', profileBtn.create({
+      number: rows[i].id,
+      action: 'deletestory'}))
+        ]
+        ])
+    )
+  }
+}catch(e){
+  await ctx.answerCbQuery('⚠Ошибка!');
+  return ctx.scene.leave();
+}
+  return ctx.scene.leave();
+});
+
+deleteScene.action('likedstory', async (ctx) => {
+  try{
+  ctx.session.myData.preferenceType = 'likedstory';
+  const {count, rows} = like.findAndCountAll({where:{
+    authId: ctx.callbackQuery.from.id,
+  }})
+    if (count<1) {
+      await ctx.answerCbQuery('⚠Для этой функции требуется создать историю!');
+      return ctx.scene.leave();
+    }
+    await ctx.reply ('Любимые истории:');
+      let x = count - 1;
+      for (let i=0; i<=x; i++){
+        const row = await story.findOne({where: {
+          id: rows[i].story,
+          release: true
+        }});
+        const coun = await like.count({where:{
+          story: row.id
+        }})
+        await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.name}</u>
+<i>👓 ${row.views}, ⭐ +${coun}</i>`)
+      }
+    } catch (e){
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave();
+    }
+});
+
+deleteScene.use(async (ctx) =>{ 
+await ctx.answerCbQuery('⚠Ошибка!')
+return ctx.scene.leave()});
+
+const stagep = new Scenes.Stage([profileScene])
+bot.use(session())
+bot.use(stagep.middleware())
+bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 
 
 bot.launch()

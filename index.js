@@ -399,7 +399,7 @@ profileScene.action('mystory', async (ctx) => {
   return ctx.scene.leave();
 });
 
-deleteScene.action('likedstory', async (ctx) => {
+profileScene.action('likedstory', async (ctx) => {
   try{
   ctx.session.myData.preferenceType = 'likedstory';
   const {count, rows} = like.findAndCountAll({where:{
@@ -428,7 +428,7 @@ deleteScene.action('likedstory', async (ctx) => {
     }
 });
 
-deleteScene.use(async (ctx) =>{ 
+profileScene.use(async (ctx) =>{ 
 await ctx.answerCbQuery('⚠Ошибка!')
 return ctx.scene.leave()});
 

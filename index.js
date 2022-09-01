@@ -374,7 +374,7 @@ profileScene.action('mystory', async (ctx) => {
     release: true,
   }})
   if (count < 1) {
-    await ctx.answerCbQuery('⚠Для этой функции треубется опубликовать историю!');
+    await ctx.answerCbQuery('⚠Для этой функции требуется опубликовать историю!');
     return ctx.scene.leave();
   }
   let x = count - 1;
@@ -406,7 +406,7 @@ profileScene.action('likedstory', async (ctx) => {
     authId: ctx.callbackQuery.from.id,
   }})
     if (count<1) {
-      await ctx.answerCbQuery('⚠Для этой функции требуется создать историю!');
+      await ctx.answerCbQuery('⚠Для этой функции требуется лайкнуть историю!');
       return ctx.scene.leave();
     }
     await ctx.reply ('Любимые истории:');

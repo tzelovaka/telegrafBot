@@ -222,14 +222,22 @@ return ctx.wizard.next()
 const readSceneTrue = new Composer()
 readSceneTrue.on('callback_query', async (ctx) => {
   try{
+    await ctx.answerCbQuery();
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
+    ctx.wizard.state.data.readSceneTrue = number;
+    if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
+      await ctx.answerCbQuery('⚠Ошибка!');
+      return ctx.scene.leave()
+    }
     const rov = await storylin.findOne({where:{
-      id: number,
+      id: ctx.wizard.state.data.readSceneTrue,
       storyId: ctx.wizard.state.data.readScene,
     }})
+    console.log(rov);
     if (rov != null){
       const {countt, rovv} = await storylin.findAndCountAll({where:{
-        storyblId: rov.storyblId
+        storyblId: rov.storyblId,
+        storyId: ctx.wizard.state.data.readScene
       }})
       let time = await ctx.reply ('⏳')
       let x = time.message_id - countt
@@ -241,11 +249,6 @@ readSceneTrue.on('callback_query', async (ctx) => {
           console.error(e);
       }
       }
-    }
-    ctx.wizard.state.data.readSceneTrue = number;
-    if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
-      await ctx.answerCbQuery('⚠Ошибка!');
-      return ctx.scene.leave()
     }
   const row = await storybl.findOne({where: {
     linid: ctx.wizard.state.data.readSceneTrue,

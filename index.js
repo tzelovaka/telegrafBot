@@ -233,14 +233,14 @@ readSceneTrue.on('callback_query', async (ctx) => {
       id: ctx.wizard.state.data.readSceneTrue,
       storyId: ctx.wizard.state.data.readScene,
     }})
-    console.log(rov);
+    var r = rov;
     if (rov != null){
-      const {countt, rovv} = await storylin.findAndCountAll({where:{
-        storyblId: rov.storyblId,
+      const count = await storylin.count({where:{
+        storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})
       let time = await ctx.reply ('⏳')
-      let x = time.message_id - countt
+      let x = time.message_id - count
       for(let i = time.message_id; i >= x; i--) {
         try {
           let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);

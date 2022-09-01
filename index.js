@@ -402,7 +402,7 @@ profileScene.action('mystory', async (ctx) => {
 profileScene.action('likedstory', async (ctx) => {
   try{
   ctx.session.myData.preferenceType = 'likedstory';
-  const {count, rows} = like.findAndCountAll({where:{
+  const {count, rows} = await like.findAndCountAll({where:{
     authId: ctx.callbackQuery.from.id,
   }})
     if (count<1) {

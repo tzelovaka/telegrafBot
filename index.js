@@ -422,6 +422,7 @@ profileScene.action('likedstory', async (ctx) => {
         await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.name}</u>
 <i>👓 ${row.views}, ⭐ +${coun}</i>`)
       }
+      return ctx.scene.leave();
     } catch (e){
       await ctx.answerCbQuery('⚠Ошибка!')
       return ctx.scene.leave();
@@ -436,7 +437,6 @@ const stagep = new Scenes.Stage([profileScene])
 bot.use(session())
 bot.use(stagep.middleware())
 bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
-
 
 bot.launch()
 

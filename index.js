@@ -223,6 +223,25 @@ const readSceneTrue = new Composer()
 readSceneTrue.on('callback_query', async (ctx) => {
   try{
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
+    const rov = await storylin.findOne({where:{
+      id: number,
+      storyId: ctx.wizard.state.data.readScene,
+    }})
+    if (rov != null){
+      const {countt, rovv} = await storylin.findAndCountAll({where:{
+        storyblId: rov.storyblId
+      }})
+      let time = await ctx.reply ('⏳')
+      let x = time.message_id - countt
+      for(let i = time.message_id; i >= x; i--) {
+        try {
+          let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+          console.log(res);
+      } catch (e) {
+          console.error(e);
+      }
+      }
+    }
     ctx.wizard.state.data.readSceneTrue = number;
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
       await ctx.answerCbQuery('⚠Ошибка!');

@@ -421,6 +421,38 @@ profileScene.action('mystory', async (ctx) => {
   return ctx.scene.leave();
 });
 
+
+profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
+  try{
+  ctx.session.myData.preferenceType = number;
+  const { number, action } = profileBtn.parse(ctx.callbackQuery.data);
+  await story.destroy({
+    where:{
+      id: number,
+      release: true
+      }
+    })
+  await storybl.destroy({
+    where:{
+      storyId: number,
+      release: true
+      }
+      })
+  await storylin.destroy({
+    where:{
+      storyId: number,
+      release: true
+      }
+      })
+    await ctx.answerCbQuery('Выбранная история была удалена.');
+    }catch(e){
+    await ctx.answerCbQuery('⚠Ошибка!')
+    return ctx.scene.leave();
+  }
+      return ctx.scene.leave();
+  })
+
+
 profileScene.action('likedstory', async (ctx) => {
   try{
   ctx.session.myData.preferenceType = 'likedstory';

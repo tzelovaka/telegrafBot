@@ -419,7 +419,6 @@ profileScene.action('mystory', async (ctx) => {
   await ctx.answerCbQuery('⚠Ошибка!');
   return ctx.scene.leave();
 }
-  return ctx.scene.leave();
 });
 
 

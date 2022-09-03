@@ -429,25 +429,25 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
   ctx.session.myData.preferenceType = number;
   await story.destroy({
     where:{
-      id: number,
+      id: `${number}`,
       release: true
       }
     })
   await storybl.destroy({
     where:{
-      storyId: number,
+      storyId: `${number}`,
       release: true
       }
       })
   await storylin.destroy({
     where:{
-      storyId: number,
+      storyId: `${number}`,
       release: true
       }
       })
   await like.destroy({
     where:{
-      story: number
+      story: `${number}`
     }
   })
     await ctx.answerCbQuery('Выбранная история была удалена.');

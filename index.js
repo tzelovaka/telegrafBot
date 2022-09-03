@@ -426,6 +426,7 @@ profileScene.action('mystory', async (ctx) => {
 profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
   try{
   const { number, action } = profileBtn.parse(ctx.callbackQuery.data);
+  console.log(number);
   await story.destroy({
     where:{
       id: `${number}`,

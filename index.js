@@ -117,7 +117,7 @@ choiceScene.on('text', async (ctx) => {
     name: ctx.wizard.state.data.choiceScene,
     release: true,
   }})
-  if (rows === null){
+  if (count < 1){
     await ctx.reply('⚠Историй с таким названием нет!');
     return ctx.scene.leave()
   }

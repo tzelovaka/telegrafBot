@@ -424,8 +424,8 @@ profileScene.action('mystory', async (ctx) => {
 
 profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
   try{
-  ctx.session.myData.preferenceType = number;
   const { number, action } = profileBtn.parse(ctx.callbackQuery.data);
+  ctx.session.myData.preferenceType = number;
   await story.destroy({
     where:{
       id: number,
@@ -449,7 +449,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave();
   }
-      return ctx.scene.leave();
+    return ctx.scene.leave();
   })
 
 

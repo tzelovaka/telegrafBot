@@ -426,7 +426,6 @@ profileScene.action('mystory', async (ctx) => {
 profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
   try{
   const { number, action } = profileBtn.parse(ctx.callbackQuery.data);
-  ctx.session.myData.preferenceType = number;
   await story.destroy({
     where:{
       id: `${number}`,
@@ -450,6 +449,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
       story: `${number}`
     }
   })
+  ctx.session.myData.preferenceType = number;
     await ctx.answerCbQuery('Выбранная история была удалена.');
     }catch(e){
     await ctx.answerCbQuery('⚠Ошибка!')

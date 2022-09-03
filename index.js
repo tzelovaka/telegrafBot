@@ -152,7 +152,7 @@ numberScene.on('text', async (ctx) => {
     id: ctx.wizard.state.data.numberScene,
     release: true,
   }})
-  if (rows === null){
+  if (count < 1){
     await ctx.reply('⚠Историй с таким номером нет!');
     return ctx.scene.leave()
   }

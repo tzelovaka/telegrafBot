@@ -372,6 +372,7 @@ bot.command('search', async (ctx) => ctx.scene.enter('readScene'))
 
 
 const profileBtn = new CallbackData('profileBtn', ['number', 'action']);
+
 const profileScene = new Scenes.BaseScene('profile')
 profileScene.enter(async (ctx) => {
   try{
@@ -407,7 +408,7 @@ profileScene.action('mystory', async (ctx) => {
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
 <i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
-        [Markup.button.callback('Удалить историю❌', profileBtn.create({
+        [Markup.button.callback('❌Удалить историю', profileBtn.create({
       number: rows[i].id,
       action: 'deletestory'}))
         ]
@@ -444,6 +445,11 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
       release: true
       }
       })
+  await like.destroy({
+    where:{
+      story: number
+    }
+  })
     await ctx.answerCbQuery('Выбранная история была удалена.');
     }catch(e){
     await ctx.answerCbQuery('⚠Ошибка!')

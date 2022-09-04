@@ -107,6 +107,9 @@ searchScene.on('callback_query', async (ctx) => {
       case '4':
         try{
   const {count, rows} = await story.findAndCountAll({
+    where:{
+      release: true
+    },
     order: [
       ['views', 'DESC']
     ]

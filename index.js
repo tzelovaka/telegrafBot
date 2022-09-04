@@ -105,7 +105,8 @@ searchScene.on('callback_query', async (ctx) => {
   return ctx.wizard.selectStep(4)
       break;
       case '4':
-  const {countt, rowss} = await story.findAndCountAll({
+        try{
+  const {count, rows} = await story.findAndCountAll({
     order: [
       ['views', 'DESC']
     ]
@@ -113,13 +114,13 @@ searchScene.on('callback_query', async (ctx) => {
   }).then((story) => {
     console.log("Story:", JSON.stringify(story, null, 2));
   });
-  console.log(countt);
-  for (let u = 0; u <= 4 && u<=countt; u++){
+  console.log(count);
+  for (let u = 0; u <= 4 && u<=count; u++){
     const cou = await like.count({where:{
-      story: rowss[u].id
+      story: rows[u].id
     }})
-    await ctx.replyWithHTML (`<u>№${rowss[u].id} 📚 ${rowss[u].name}</u>
-<i>👓 ${rowss[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
+    await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].name}</u>
+<i>👓 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rowss[u].id,
@@ -130,6 +131,10 @@ searchScene.on('callback_query', async (ctx) => {
     ) 
   }
   return ctx.wizard.selectStep(4)
+} catch(e){
+  await ctx.reply('⚠Ошибка!');
+  return ctx.scene.leave()
+}
       break;
   }
   return ctx.scene.leave()

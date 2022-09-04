@@ -106,9 +106,7 @@ searchScene.on('callback_query', async (ctx) => {
       break;
       case '4':
   const {c, row} = await story.findAndCountAll({
-    order:[
-      [sequelize.fn('max', sequelize.col('views')), 'DESC']
-  ],
+    order: sequelize.literal('max(views) DESC')
     //attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
   });
   console.log(c);

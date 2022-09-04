@@ -50,7 +50,10 @@ searchChoiceScene.on('text', async (ctx) => {
       action: 'filter'}))],
     [Markup.button.callback('Актуальное🔴', searchChoiceBtn.create({
       number: '3',
-      action: 'filter'}))]
+      action: 'filter'}))],
+      [Markup.button.callback('Популярное⭐', searchChoiceBtn.create({
+        number: '4',
+        action: 'filter'}))],
       ])
   );
 } catch(e){
@@ -100,6 +103,37 @@ searchScene.on('callback_query', async (ctx) => {
     ) 
   }
   return ctx.wizard.selectStep(4)
+      break;
+      case '4':
+  const {c, row} = story.findAndCountAll({
+    order:[
+      ['views', 'DESC']
+    ]
+  })
+  for (let u = 0; u <= 5; u++){
+    const rw = story.count({where:{
+      id: row[u].id
+    }})
+    if (rw < 1){
+      return ctx.wizard.selectStep(4)
+      break;
+    }
+    const cou = await like.count({where:{
+      story: row[u].id
+    }})
+    await ctx.replyWithHTML (`<u>№${row[u].id} 📚 ${row[u].name}</u>
+<i>👓 ${row[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
+      [
+        [Markup.button.callback('👆', searchBtn.create({
+      number: row[u].id,
+      name: row[u].name,
+      action: 'storyread'}))
+        ]
+        ])
+    ) 
+  }
+  return ctx.wizard.selectStep(4)
+  return ctx.scene.leave()
       break;
   }
   return ctx.scene.leave()

@@ -51,7 +51,7 @@ searchChoiceScene.on('text', async (ctx) => {
     [Markup.button.callback('Актуальное🔴', searchChoiceBtn.create({
       number: '3',
       action: 'filter'}))],
-      [Markup.button.callback('Популярное⭐', searchChoiceBtn.create({
+      [Markup.button.callback('Топ-5 популярных⭐', searchChoiceBtn.create({
         number: '4',
         action: 'filter'}))],
       ])

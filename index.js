@@ -123,8 +123,8 @@ searchScene.on('callback_query', async (ctx) => {
 <i>👓 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
-      number: rowss[u].id,
-      name: rowss[u].name,
+      number: rows[u].id,
+      name: rows[u].name,
       action: 'storyread'}))
         ]
         ])

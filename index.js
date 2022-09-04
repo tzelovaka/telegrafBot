@@ -107,10 +107,9 @@ searchScene.on('callback_query', async (ctx) => {
       case '4':
   const {c, row} = await story.findAndCountAll({
     order:[
-      ['id', 'DESC'],
       [sequelize.fn('max', sequelize.col('views')), 'DESC']
   ],
-    attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
+    //attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
   });
   console.log(c);
   for (let u = 0; u <= 4 && u<=c; u++){

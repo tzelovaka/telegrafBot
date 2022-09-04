@@ -110,14 +110,8 @@ searchScene.on('callback_query', async (ctx) => {
       ['views', 'DESC']
     ]
   })
-  for (let u = 0; u <= 5 && u<=c; u++){
-    /*const rw = story.count({where:{
-      id: row[u].id
-    }})
-    if (rw < 1){
-      return ctx.wizard.selectStep(4)
-      break;
-    }*/
+  console.log(c);
+  for (let u = 0; u <= 4 && u<=c; u++){
     const cou = await like.count({where:{
       story: row[u].id
     }})
@@ -133,7 +127,6 @@ searchScene.on('callback_query', async (ctx) => {
     ) 
   }
   return ctx.wizard.selectStep(4)
-  return ctx.scene.leave()
       break;
   }
   return ctx.scene.leave()

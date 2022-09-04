@@ -105,13 +105,14 @@ searchScene.on('callback_query', async (ctx) => {
   return ctx.wizard.selectStep(4)
       break;
       case '4':
-  const {c, row} = () => {return await story.findAndCountAll({
+  await story.findAndCountAll({
     order: [
       ['views', 'DESC']
     ]
     //attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
+  }).then((story) => {
+    console.log("Story:", JSON.stringify(story, null, 2));
   });
-}
   console.log(c);
   for (let u = 0; u <= 4 && u<=c; u++){
     const cou = await like.count({where:{

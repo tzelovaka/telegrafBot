@@ -105,7 +105,7 @@ searchScene.on('callback_query', async (ctx) => {
   return ctx.wizard.selectStep(4)
       break;
       case '4':
-  const {c, row} = story.findAndCountAll({
+  const {c, row} = await story.findAndCountAll({
     order:[
       ['views', 'DESC']
     ]

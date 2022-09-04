@@ -112,6 +112,7 @@ searchScene.on('callback_query', async (ctx) => {
   ],
     //attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
   });
+  console.log(c);
   for (let u = 0; u <= 4 && u<=c; u++){
     const cou = await like.count({where:{
       story: row[u].id

@@ -113,11 +113,11 @@ searchScene.on('callback_query', async (ctx) => {
     order: [
       ['views', 'DESC']
     ]
-    //attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
   })/*.then((story) => {
     console.log("Story:", JSON.stringify(story, null, 2));
   });*/
-  for (let u = 0; u <= 4 && u<=count; u++){
+  let x = count - 1
+  for (let u = 0; u <= 4 && u<=x; u++){
     const cou = await like.count({where:{
       story: rows[u].id
     }})

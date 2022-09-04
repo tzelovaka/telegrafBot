@@ -110,7 +110,7 @@ searchScene.on('callback_query', async (ctx) => {
       ['views', 'DESC']
     ]
   })
-  for (let u = 0; u <= 5; u++){
+  for (let u = 0; u <= 5 && u<=c; u++){
     /*const rw = story.count({where:{
       id: row[u].id
     }})

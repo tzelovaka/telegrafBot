@@ -51,7 +51,7 @@ searchChoiceScene.on('text', async (ctx) => {
     [Markup.button.callback('Актуальное🔴', searchChoiceBtn.create({
       number: '3',
       action: 'filter'}))],
-      [Markup.button.callback('Топ-5 популярных⭐', searchChoiceBtn.create({
+      [Markup.button.callback('Топ-5 популярных👀', searchChoiceBtn.create({
         number: '4',
         action: 'filter'}))],
       ])
@@ -92,7 +92,7 @@ searchScene.on('callback_query', async (ctx) => {
       story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
+<i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -122,7 +122,7 @@ searchScene.on('callback_query', async (ctx) => {
       story: rows[u].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].name}</u>
-<i>👓 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
+<i>👀 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[u].id,
@@ -164,7 +164,7 @@ choiceScene.on('text', async (ctx) => {
       story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
+<i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -199,7 +199,7 @@ numberScene.on('text', async (ctx) => {
       story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
+<i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
@@ -443,7 +443,7 @@ profileScene.action('mystory', async (ctx) => {
       story: rows[i].id
     }})
     await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
-<i>👓 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
+<i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('❌Удалить историю', profileBtn.create({
       number: rows[i].id,
@@ -517,7 +517,7 @@ profileScene.action('likedstory', async (ctx) => {
           story: row.id
         }})
         await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.name}</u>
-<i>👓 ${row.views}, ⭐ +${coun}</i>`)
+<i>👀 ${row.views}, ⭐ +${coun}</i>`)
       }
       return ctx.scene.leave();
     } catch (e){

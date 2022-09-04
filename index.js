@@ -107,9 +107,10 @@ searchScene.on('callback_query', async (ctx) => {
       case '4':
   const row = await story.findAll({
     order:[
-      ['views', 'DESC'],
-    ],
-    attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
+      ['id', 'DESC'],
+      [sequelize.fn('max', sequelize.col('views')), 'DESC']
+  ],
+    //attributes: ['id', 'views', 'pic', 'name', 'desc', 'authId', 'release', 'createdAt', 'updatedAt']
   });
   for (let u = 0; u <= 4 && u<=c; u++){
     const cou = await like.count({where:{

@@ -362,7 +362,7 @@ likeScene.on('callback_query', async (ctx) => {
   try{
     let time = await ctx.reply ('⏳')
       let x = time.message_id - 2
-      for(let i = time.message_id; i >= x; i--) {
+      for(let i = time.message_id; i > x; i--) {
         try {
           let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
           console.log(res);

@@ -360,6 +360,16 @@ return ctx.wizard.selectStep(5)
 const likeScene = new Composer()
 likeScene.on('callback_query', async (ctx) => {
   try{
+    let time = await ctx.reply ('⏳')
+      let x = time.message_id - 2
+      for(let i = time.message_id; i >= x; i--) {
+        try {
+          let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+          console.log(res);
+      } catch (e) {
+          console.error(e);
+      }
+      }
   const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;
   switch (ctx.wizard.state.data.likeScene) {

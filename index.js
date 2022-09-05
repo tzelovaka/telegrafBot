@@ -316,10 +316,10 @@ else {
         [
         [Markup.button.callback('👍', likeBtn.create({
           number: ctx.wizard.state.data.readScene,
-          action: 'storylike'}))],
+          action: `storylike${ctx.wizard.state.data.readScene}`}))],
         [Markup.button.callback('Пропустить', likeBtn.create({
           number: ctx.wizard.state.data.readScene,
-          action: 'storylikenull'}))]
+          action: `storylikenull${ctx.wizard.state.data.readScene}`}))]
         ],
       )
     );
@@ -329,10 +329,10 @@ else {
       [
       [Markup.button.callback('👎', likeBtn.create({
         number: ctx.wizard.state.data.readScene,
-        action: 'storydislike'}))],
+        action: `storydislike${ctx.wizard.state.data.readScene}`}))],
       [Markup.button.callback('Пропустить', likeBtn.create({
         number: ctx.wizard.state.data.readScene,
-        action: 'storylikenull'}))]
+        action: `storylikenull${ctx.wizard.state.data.readScene}`}))]
       ],
     )
   );
@@ -374,10 +374,17 @@ likeScene.on('callback_query', async (ctx) => {
   const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;
   switch (ctx.wizard.state.data.likeScene) {
-    case 'storylike':
-      await ctx.answerCbQuery('👍');
+    case `storylike${ctx.wizard.state.data.readScene}`:
       const t = await sequelize.transaction();
   try{
+    const row = await like.findOne({
+      where:{
+        authId: ctx.callbackQuery.from.id,
+        story: ctx.wizard.state.data.readScene,
+      }
+    })
+    if (row === null) {
+    await ctx.answerCbQuery('👍');
     const resul = await sequelize.transaction(async (t) => {
       const likeCr = await like.create ({
         authId: ctx.callbackQuery.from.id,
@@ -385,22 +392,40 @@ likeScene.on('callback_query', async (ctx) => {
       }, { transaction: t })
     })
     await t.commit('commit');
+  }
+  else{
+    await ctx.answerCbQuery('⚠Ошибка!');
+    return ctx.scene.leave()
+  }
   } catch (error) {
-    await ctx.reply ('Ошибка! Пожалуйста попробуйте сначала.');
+    await ctx.reply ('⚠Ошибка!');
     await t.rollback();
     return ctx.scene.leave()
   }
     return ctx.scene.leave()
     break;
-    case 'storydislike':
+
+
+    case `storydislike${ctx.wizard.state.data.readScene}`:
+    const ro = await like.findOne({where:{
+      story: ctx.wizard.state.data.readScene,
+      authId: ctx.callbackQuery.from.id
+    }})
+    if (ro != null){
       await ctx.answerCbQuery('👎');
       await like.destroy ({where:{
         story: ctx.wizard.state.data.readScene,
         authId: ctx.callbackQuery.from.id
       }})
       return ctx.scene.leave()
+    }
+    else{
+      await ctx.answerCbQuery('⚠Ошибка!');
+      return ctx.scene.leave()
+    }
     break;
-    case 'storylikenull':
+    
+    case `storylikenull${ctx.wizard.state.data.readScene}`:
       await ctx.answerCbQuery('🔚');
       return ctx.scene.leave()
     break;

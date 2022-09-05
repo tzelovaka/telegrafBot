@@ -286,7 +286,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
           console.error(e);
       }
       }
-      await ctx.reply (`${r.link}`)
+      await ctx.reply (`${r.smile} ${r.link}`)
     }
   const row = await storybl.findOne({where: {
     linid: ctx.wizard.state.data.readSceneTrue,

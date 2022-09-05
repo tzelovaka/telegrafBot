@@ -276,10 +276,9 @@ readSceneTrue.on('callback_query', async (ctx) => {
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})
-      let time = await ctx.reply (`${name}`)
+      let time = await ctx.reply ('⏳')
       let x = time.message_id - count
-      let m = time.message_id - 1
-      for(let i = m; i >= x; i--) {
+      for(let i = time.message_id; i >= x; i--) {
         try {
           let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
           console.log(res);
@@ -287,6 +286,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
           console.error(e);
       }
       }
+      await ctx.reply (`${name}`)
     }
   const row = await storybl.findOne({where: {
     linid: ctx.wizard.state.data.readSceneTrue,

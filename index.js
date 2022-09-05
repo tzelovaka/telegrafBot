@@ -424,11 +424,14 @@ likeScene.on('callback_query', async (ctx) => {
       return ctx.scene.leave()
     }
     break;
-    
+
     case `storylikenull${ctx.wizard.state.data.readScene}`:
       await ctx.answerCbQuery('🔚');
       return ctx.scene.leave()
     break;
+    default:
+      await ctx.reply('⚠Ошибка!')
+      return ctx.scene.leave()
   }
   } catch (e){
     await ctx.reply('⚠Ошибка!')

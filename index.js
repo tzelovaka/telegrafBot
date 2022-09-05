@@ -286,6 +286,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
           console.error(e);
       }
       }
+      await ctx.reply (name)
     }
   const row = await storybl.findOne({where: {
     linid: ctx.wizard.state.data.readSceneTrue,
@@ -343,7 +344,7 @@ else {
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
-        name: null,
+        name: rows[i].link,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

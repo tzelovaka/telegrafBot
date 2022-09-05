@@ -276,9 +276,10 @@ readSceneTrue.on('callback_query', async (ctx) => {
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})
-      let time = await ctx.reply ('⏳')
+      let time = await ctx.reply (`${name}`)
       let x = time.message_id - count
-      for(let i = time.message_id; i >= x; i--) {
+      let m = time.message_id - 1
+      for(let i = m; i >= x; i--) {
         try {
           let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
           console.log(res);
@@ -343,7 +344,7 @@ else {
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
-        name: null,
+        name: `${rows[i].link}`,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

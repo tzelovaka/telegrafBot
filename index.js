@@ -245,7 +245,7 @@ readScene.on('callback_query', async (ctx) => {
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
-        name: ctx.callbackQuery.date,
+        name: null,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
   } catch (e){
@@ -267,12 +267,12 @@ readSceneTrue.on('callback_query', async (ctx) => {
       return ctx.scene.leave()
     }
     if (ctx.wizard.state.data.readSceneTrue = 0) {
-      var date = ctx.callbackQuery.date
+      var date = ctx.callbackQuery.message.date
     }
-    if (name != date) {
+    if (ctx.wizard.state.data.readSceneTrue != 0 && name != date){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
-    }
+  }
     const rov = await storylin.findOne({where:{
       id: ctx.wizard.state.data.readSceneTrue,
       storyId: ctx.wizard.state.data.readScene,

@@ -71,8 +71,8 @@ searchScene.on('callback_query', async (ctx) => {
     await ctx.answerCbQuery('⚠Ошибка!');
     return ctx.scene.leave()
   }
-  ctx.wizard.state.data.searchScene = number;
-  switch (ctx.wizard.state.data.searchScene) {
+  ctx.wizard.state.data.searchScene = ctx.callbackQuery.message.date;
+  switch (number) {
     case '1':
   await ctx.reply('Введите название искомой истории');
   return ctx.wizard.next()
@@ -245,7 +245,7 @@ readScene.on('callback_query', async (ctx) => {
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
-        name: null,
+        name: ctx.wizard.state.data.searchScene,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
   } catch (e){
@@ -267,16 +267,10 @@ readSceneTrue.on('callback_query', async (ctx) => {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
-    if (ctx.wizard.state.data.readSceneTrue < 1) {
-      var dates = ctx.callbackQuery.message.date
-      console.log(dates);
-    }
-    if (ctx.wizard.state.data.readSceneTrue > 0){
-      if (name != dates){
+    if (name != ctx.wizard.state.data.searchScene) {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
-      }
-  }
+    }
     const rov = await storylin.findOne({where:{
       id: ctx.wizard.state.data.readSceneTrue,
       storyId: ctx.wizard.state.data.readScene,
@@ -355,7 +349,7 @@ else {
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
-        name: dates,
+        name: ctx.wizard.state.data.searchScene,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

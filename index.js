@@ -245,7 +245,7 @@ readScene.on('callback_query', async (ctx) => {
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
-        name: ctx.message.date,
+        name: ctx.callbackQuery.date,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
   } catch (e){

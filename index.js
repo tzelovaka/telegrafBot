@@ -270,9 +270,11 @@ readSceneTrue.on('callback_query', async (ctx) => {
       var date = ctx.callbackQuery.message.date
       console.log(date);
     }
-    if (ctx.wizard.state.data.readSceneTrue != 0 && name != date){
+    if (ctx.wizard.state.data.readSceneTrue != '0'){
+      if (name != date){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
+      }
   }
     const rov = await storylin.findOne({where:{
       id: ctx.wizard.state.data.readSceneTrue,

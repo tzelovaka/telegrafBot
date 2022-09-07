@@ -245,7 +245,7 @@ readScene.on('callback_query', async (ctx) => {
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
-        name: row.name,
+        name: ctx.message.date,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
   } catch (e){
@@ -263,6 +263,13 @@ readSceneTrue.on('callback_query', async (ctx) => {
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
     ctx.wizard.state.data.readSceneTrue = number;
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
+      await ctx.answerCbQuery('⚠Ошибка!');
+      return ctx.scene.leave()
+    }
+    if (ctx.wizard.state.data.readSceneTrue = 0) {
+      var date = ctx.callbackQuery.date
+    }
+    if (name != date) {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
@@ -344,7 +351,7 @@ else {
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
-        name: null,
+        name: date,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

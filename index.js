@@ -266,7 +266,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
-    if (ctx.wizard.state.data.readSceneTrue = 0) {
+    if (ctx.wizard.state.data.readSceneTrue = '0') {
       var date = ctx.callbackQuery.message.date
       console.log(date);
     }

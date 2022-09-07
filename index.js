@@ -268,6 +268,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
     }
     if (ctx.wizard.state.data.readSceneTrue = 0) {
       var date = ctx.callbackQuery.message.date
+      console.log(date);
     }
     if (ctx.wizard.state.data.readSceneTrue != 0 && name != date){
       await ctx.answerCbQuery('⚠Ошибка!');

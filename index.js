@@ -27,10 +27,10 @@ try {
 
 
 
-bot.start ( (ctx) =>
-  /*if (ctx.message.from.is_bot = true){
+/*bot.start ( (ctx) =>
+  if (ctx.message.from.is_bot = true){
     await ctx.telegram.kickChatMember(ctx.chat.id, ctx.message.from.id)
-  }*/ ctx.reply(`Здравствуйте, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец'}!`))
+  } ctx.reply(`Здравствуйте, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец'}!`))*/
 
 
 
@@ -452,7 +452,7 @@ const readmenuScene = new Scenes.WizardScene('readScene', searchChoiceScene, sea
 const stager = new Scenes.Stage([readmenuScene])
 bot.use(session())
 bot.use(stager.middleware())
-bot.command('search', async (ctx) => ctx.scene.enter('readScene'))
+bot.command('start', async (ctx) => ctx.scene.enter('readScene'))
 
 
 const profileBtn = new CallbackData('profileBtn', ['number', 'action']);

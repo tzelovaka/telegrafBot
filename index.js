@@ -36,7 +36,7 @@ try {
 
 
 const searchChoiceBtn = new CallbackData('searchChoiceBtn', ['number', 'action']);
-const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
+const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'count', 'action']);
 const likeBtn = new CallbackData('likeBtn', ['number', 'action']);
 
 const searchChoiceScene = new Composer()
@@ -105,6 +105,7 @@ searchScene.on('callback_query', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: rows[i].name,
+      count: null,
       action: 'storyread'}))
         ]
         ])
@@ -135,6 +136,7 @@ searchScene.on('callback_query', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[u].id,
       name: rows[u].name,
+      count: null,
       action: 'storyread'}))
         ]
         ])
@@ -177,6 +179,7 @@ choiceScene.on('text', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: rows[i].name,
+      count: count,
       action: 'storyread'}))
         ]
         ])
@@ -212,6 +215,7 @@ numberScene.on('text', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: rows[i].name,
+      count: count,
       action: 'storyread'}))
         ]
         ])
@@ -227,7 +231,12 @@ return ctx.wizard.next()
 const readScene = new Composer()
 readScene.on('callback_query', async (ctx) => {
   try{
-  const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
+  const { number, name, count, action } = searchBtn.parse(ctx.callbackQuery.data);
+    let led = await ctx.reply('⏳');
+    let x = led.message_id - count;
+    for (let i=led.message_id; i >= x; i--){
+    let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+    }
     if (action != 'storyread'){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
@@ -254,6 +263,7 @@ readScene.on('callback_query', async (ctx) => {
       [Markup.button.callback('👆', searchBtn.create({
         number: 0,
         name: ctx.wizard.state.data.searchScene,
+        count: 1,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
   } catch (e){
@@ -268,7 +278,12 @@ const readSceneTrue = new Composer()
 readSceneTrue.on('callback_query', async (ctx) => {
   try{
     await ctx.answerCbQuery();
-    const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
+    const { number, name, count, action } = searchBtn.parse(ctx.callbackQuery.data);
+    let led = await ctx.reply('⏳');
+    let p = led.message_id - count;
+    for (let i=led.message_id; i >= p; i--){
+    let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+    }
     ctx.wizard.state.data.readSceneTrue = number;
     console.log(number);
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
@@ -313,12 +328,12 @@ if (row.pic != null) {
 else {
   let res = await ctx.reply(`${row.bl}`);
 }
-  const {count, rows} = await storylin.findAndCountAll ({where: {
+  const {coun, rows} = await storylin.findAndCountAll ({where: {
     release: true,
     storyblId: row.id,
     storyId: ctx.wizard.state.data.readScene
   }});
-  if (count < 1) {
+  if (coun < 1) {
     const rov = await like.findOne({where:{
         authId: ctx.callbackQuery.from.id,
         story: ctx.wizard.state.data.readScene
@@ -351,13 +366,14 @@ else {
   );
     return ctx.wizard.next()
   }
-  let x = count - 1;
+  let x = coun - 1;
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
         name: ctx.wizard.state.data.searchScene,
+        count: coun,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

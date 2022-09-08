@@ -390,7 +390,7 @@ likeScene.on('callback_query', async (ctx) => {
           console.error(e);
       }
       }
-  await ctx.reply ('Прохождение истории окончено.')
+  await ctx.reply ('🔚Прохождение истории окончено.')
   const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;
   switch (ctx.wizard.state.data.likeScene) {

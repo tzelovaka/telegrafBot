@@ -273,7 +273,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
     if (number < 1){
     let led = await ctx.reply('⏳');
     let x = led.message_id - 2;
-    for (let i=led.message_id; i >= x; i--){
+    for (let i=led.message_id; i > x; i--){
     let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
     }
     }

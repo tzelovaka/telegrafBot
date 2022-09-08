@@ -278,9 +278,9 @@ const readSceneTrue = new Composer()
 readSceneTrue.on('callback_query', async (ctx) => {
   try{
     await ctx.answerCbQuery();
-    const { number, name, count, action } = searchBtn.parse(ctx.callbackQuery.data);
+    const { number, name, countt, action } = searchBtn.parse(ctx.callbackQuery.data);
     let led = await ctx.reply('⏳');
-    let p = led.message_id - count;
+    let p = led.message_id - countt;
     for (let i=led.message_id; i >= p; i--){
     let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
     }
@@ -328,12 +328,12 @@ if (row.pic != null) {
 else {
   let res = await ctx.reply(`${row.bl}`);
 }
-  const {coun, rows} = await storylin.findAndCountAll ({where: {
+  const {count, rows} = await storylin.findAndCountAll ({where: {
     release: true,
     storyblId: row.id,
     storyId: ctx.wizard.state.data.readScene
   }});
-  if (coun < 1) {
+  if (count < 1) {
     const rov = await like.findOne({where:{
         authId: ctx.callbackQuery.from.id,
         story: ctx.wizard.state.data.readScene
@@ -366,14 +366,14 @@ else {
   );
     return ctx.wizard.next()
   }
-  let x = coun - 1;
+  let x = count - 1;
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].link}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
         number: rows[i].id,
         name: ctx.wizard.state.data.searchScene,
-        count: coun,
+        count: countt,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

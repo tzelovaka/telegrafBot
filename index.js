@@ -270,7 +270,13 @@ readSceneTrue.on('callback_query', async (ctx) => {
     await ctx.answerCbQuery();
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
     ctx.wizard.state.data.readSceneTrue = number;
-    console.log(number);
+    if (number < 1){
+    let led = await ctx.reply('⏳');
+    let x = led.message_id - 2;
+    for (let i=led.message_id; i >= x; i--){
+    let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+    }
+    }
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()

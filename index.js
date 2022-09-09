@@ -510,6 +510,16 @@ profileScene.action('mystory', async (ctx) => {
     authId: ctx.callbackQuery.from.id,
     release: true,
   }})
+  let time = await ctx.reply ('⏳')
+      let k = time.message_id - count
+      for(let i = time.message_id; i >= k; i--) {
+        try {
+          let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+          console.log(res);
+      } catch (e) {
+          console.error(e);
+      }
+      }
   if (count < 1) {
     await ctx.answerCbQuery('⚠Для этой функции требуется опубликовать историю!');
     return ctx.scene.leave();
@@ -579,6 +589,16 @@ profileScene.action('likedstory', async (ctx) => {
   const {count, rows} = await like.findAndCountAll({where:{
     authId: ctx.callbackQuery.from.id,
   }})
+  let time = await ctx.reply ('⏳')
+      let k = time.message_id - 1
+      for(let i = time.message_id; i >= k; i--) {
+        try {
+          let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+          console.log(res);
+      } catch (e) {
+          console.error(e);
+      }
+      }
     if (count<1) {
       await ctx.answerCbQuery('⚠Для этой функции требуется лайкнуть историю!');
       return ctx.scene.leave();

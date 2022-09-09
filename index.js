@@ -554,6 +554,10 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     authId: ctx.callbackQuery.from.id,
     release: true,
   }})
+  const row = await story.findOne({where:{
+    id: `${number}`,
+    release: true
+  }})
   let time = await ctx.reply ('⏳')
       let k = time.message_id - count
       for(let i = time.message_id; i >= k; i--) {
@@ -588,7 +592,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     }
   })
   ctx.session.myData.preferenceType = number;
-    await ctx.reply('Выбранная история была удалена.');
+    await ctx.reply(`История "${row.name}" была удалена.`);
     }catch(e){
     await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave();

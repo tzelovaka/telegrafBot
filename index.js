@@ -177,7 +177,7 @@ choiceScene.on('text', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: rows[i].name,
-      action: 'storyread'}))
+      action: 'storyreadname'}))
         ]
         ])
     )
@@ -212,7 +212,7 @@ numberScene.on('text', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: rows[i].name,
-      action: 'storyread'}))
+      action: 'storyreadnumber'}))
         ]
         ])
     )
@@ -228,9 +228,27 @@ const readScene = new Composer()
 readScene.on('callback_query', async (ctx) => {
   try{
   const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
-    if (action != 'storyread'){
+    if (action != 'storyreadname' && action != 'storyreadnumber'){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
+    }
+    if (action === 'storyreadname'){
+      const {count, rows} = await story.findAndCountAll({where:{
+        name: ctx.wizard.state.data.choiceScene,
+        release: true,
+      }})
+    let led = await ctx.reply('⏳');
+    let x = led.message_id - count;
+    for (let i=led.message_id; i > x; i--){
+    let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+    }
+    }
+    if (action === 'storyreadnumber'){
+    let led = await ctx.reply('⏳');
+    let x = led.message_id - 2;
+    for (let i=led.message_id; i > x; i--){
+    let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+    }
     }
     await story.increment({ views: 1}, {
       where: {

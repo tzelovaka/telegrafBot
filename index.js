@@ -511,7 +511,7 @@ profileScene.action('mystory', async (ctx) => {
     release: true,
   }})
   let time = await ctx.reply ('⏳')
-      let k = time.message_id - count
+      let k = time.message_id - count-1
       for(let i = time.message_id; i >= k; i--) {
         try {
           let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);

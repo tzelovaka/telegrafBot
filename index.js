@@ -550,6 +550,20 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
   try{
   const { number, action } = profileBtn.parse(ctx.callbackQuery.data);
   console.log(number);
+  const count = await story.count({where:{
+    authId: ctx.callbackQuery.from.id,
+    release: true,
+  }})
+  let time = await ctx.reply ('⏳')
+      let k = time.message_id - count
+      for(let i = time.message_id; i >= k; i--) {
+        try {
+          let res = await ctx.telegram.deleteMessage(ctx.chat.id, i);
+          console.log(res);
+      } catch (e) {
+          console.error(e);
+      }
+      }
   await story.destroy({
     where:{
       id: `${number}`,
@@ -574,7 +588,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     }
   })
   ctx.session.myData.preferenceType = number;
-    await ctx.answerCbQuery('Выбранная история была удалена.');
+    await ctx.reply('Выбранная история была удалена.');
     }catch(e){
     await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave();

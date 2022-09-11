@@ -69,7 +69,7 @@ return ctx.wizard.next()
 //1
 const searchScene = new Composer()
 searchScene.on('callback_query', async (ctx) => {
-  try{
+ // try{
     /*let led = await ctx.reply('⏳');
     let x = led.message_id - 2;
     for (let i=led.message_id; i >= x; i--){
@@ -143,16 +143,16 @@ searchScene.on('callback_query', async (ctx) => {
   }
   return ctx.wizard.selectStep(4)
 } catch(e){
-  await ctx.reply('⚠Ошибка!');
+  await ctx.reply('⚠Ошибкj!');
   return ctx.scene.leave()
 }
       break;
   }
   return ctx.scene.leave()
-} catch(e){
+/*} catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()
-}
+}*/
 })
 //2
 const choiceScene = new Composer()

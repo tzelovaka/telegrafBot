@@ -491,7 +491,7 @@ const profileScene = new Scenes.BaseScene('profile')
 profileScene.enter(async (ctx) => {
   try{
   ctx.session.myData = {};
-  ctx.reply(`Имя: ${ctx.callbackQuery.from.first_name}`, Markup.inlineKeyboard(
+  ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
     [
     [Markup.button.callback('📚Мои истории', 'mystory')], 
     [Markup.button.callback('💜Любимые истории', 'likedstory')],
@@ -648,13 +648,13 @@ return ctx.scene.leave()});
 const stagep = new Scenes.Stage([profileScene])
 bot.use(session())
 bot.use(stagep.middleware())
-bot.action('profilee', Scenes.Stage.enter('profile'));
-//bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
-bot.help(async (ctx) => await ctx.reply('Тест', Markup.inlineKeyboard(
+//bot.action('profilee', Scenes.Stage.enter('profile'));
+bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
+/*bot.help(async (ctx) => await ctx.reply('Тест', Markup.inlineKeyboard(
   [
     [Markup.button.callback('Профиль', 'profilee')
     ]
-    ])))
+    ])))*/
 
 bot.launch()
 

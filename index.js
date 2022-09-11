@@ -313,7 +313,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})
-      let time = await ctx.reply ('⏳')
+      /*let time = await ctx.reply ('⏳')
       let x = time.message_id - count
       for(let i = time.message_id; i >= x; i--) {
         try {
@@ -322,7 +322,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
       } catch (e) {
           console.error(e);
       }
-      }
+      }*/
       await ctx.reply (`${r.smile} ${r.link}`)
     }
   const row = await storybl.findOne({where: {
@@ -398,7 +398,7 @@ return ctx.wizard.selectStep(5)
 const likeScene = new Composer()
 likeScene.on('callback_query', async (ctx) => {
   try{
-    let time = await ctx.reply ('⏳')
+    /*let time = await ctx.reply ('⏳')
       let x = time.message_id - 2
       for(let i = time.message_id; i > x; i--) {
         try {
@@ -407,7 +407,7 @@ likeScene.on('callback_query', async (ctx) => {
       } catch (e) {
           console.error(e);
       }
-      }
+      }*/
   await ctx.reply ('🔚Прохождение истории окончено.')
   const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;

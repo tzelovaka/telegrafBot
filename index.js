@@ -106,7 +106,7 @@ searchScene.on('callback_query', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
       name: rows[i].name,
-      action: 'storyread'}))
+      action: 'storyreadlast'}))
         ]
         ])
     ) 
@@ -136,14 +136,14 @@ searchScene.on('callback_query', async (ctx) => {
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[u].id,
       name: rows[u].name,
-      action: 'storyread'}))
+      action: 'storyreadpopular'}))
         ]
         ])
     ) 
   }
   return ctx.wizard.selectStep(4)
 } catch(e){
-  await ctx.reply('⚠Ошибкj!');
+  await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()
 }
       break;
@@ -229,7 +229,7 @@ const readScene = new Composer()
 readScene.on('callback_query', async (ctx) => {
   try{
   const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
-    if (action != 'storyreadname' && action != 'storyreadnumber'){
+    if (action != 'storyreadname' && action != 'storyreadnumber' && action != 'storyreadlast' && action != 'storyreadpopular'){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }

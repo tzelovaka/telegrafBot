@@ -288,6 +288,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
   try{
     await ctx.answerCbQuery();
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
+
     ctx.wizard.state.data.readSceneTrue = number;
     /*if (number < 1){
     let led = await ctx.reply('⏳');
@@ -297,11 +298,11 @@ readSceneTrue.on('callback_query', async (ctx) => {
     }
     }*/
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
-      await ctx.answerCbQuery('⚠Ошибка!');
+      await ctx.reply('⚠Ошибка!');
       return ctx.scene.leave()
     }
     if (name != ctx.wizard.state.data.searchScene) {
-      await ctx.answerCbQuery('⚠Ошибка!');
+      await ctx.reply('⚠Ошибка!');
       return ctx.scene.leave()
     }
     const rov = await storylin.findOne({where:{

@@ -648,7 +648,13 @@ return ctx.scene.leave()});
 const stagep = new Scenes.Stage([profileScene])
 bot.use(session())
 bot.use(stagep.middleware())
-bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
+profileScene.action('profile', (ctx) => ctx.scene.enter('profile'));
+//bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
+bot.help(async (ctx) => await ctx.reply('Тест', Markup.inlineKeyboard(
+  [
+    [Markup.button.callback('Профиль', 'profile')
+    ]
+    ])))
 
 bot.launch()
 

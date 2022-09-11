@@ -54,10 +54,10 @@ searchChoiceScene.on('text', async (ctx) => {
     [Markup.button.callback('Актуальное🔴', searchChoiceBtn.create({
       number: '3',
       action: 'filter'}))],
-      [Markup.button.callback('ТОП-5 популярных👀', searchChoiceBtn.create({
-        number: '4',
-        action: 'filter'}))],
-      ])
+    [Markup.button.callback('ТОП-5 популярных👀', searchChoiceBtn.create({
+      number: '4',
+      action: 'filter'}))],
+    ])
   );
 } catch(e){
   await ctx.reply('⚠Ошибка!');
@@ -69,11 +69,11 @@ return ctx.wizard.next()
 const searchScene = new Composer()
 searchScene.on('callback_query', async (ctx) => {
   try{
-    let led = await ctx.reply('⏳');
+    /*let led = await ctx.reply('⏳');
     let x = led.message_id - 2;
     for (let i=led.message_id; i >= x; i--){
     let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
-    }
+    }*/
   const { number, action } = searchChoiceBtn.parse(ctx.callbackQuery.data);
   if (action != 'filter'){
     await ctx.answerCbQuery('⚠Ошибка!');
@@ -232,7 +232,7 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
     }
-    if (action === 'storyreadname'){
+    /*if (action === 'storyreadname'){
       const {count, rows} = await story.findAndCountAll({where:{
         name: ctx.wizard.state.data.choiceScene,
         release: true,
@@ -240,7 +240,7 @@ readScene.on('callback_query', async (ctx) => {
     let led = await ctx.reply('⏳');
     let x = led.message_id - count;
     for (let i=led.message_id; i >= x; i--){
-    let del = await ctx.telegram.deleteMessage(ctx.message.chat.id, i);
+    let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
     }
     }
     if (action === 'storyreadnumber'){
@@ -249,7 +249,7 @@ readScene.on('callback_query', async (ctx) => {
     for (let i=led.message_id; i > x; i--){
     let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
     }
-    }
+    }*/
     await story.increment({ views: 1}, {
       where: {
         id: number
@@ -288,13 +288,13 @@ readSceneTrue.on('callback_query', async (ctx) => {
     await ctx.answerCbQuery();
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
     ctx.wizard.state.data.readSceneTrue = number;
-    if (number < 1){
+    /*if (number < 1){
     let led = await ctx.reply('⏳');
     let x = led.message_id - 2;
     for (let i=led.message_id; i > x; i--){
     let del = await ctx.telegram.deleteMessage(ctx.chat.id, i);
     }
-    }
+    }*/
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
       await ctx.answerCbQuery('⚠Ошибка!');
       return ctx.scene.leave()
@@ -510,7 +510,7 @@ profileScene.action('mystory', async (ctx) => {
     authId: ctx.callbackQuery.from.id,
     release: true,
   }})
-  let time = await ctx.reply ('⏳')
+  /*let time = await ctx.reply ('⏳')
       let k = time.message_id - count-1
       for(let i = time.message_id; i >= k; i--) {
         try {
@@ -519,7 +519,7 @@ profileScene.action('mystory', async (ctx) => {
       } catch (e) {
           console.error(e);
       }
-      }
+      }*/
   if (count < 1) {
     await ctx.answerCbQuery('⚠Для этой функции требуется опубликовать историю!');
     return ctx.scene.leave();
@@ -558,7 +558,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     id: `${number}`,
     release: true
   }})
-  let time = await ctx.reply ('⏳')
+/*let time = await ctx.reply ('⏳')
       let k = time.message_id - count
       for(let i = time.message_id; i >= k; i--) {
         try {
@@ -567,7 +567,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
       } catch (e) {
           console.error(e);
       }
-      }
+      }*/
   await story.destroy({
     where:{
       id: `${number}`,
@@ -607,7 +607,7 @@ profileScene.action('likedstory', async (ctx) => {
   const {count, rows} = await like.findAndCountAll({where:{
     authId: ctx.callbackQuery.from.id,
   }})
-  let time = await ctx.reply ('⏳')
+  /*let time = await ctx.reply ('⏳')
       let k = time.message_id - 1
       for(let i = time.message_id; i >= k; i--) {
         try {
@@ -616,7 +616,7 @@ profileScene.action('likedstory', async (ctx) => {
       } catch (e) {
           console.error(e);
       }
-      }
+      }*/
     if (count<1) {
       await ctx.answerCbQuery('⚠Для этой функции требуется лайкнуть историю!');
       return ctx.scene.leave();

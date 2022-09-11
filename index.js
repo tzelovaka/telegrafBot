@@ -648,7 +648,7 @@ return ctx.scene.leave()});
 const stagep = new Scenes.Stage([profileScene])
 bot.use(session())
 bot.use(stagep.middleware())
-bot.action('profilee', (ctx) => stagep.enter('profile'));
+bot.action('profilee', Scenes.Stage.enter('profile'));
 //bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 bot.help(async (ctx) => await ctx.reply('Тест', Markup.inlineKeyboard(
   [

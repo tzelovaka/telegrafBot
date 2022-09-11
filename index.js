@@ -498,7 +498,7 @@ profileScene.enter(async (ctx) => {
   ]))
 }
 catch(e){
-  await ctx.reply('⚠Ошибка!');
+  await ctx.reply('⚠Ошибко!');
   return ctx.scene.leave();
 }
 });

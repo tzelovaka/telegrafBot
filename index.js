@@ -489,18 +489,18 @@ const profileBtn = new CallbackData('profileBtn', ['number', 'action']);
 
 const profileScene = new Scenes.BaseScene('profile')
 profileScene.enter(async (ctx) => {
-  //try{
+  try{
   ctx.session.myData = {};
-  ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
+  ctx.reply(`Имя: ${ctx.callbackQuery.from.first_name}`, Markup.inlineKeyboard(
     [
     [Markup.button.callback('📚Мои истории', 'mystory')], 
     [Markup.button.callback('💜Любимые истории', 'likedstory')],
   ]))
-/*}
+}
 catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave();
-}*/
+}
 });
 
 profileScene.action('mystory', async (ctx) => {

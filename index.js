@@ -40,6 +40,7 @@ const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
 const likeBtn = new CallbackData('likeBtn', ['number', 'action']);
 
 const searchChoiceScene = new Composer()
+//0
 searchChoiceScene.on('text', async (ctx) => {
   try{
   ctx.wizard.state.data = {};
@@ -65,7 +66,7 @@ searchChoiceScene.on('text', async (ctx) => {
 }
 return ctx.wizard.next()
 })
-
+//1
 const searchScene = new Composer()
 searchScene.on('callback_query', async (ctx) => {
   try{
@@ -153,7 +154,7 @@ searchScene.on('callback_query', async (ctx) => {
   return ctx.scene.leave()
 }
 })
-
+//2
 const choiceScene = new Composer()
 choiceScene.on('text', async (ctx) => {
   try{
@@ -188,7 +189,7 @@ choiceScene.on('text', async (ctx) => {
 }
 return ctx.wizard.selectStep(4)
 })
-
+//3
 const numberScene = new Composer()
 numberScene.on('text', async (ctx) => {
   try{
@@ -223,7 +224,7 @@ numberScene.on('text', async (ctx) => {
 }
 return ctx.wizard.next()
 })
-
+//4
 const readScene = new Composer()
 readScene.on('callback_query', async (ctx) => {
   try{
@@ -281,7 +282,7 @@ readScene.on('callback_query', async (ctx) => {
 return ctx.wizard.next()
 })
 
-
+//5
 const readSceneTrue = new Composer()
 readSceneTrue.on('callback_query', async (ctx) => {
   try{
@@ -394,7 +395,7 @@ else {
 }
 return ctx.wizard.selectStep(5)
 })
-
+//6
 const likeScene = new Composer()
 likeScene.on('callback_query', async (ctx) => {
   try{
@@ -475,7 +476,7 @@ likeScene.on('callback_query', async (ctx) => {
     await ctx.reply('⚠Ошибка!')
     return ctx.scene.leave()
 }
-return ctx.wizard.next()
+return ctx.scene.leave()
 })
 
 const readmenuScene = new Scenes.WizardScene('readScene', searchChoiceScene, searchScene, choiceScene, numberScene, readScene, readSceneTrue, likeScene)

@@ -410,7 +410,9 @@ likeScene.on('callback_query', async (ctx) => {
           console.error(e);
       }
       }*/
-  await ctx.reply ('🔚Прохождение истории окончено.')
+  await ctx.replyWithHTML (`🔚Прохождение истории окончено:
+  /start - главное меню
+  /myprofile - мой профиль`)
   const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;
   switch (ctx.wizard.state.data.likeScene) {

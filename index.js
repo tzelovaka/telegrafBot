@@ -11,7 +11,8 @@ require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN);
-
+const user = require ('./user');
+const safety = require ('./safety');
 
 if (BOT_TOKEN === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
@@ -26,7 +27,16 @@ try {
 }
 
 
-
+bot.use(async (ctx, next) => {
+  await safety(ctx.message.from.id, ctx.message.date, ctx.message.from.is_bot);
+  const row = await user.findOne({where:{
+    authId: ctx.message.from.id
+  }})
+  if (row.ban === true){
+    await ctx.reply ('Вы забанены!')
+  }
+  else{await next()}
+})
 /*bot.start ( (ctx) =>
   if (ctx.message.from.is_bot = true){
     await ctx.telegram.kickChatMember(ctx.chat.id, ctx.message.from.id)
@@ -254,7 +264,7 @@ readScene.on('callback_query', async (ctx) => {
     await story.increment({ views: 1}, {
       where: {
         id: number
-      }}),
+      }});
   await ctx.answerCbQuery(`Вы выбрали историю "${name}"`);
   ctx.wizard.state.data.readScene = number;
     const row = await story.findOne({where: {

@@ -32,10 +32,12 @@ bot.use(async (ctx, next) => {
   const row = await user.findOne({where:{
     authId: ctx.message.from.id
   }})
-  if (row.ban === true){
+  if (row.ban == true){
     await ctx.reply ('Вы забанены!')
   }
-  else{await next()}
+  else{
+    await next()
+  }
 })
 /*bot.start ( (ctx) =>
   if (ctx.message.from.is_bot = true){

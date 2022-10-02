@@ -18,6 +18,10 @@ module.exports = async function safety(authId, lmt, isbot) {
             authId: authId,
             last_message_time: lmt,
         })
+        await user.increment({ count: 1}, {
+            where: {
+                authId: authId
+            }});
         if (isbot === true){
             const row = await user.update({
                 isbot: true,
@@ -28,25 +32,19 @@ module.exports = async function safety(authId, lmt, isbot) {
             }})
       }
     }else{
+        if (row.ban === false){
         const row = await user.findOne({
             where:{
             authId: authId
             }
           })
-          if (row.isbot === true){
-            const row = await user.update({
-                isbot: true,
-                ban: true
-            }, {
-                where: {
-                authId: authId
-            }})
-      }
       await user.increment({ count: 1}, {
         where: {
             authId: authId
         }});
-        if (row.count == 5){
+
+        if (row.count >= 5){
+        
         let x = lmt - row.last_message_time;
         if (x <= 9){
         const row = await user.update({
@@ -58,12 +56,14 @@ module.exports = async function safety(authId, lmt, isbot) {
         }})
     }else{
         const rov = await user.update({
-            last_message_time: lmt
+            last_message_time: lmt,
+            count: 0
         }, {
             where: {
             authId: authId
         }})
     }
       }
+    }
     }
 }

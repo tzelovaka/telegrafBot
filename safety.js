@@ -22,7 +22,7 @@ module.exports = async function safety(authId, lmt, isbot) {
             where: {
                 authId: authId
             }});
-        if (isbot === true){
+        if (isbot == true){
             const row = await user.update({
                 isbot: true,
                 ban: true
@@ -32,7 +32,7 @@ module.exports = async function safety(authId, lmt, isbot) {
             }})
       }
     }else{
-        if (row.ban === false){
+        if (row.ban == false){
         const row = await user.findOne({
             where:{
             authId: authId
@@ -43,8 +43,7 @@ module.exports = async function safety(authId, lmt, isbot) {
             authId: authId
         }});
 
-        if (row.count >= 5){
-        
+        if (row.count >= 12){
         let x = lmt - row.last_message_time;
         if (x <= 9){
         const row = await user.update({

@@ -20,7 +20,7 @@ if (BOT_TOKEN === undefined) {
 
 try {
   sequelize.authenticate()
-  sequelize.sync({ force: true })
+  //sequelize.sync({ force: true })
   console.log('Соединение с БД было успешно установлено.')
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
@@ -521,8 +521,8 @@ profileScene.enter(async (ctx) => {
   ctx.session.myData = {};
   ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
     [
-    [Markup.button.callback('📚Мои истории', 'mystory')], 
-    [Markup.button.callback('💜Любимые истории', 'likedstory')],
+    [Markup.button.callback('Мои истории📚', 'mystory')], 
+    [Markup.button.callback('Любимые истории💜', 'likedstory')],
   ]))
 }
 catch(e){
@@ -604,13 +604,15 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     })
   await storybl.destroy({
     where:{
-      storyId: `${number}`,
+      authId: `${ctx.message.from.id}`,
+      storyId: null,
       release: true
       }
       })
   await storylin.destroy({
     where:{
-      storyId: `${number}`,
+      authId: `${ctx.message.from.id}`,
+      storyId: null,
       release: true
       }
       })

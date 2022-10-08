@@ -604,14 +604,14 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     })
   await storybl.destroy({
     where:{
-      authId: `${ctx.message.from.id}`,
+      authId: `${ctx.callbackQuery.from.id}`,
       storyId: null,
       release: true
       }
       })
   await storylin.destroy({
     where:{
-      authId: `${ctx.message.from.id}`,
+      authId: `${ctx.callbackQuery.from.id}`,
       storyId: null,
       release: true
       }

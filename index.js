@@ -672,7 +672,7 @@ profileScene.action('likedstory', async (ctx) => {
 });
 
 profileScene.use(async (ctx) =>{ 
-await ctx.answerCbQuery('⚠Ошибка!')
+//await ctx.answerCbQuery('⚠Ошибка!')
 return ctx.scene.leave()});
 
 const stagep = new Scenes.Stage([profileScene])

@@ -11,7 +11,12 @@ require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const bot = new Telegraf(BOT_TOKEN, {
-  polling: true
+  polling: true,
+  autoStart: true,
+  interval: 300,
+  params:{
+    timeout: 10
+  }
 });
 const user = require ('./user');
 const safety = require ('./safety');

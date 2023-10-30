@@ -30,7 +30,8 @@ try {
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
-
+story.hasMany(storybl);
+story.hasMany(storylin);
 
 bot.on('text', async (ctx, next) => {
   await safety(ctx.message.from.id, ctx.message.date, ctx.message.from.is_bot);
@@ -129,12 +130,12 @@ searchScene.on('callback_query', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].name,
+      name: rows[i].title,
       action: 'storyreadlast'}))
         ]
         ])
@@ -164,7 +165,7 @@ searchScene.on('callback_query', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[u].id,
-      name: rows[u].name,
+      name: rows[u].title,
       action: 'storyreadpopular'}))
         ]
         ])
@@ -189,7 +190,7 @@ choiceScene.on('text', async (ctx) => {
   try{
   ctx.wizard.state.data.choiceScene = ctx.message.text;
   const {count, rows} = await story.findAndCountAll({where:{
-    name: ctx.wizard.state.data.choiceScene,
+    title: ctx.wizard.state.data.choiceScene,
     release: true,
   }})
   if (count < 1){
@@ -206,7 +207,7 @@ choiceScene.on('text', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].name,
+      name: rows[i].title,
       action: 'storyreadname'}))
         ]
         ])
@@ -236,12 +237,12 @@ numberScene.on('text', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].name,
+      name: rows[i].title,
       action: 'storyreadnumber'}))
         ]
         ])

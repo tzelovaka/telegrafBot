@@ -1,6 +1,6 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-const { CallbackData } = require('@bot-base/callback-data');
-import { createCallbackData } from "callback-data";
+//const { CallbackData } = require('@bot-base/callback-data');
+const createCallbackData = require('callback-data');
 const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');

@@ -15,6 +15,7 @@
     "@bot-base/callback-data": "^0.3.0",
     "@types/google-spreadsheet": "^3.2.1",
     "axios": "^0.26.1",
+    "callback-data": "^1.1.1",
     "cls-hooked": "^4.2.2",
     "dotenv": "^16.0.0",
     "google-spreadsheet": "^3.2.0",

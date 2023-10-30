@@ -1,6 +1,5 @@
 const { Telegraf, Scenes, Composer, session, Markup} = require('telegraf');
-//const { CallbackData } = require('@bot-base/callback-data');
-const createCallbackData = require('callback-data');
+const { CallbackData } = require('telegraf-callback-data');
 const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
@@ -66,9 +65,9 @@ bot.on('callback_query', async (ctx, next) => {
 
 
 
-const searchChoiceBtn = createCallbackData('searchChoiceBtn', ['number', 'action']);
-const searchBtn = createCallbackData('searchBtn', ['number', 'name', 'action']);
-const likeBtn = createCallbackData('likeBtn', ['number', 'action']);
+const searchChoiceBtn = new CallbackData('searchChoiceBtn', ['number', 'action']);
+const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
+const likeBtn = new CallbackData('likeBtn', ['number', 'action']);
 
 const searchChoiceScene = new Composer()
 //0
@@ -520,7 +519,7 @@ bot.use(stager.middleware())
 bot.command('start', async (ctx) => ctx.scene.enter('readScene'))
 
 
-const profileBtn = createCallbackData('profileBtn', ['number', 'action']);
+const profileBtn = new CallbackData('profileBtn', ['number', 'action']);
 
 const profileScene = new Scenes.BaseScene('profile')
 profileScene.enter(async (ctx) => {

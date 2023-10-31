@@ -324,12 +324,23 @@ readSceneTrue.on('callback_query', async (ctx) => {
       }})
       await ctx.reply (`${r.smile} ${r.link}`)
     }
-  const row = await storybl.findOne({where: {
-    fId: rov.target ? row.target : '0',
+    var row = null
+  if (ctx.wizard.state.data.readSceneTrue == '0'){
+    row = await storybl.findOne({where: {
+    fId: '0',
     storyId: ctx.wizard.state.data.readScene,
     release: true
   }
 });
+  }else{
+    row = await storybl.findOne({where: {
+      fId: rov.target,
+      storyId: ctx.wizard.state.data.readScene,
+      release: true
+    }
+  })
+}
+  
 if (row.pic != null) {
   let res = await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
 }

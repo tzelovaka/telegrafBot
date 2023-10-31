@@ -3,7 +3,7 @@ const {DataTypes} = require('sequelize')
 
 const story = sequelize.define ('story', {
     id: {type: DataTypes.BIGINT, primaryKey: true, unique: true, autoIncrement: true},
-    views: {type: DataTypes.BIGINT, unique: false, allowNull: true, defaultValue: null},
+    views: {type: DataTypes.BIGINT, unique: false, allowNull: true, defaultValue: 0},
     img: {type: DataTypes.TEXT, allowNull: true, defaultValue: null},
     title: {type: DataTypes.STRING},
     desc: {type: DataTypes.STRING},

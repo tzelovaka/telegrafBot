@@ -277,7 +277,7 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.reply('Вы не добавили ни одной истории!')
       return ctx.scene.leave()
     }
-    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `🎫 ${row.title}`});
+    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
     else  await ctx.reply(`🎫 ${row.title}`);
     await ctx.reply (`📜 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(

@@ -316,13 +316,12 @@ readSceneTrue.on('callback_query', async (ctx) => {
       storyId: ctx.wizard.state.data.readScene,
       release: true
     }})}
-    var r = rov;
     if (rov){
-      const count = await storylin.count({where:{
+      /*const count = await storylin.count({where:{
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
-      }})
-      await ctx.reply (`${r.smile} ${r.link}`)
+      }})*/
+      await ctx.reply (`${r.smile} ${r.text}`)
     }
     var row = null
   if (ctx.wizard.state.data.readSceneTrue == '0'){

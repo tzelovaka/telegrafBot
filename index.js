@@ -321,7 +321,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})*/
-      await ctx.reply (`${rov.smile} ${rov.text}`)
+      await ctx.reply (`${(rows[i].smile != null && rows[i].smile != undefined && rows[i].smile.length > 0) ? rows[i].smile : '👆'} ${rov.text}`)
     }
     var row = null
   if (ctx.wizard.state.data.readSceneTrue == '0'){
@@ -351,7 +351,7 @@ else {
     source: row.fId,
     storyId: ctx.wizard.state.data.readScene
   }});
-  /*if (count < 1) {
+  if (count < 1) {
     const rov = await like.findOne({where:{
         authId: ctx.callbackQuery.from.id,
         story: ctx.wizard.state.data.readScene
@@ -383,7 +383,7 @@ else {
     )
   );
     return ctx.wizard.next()
-  }*/
+  }
   let x = count - 1;
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].text}`, Markup.inlineKeyboard(

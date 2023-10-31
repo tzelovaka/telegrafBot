@@ -321,7 +321,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})*/
-      await ctx.reply (`${(rows[i].smile != null && rows[i].smile != undefined && rows[i].smile.length > 0) ? rows[i].smile : '👆'} ${rov.text}`)
+      await ctx.reply (`${(rov.smile != null && rov.smile != undefined && rov.smile.length > 0) ? rov.smile : '👆'} ${rov.text}`)
     }
     var row = null
   if (ctx.wizard.state.data.readSceneTrue == '0'){

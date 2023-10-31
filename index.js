@@ -341,11 +341,11 @@ readSceneTrue.on('callback_query', async (ctx) => {
   })
 }
   
-if (row.pic != null) {
-  let res = await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `${row.bl}`});
+if (row.img != null && row.img.length >0 && row.img != undefined) {
+  let res = await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `${row.text}`});
 }
 else {
-  let res = await ctx.reply(`${row.bl}`);
+  let res = await ctx.reply(`${row.text}`);
 }
   const {count, rows} = await storylin.findAndCountAll ({where: {
     release: true,

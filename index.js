@@ -604,7 +604,7 @@ profileScene.action('likedstory', async (ctx) => {
         const coun = await like.count({where:{
           story: row.id
         }})
-        await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.name}</u>
+        await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.title}</u>
 <i>👀 ${row.views}, ⭐ +${coun}</i>`)
       }
       return ctx.scene.leave();

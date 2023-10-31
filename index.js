@@ -277,7 +277,7 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.reply('Вы не добавили ни одной истории!')
       return ctx.scene.leave()
     }
-    if (row.img != null) await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
+    if (row.img !== null && row.img !== undefined && row.img.length >0) await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
     else  await ctx.reply(`🎫 ${row.title}`);
     await ctx.reply (`📜 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
@@ -575,7 +575,7 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     }
   })
   ctx.session.myData.preferenceType = number;
-    await ctx.reply(`История "${row.name}" была удалена.`);
+    await ctx.reply(`История "${row.title}" была удалена.`);
     }catch(e){
     await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave();

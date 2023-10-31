@@ -277,13 +277,13 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.reply('Вы не добавили ни одной истории!')
       return ctx.scene.leave()
     }
-    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `🎫 ${row.name}`});
-    else  await ctx.reply(`🎫 ${row.name}`);
+    if (row.pic != null) await ctx.replyWithPhoto({ url: `${row.pic}` }, { caption: `🎫 ${row.title}`});
+    else  await ctx.reply(`🎫 ${row.title}`);
     await ctx.reply (`📜 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', searchBtn.create({
-        number: 0,
+        number: '0',
         name: ctx.wizard.state.data.searchScene,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
@@ -310,7 +310,7 @@ readSceneTrue.on('callback_query', async (ctx) => {
       return ctx.scene.leave()
     }
     const rov = await storylin.findOne({where:{
-      fId: ctx.wizard.state.data.readSceneTrue,
+      target: ctx.wizard.state.data.readSceneTrue,
       storyId: ctx.wizard.state.data.readScene,
       release: true
     }})

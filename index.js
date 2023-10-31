@@ -389,7 +389,7 @@ else {
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].text}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback(`${rows[i].smile}`, searchBtn.create({
+      [Markup.button.callback(`${rows[i].smile != null && rows[i].smile != undefined && rows[i].smile.length > 0 ? rows[i].smile : '👆'}`, searchBtn.create({
         number: rows[i].fId,
         name: rows[i].target,//ctx.wizard.state.data.searchScene,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
@@ -521,7 +521,7 @@ profileScene.action('mystory', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].name}</u>
+    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('❌Удалить историю', profileBtn.create({

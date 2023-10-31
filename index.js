@@ -389,9 +389,9 @@ else {
   for (let i = 0; i <= x; i++){
     await ctx.reply(`${rows[i].text}`, Markup.inlineKeyboard(
       [
-      [Markup.button.callback(`${rows[i].smile != null && rows[i].smile != undefined && rows[i].smile.length > 0 ? rows[i].smile : '👆'}`, searchBtn.create({
-        number: rows[i].fId,
-        name: rows[i].target,//ctx.wizard.state.data.searchScene,
+      [Markup.button.callback(`${(rows[i].smile != null && rows[i].smile != undefined && rows[i].smile.length > 0) ? rows[i].smile : '👆'}`, searchBtn.create({
+        number: rows[i].target,
+        name: ctx.wizard.state.data.searchScene,//ctx.wizard.state.data.searchScene,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]
     )

@@ -35,6 +35,7 @@ story.hasMany(storybl);
 story.hasMany(storylin);
 
 bot.on('text', async (ctx, next) => {
+  console.log(ctx.message);
   await safety(ctx.message.from.id, ctx.message.date, ctx.message.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.message.from.id
@@ -47,6 +48,7 @@ bot.on('text', async (ctx, next) => {
   }
 })
 bot.on('callback_query', async (ctx, next) => {
+  console.log(ctx.callbackQuery);
   await safety(ctx.callbackQuery.from.id, ctx.callbackQuery.date, ctx.callbackQuery.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.callbackQuery.from.id

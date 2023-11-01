@@ -33,7 +33,7 @@ try {
 story.hasMany(storybl);
 story.hasMany(storylin);
 bot.use(async (ctx, next) => {
- console.log(ctx)
+ console.log(ctx.message.message_id)
   await next()
   
 })

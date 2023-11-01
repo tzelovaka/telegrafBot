@@ -33,9 +33,8 @@ try {
 }
 story.hasMany(storybl);
 story.hasMany(storylin);
-bot.use(async (ctx, next) => {
- console.log(ctx.message.message_id)
- console.log(ctx)
+bot.use('callback_query', async (ctx, next) => {
+ console.log(ctx.callback_query.message_id)
   await next()
   
 })

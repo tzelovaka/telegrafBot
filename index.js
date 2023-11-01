@@ -277,8 +277,11 @@ readScene.on('callback_query', async (ctx) => {
       await ctx.reply('Вы не добавили ни одной истории!')
       return ctx.scene.leave()
     }
-    if (row.img !== null && row.img !== undefined && row.img.length >0) await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
-    else  await ctx.reply(`🎫 ${row.title}`);
+    try{
+      await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
+    }catch(e){
+      await ctx.reply(`🎫 ${row.title}`);
+    }
     await ctx.reply (`📜 ${row.desc}`)
     await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
@@ -340,11 +343,11 @@ readSceneTrue.on('callback_query', async (ctx) => {
   })
 }
   
-if (row.img != null && row.img.length >0 && row.img != undefined) {
-  let res = await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `${row.text}`});
+try {
+  await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `${row.text}`});
 }
-else {
-  let res = await ctx.reply(`${row.text}`);
+catch(e) {
+  await ctx.reply(`${row.text}`);
 }
   const {count, rows} = await storylin.findAndCountAll ({where: {
     release: true,

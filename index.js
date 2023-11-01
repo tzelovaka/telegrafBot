@@ -4,6 +4,7 @@ const storybl = require('./modebl');
 const storylin = require('./modelink');
 const story = require ('./story');
 const like = require ('./like');
+const messages = require('./messages')
 const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
@@ -34,6 +35,7 @@ story.hasMany(storybl);
 story.hasMany(storylin);
 bot.use(async (ctx, next) => {
  console.log(ctx.message.message_id)
+ console.log(ctx)
   await next()
   
 })

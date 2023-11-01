@@ -6,4 +6,4 @@ const message = sequelize.define ('message', {
     message_id: {type: DataTypes.BIGINT, unique: true},
 })
 
-module.exports = user;
+module.exports = message;

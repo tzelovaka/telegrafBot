@@ -36,7 +36,7 @@ story.hasMany(storylin);
 
 bot.on('text', async (ctx, next) => {
   try{
-  //await messages.create({authId: `${ctx.message.chat.id}`, message_id: `${ctx.message.message_id}`})
+  await messages.create({authId: `${ctx.message.chat.id}`, message_id: `${ctx.message.message_id}`})
   await safety(ctx.message.from.id, ctx.message.date, ctx.message.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.message.from.id
@@ -54,9 +54,14 @@ bot.on('text', async (ctx, next) => {
 })
 bot.on('callback_query', async (ctx, next) => {
   try{
-  console.log(ctx.callbackQuery);
-  //await messages.destroy({where: {authId: `${ctx.callbackQuery.message.chat.id}`, message_id: `${ctx.callbackQuery.message.message_id}})
-  //await ctx.deleteMessage(ctx.callbackQuery.message.message_id);
+  let msgs = await messages.findAll({where:{authId: `${ctx.callbackQuery.message.chat.id}`}})
+  if (msgs){
+    msgs.forEach(async msg => {
+    await ctx.deleteMessage(msg.message_id);
+  });
+  await messages.destroy({where: {authId: `${ctx.callbackQuery.message.chat.id}`}})
+  }
+  
   await safety(ctx.callbackQuery.from.id, ctx.callbackQuery.date, ctx.callbackQuery.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.callbackQuery.from.id
@@ -72,13 +77,6 @@ bot.on('callback_query', async (ctx, next) => {
   }
   
 })
-/*bot.start ( (ctx) =>
-  if (ctx.message.from.is_bot = true){
-    await ctx.telegram.kickChatMember(ctx.chat.id, ctx.message.from.id)
-  } ctx.reply(`Здравствуйте, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец'}!`))*/
-
-
-
 
 const searchChoiceBtn = new CallbackData('searchChoiceBtn', ['number', 'action']);
 const searchBtn = new CallbackData('searchBtn', ['number', 'name', 'action']);
@@ -106,6 +104,8 @@ searchChoiceScene.on('text', async (ctx) => {
     ])
   );
   let y = await ctx.replyWithHTML('⬇⬇⬇РЕДАКТОР для креатива');
+  await messages.create({authId: `${x.message.chat.id}`, message_id: `${x.message.message_id}`})
+  await messages.create({authId: `${y.message.chat.id}`, message_id: `${y.message.message_id}`})
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

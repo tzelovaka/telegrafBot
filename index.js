@@ -710,7 +710,7 @@ bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 const adminScene = new Scenes.BaseScene('admin')
 adminScene.enter(async (ctx) => {
  try {
-  if (ctx.message.from.id === parseInt(A)){
+  if (ctx.message.from.id === Number(A)){
     await ctx.reply('Действия:', Markup.inlineKeyboard(
     [
       [Markup.button.callback('Очистить всё (юзеры, сообщения)', 'clean')], 

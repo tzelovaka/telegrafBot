@@ -765,7 +765,7 @@ adminScene.action('veriferi', async (ctx) => {
   const stagea = new Scenes.Stage([adminScene])
   bot.use(session())
   bot.use(stagea.middleware())
-  bot.on('text', (ctx) => {if (ctx.message.from.id === Number(A) && ctx.message.text === 'я - одмэн') ctx.scene.enter('admin')})
+  bot.on('text', (ctx) => {if (ctx.message.from.id === Number(A) && ctx.message.text === B) ctx.scene.enter('admin')})
   
 
 bot.launch()

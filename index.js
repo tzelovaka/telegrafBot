@@ -54,7 +54,7 @@ bot.on('text', async (ctx, next) => {
 })
 bot.on('callback_query', async (ctx, next) => {
   try{
-  console.log(ctx.callbackQuery.chat.id);
+  console.log(ctx.callbackQuery);
   //await messages.destroy({where: {authId: `${ctx.callbackQuery.chat.id}`, message_id: `${ctx.callbackQuery.message_id}`}})
   await safety(ctx.callbackQuery.from.id, ctx.callbackQuery.date, ctx.callbackQuery.from.is_bot);
   const row = await user.findOne({where:{

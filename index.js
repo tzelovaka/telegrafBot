@@ -36,7 +36,7 @@ story.hasMany(storylin);
 
 bot.on('text', async (ctx, next) => {
   try{
-   // await messages.create({authId: `${ctx.message.from.id}`, message_id: `${ctx.message.message_id}`})
+  //await messages.create({authId: `${ctx.message.chat.id}`, message_id: `${ctx.message.message_id}`})
   await safety(ctx.message.from.id, ctx.message.date, ctx.message.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.message.from.id
@@ -53,8 +53,9 @@ bot.on('text', async (ctx, next) => {
  
 })
 bot.on('callback_query', async (ctx, next) => {
-  console.log(ctx.callbackQuery);
-  //await messages.destroy({where: {authId: `${ctx.message.from.id}`, message_id: `${ctx.message.message_id}`}})
+  try{
+  console.log(ctx.callbackQuery.chat.id);
+  //await messages.destroy({where: {authId: `${ctx.callbackQuery.chat.id}`, message_id: `${ctx.callbackQuery.message_id}`}})
   await safety(ctx.callbackQuery.from.id, ctx.callbackQuery.date, ctx.callbackQuery.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.callbackQuery.from.id
@@ -65,6 +66,10 @@ bot.on('callback_query', async (ctx, next) => {
   else{
     await next()
   }
+  }catch(e){
+    await ctx.reply('⚠Ошибка!');
+  }
+  
 })
 /*bot.start ( (ctx) =>
   if (ctx.message.from.is_bot = true){
@@ -100,7 +105,6 @@ searchChoiceScene.on('text', async (ctx) => {
     ])
   );
   let y = await ctx.replyWithHTML('⬇⬇⬇РЕДАКТОР для креатива');
-  console.log(x);
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

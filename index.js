@@ -727,8 +727,6 @@ adminScene.enter(async (ctx) => {
 adminScene.action('clean', async (ctx) => {
   try{
   console.log(ctx.callbackQuery.message.message_id);
-  await ctx.telegram.kickChatMember(357611081, ctx.from.id)
-  console.log('Почистили');
       return ctx.scene.leave();
     } catch (e){
       await ctx.reply('⚠Ошибка!');

@@ -93,6 +93,7 @@ searchChoiceScene.on('text', async (ctx) => {
       action: 'filter'}))],
     ])
   );
+  await ctx.replyWithHTML('Рекомендуем зайти в редактор:<br>⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇');
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

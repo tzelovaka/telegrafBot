@@ -732,7 +732,7 @@ adminScene.action('clean', async (ctx) => {
   console.log('CLEAN');
       return ctx.scene.leave();
     } catch (e){
-      await ctx.answerCbQuery('⚠Ошибка!')
+      await ctx.reply('⚠Ошибка!');
       return ctx.scene.leave();
     }
 });
@@ -742,7 +742,7 @@ adminScene.action('title', async (ctx) => {
   console.log('TITLE');
       return ctx.scene.leave();
     } catch (e){
-      await ctx.answerCbQuery('⚠Ошибка!')
+      await ctx.reply('⚠Ошибка!');
       return ctx.scene.leave();
     }
 });
@@ -751,7 +751,7 @@ adminScene.action('spam', async (ctx) => {
   console.log('SPAM');
       return ctx.scene.leave();
     } catch (e){
-      await ctx.answerCbQuery('⚠Ошибка!')
+      await ctx.reply('⚠Ошибка!');
       return ctx.scene.leave();
     }
 });
@@ -760,7 +760,7 @@ adminScene.action('veriferi', async (ctx) => {
     console.log('VERIFERI');
       return ctx.scene.leave();
     } catch (e){
-      await ctx.answerCbQuery('⚠Ошибка!')
+      await ctx.reply('⚠Ошибка!');
       return ctx.scene.leave();
     }
 });

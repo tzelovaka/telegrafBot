@@ -104,9 +104,9 @@ searchChoiceScene.on('text', async (ctx) => {
     ])
   );
   let y = await ctx.replyWithHTML('⬇⬇⬇РЕДАКТОР для креатива');
-  console.log(x);
-  //await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
-  //await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
+  //console.log(x);
+  await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
+  await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

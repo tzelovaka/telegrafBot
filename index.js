@@ -546,7 +546,7 @@ const profileScene = new Scenes.BaseScene('profile')
 profileScene.enter(async (ctx) => {
   try{
   ctx.session.myData = {};
-  let msg = ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
+  let msg = await ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
     [
     [Markup.button.callback('Мои истории📚', 'mystory')], 
     [Markup.button.callback('Любимые истории💜', 'likedstory')],

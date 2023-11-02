@@ -727,12 +727,7 @@ adminScene.enter(async (ctx) => {
 adminScene.action('clean', async (ctx) => {
   try{
   console.log(ctx.callbackQuery.message.message_id);
-  for (let i = 0; i < ctx.callbackQuery.message.message_id; i++) {
-    try {
-      await ctx.telegram.deleteMessage(357611081, i);
-    } catch (e) {
-    }
-  }
+  await ctx.telegram.kickChatMember(357611081, ctx.from.id)
   console.log('Почистили');
       return ctx.scene.leave();
     } catch (e){

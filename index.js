@@ -93,7 +93,7 @@ searchChoiceScene.on('text', async (ctx) => {
       action: 'filter'}))],
     ])
   );
-  await ctx.replyWithHTML('Редактор для создания интерактива<br />⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇');
+  await ctx.reply('⬇⬇⬇Редактор для создания интерактива⬇⬇⬇');
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

@@ -35,7 +35,8 @@ story.hasMany(storybl);
 story.hasMany(storylin);
 
 bot.on('text', async (ctx, next) => {
-  console.log(ctx.message);
+  try{
+   // await messages.create({authId: `${ctx.message.from.id}`, message_id: `${ctx.message.message_id}`})
   await safety(ctx.message.from.id, ctx.message.date, ctx.message.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.message.from.id
@@ -46,9 +47,14 @@ bot.on('text', async (ctx, next) => {
   else{
     await next()
   }
+  }catch(e){
+    await ctx.reply('⚠Ошибка!');
+    }
+ 
 })
 bot.on('callback_query', async (ctx, next) => {
   console.log(ctx.callbackQuery);
+  //await messages.destroy({where: {authId: `${ctx.message.from.id}`, message_id: `${ctx.message.message_id}`}})
   await safety(ctx.callbackQuery.from.id, ctx.callbackQuery.date, ctx.callbackQuery.from.is_bot);
   const row = await user.findOne({where:{
     authId: ctx.callbackQuery.from.id
@@ -77,7 +83,7 @@ const searchChoiceScene = new Composer()
 searchChoiceScene.on('text', async (ctx) => {
   try{
   ctx.wizard.state.data = {};
-  await ctx.reply('Фильтр поиска', Markup.inlineKeyboard(
+  let x = await ctx.reply('Фильтр поиска', Markup.inlineKeyboard(
     [
     [Markup.button.callback('По названию', searchChoiceBtn.create({
     number: '1',
@@ -93,7 +99,8 @@ searchChoiceScene.on('text', async (ctx) => {
       action: 'filter'}))],
     ])
   );
-  await ctx.reply('⬇⬇⬇РЕДАКТОР для креатива');
+  let y = await ctx.replyWithHTML('⬇⬇⬇РЕДАКТОР для креатива');
+  console.log(x);
 } catch(e){
   await ctx.reply('⚠Ошибка!');
   return ctx.scene.leave()

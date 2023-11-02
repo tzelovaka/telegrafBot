@@ -37,6 +37,13 @@ story.hasMany(storylin);
 bot.on('text', async (ctx, next) => {
   try{
   await messages.create({authId: `${ctx.message.chat.id}`, message_id: `${ctx.message.message_id}`})
+  let msgs = await messages.findAll({where:{authId: `${ctx.message.chat.id}`}})
+  if (msgs){
+    msgs.forEach(async msg => {
+    await ctx.deleteMessage(msg.message_id);
+  });
+  await messages.destroy({where: {authId: `${ctx.message.chat.id}`}})
+}
   let u = await user.findOne({where:{authId: `${ctx.message.from.id}`}})
   if (!u) await ctx.replyWithHTML(
 `Добро пожаловать в <b>Сторинтер</b>! Данная система разработана для <b>создания</b> и <b>чтения интерактивных историй</b> (в них сюжет зависит от <b>выбора/выборов</b> читателя в процессе чтения). Если вы хотите попробовать прочитать историю: 

@@ -710,7 +710,7 @@ bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 const adminScene = new Scenes.BaseScene('admin')
 adminScene.enter(async (ctx) => {
  try {
-  if (ctx.message.from.id === A){
+  //if (ctx.message.from.id === A){
     await ctx.reply('Действия:', Markup.inlineKeyboard(
     [
       [Markup.button.callback('Очистить всё (юзеры, сообщения)', 'clean')], 
@@ -719,7 +719,7 @@ adminScene.enter(async (ctx) => {
       [Markup.button.callback('Смена верификации', 'veriferi')],
     ])
   );
-  }
+  //}
   
  } catch (e) {
   await ctx.reply('Ошибка');

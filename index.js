@@ -48,8 +48,9 @@ bot.on('text', async (ctx, next) => {
     await next()
   }
   }catch(e){
-    await ctx.reply('⚠Ошибка!');
-    }
+    let x = await ctx.reply('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`}) 
+  }
  
 })
 bot.on('callback_query', async (ctx, next) => {
@@ -73,7 +74,8 @@ bot.on('callback_query', async (ctx, next) => {
     await next()
   }
   }catch(e){
-    await ctx.reply('⚠Ошибка!');
+    let x = await ctx.reply('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   }
   
 })
@@ -103,12 +105,12 @@ searchChoiceScene.on('text', async (ctx) => {
       action: 'filter'}))],
     ])
   );
-  let y = await ctx.replyWithHTML('⬇⬇⬇РЕДАКТОР для креатива');
-  //console.log(x);
+  let y = await ctx.replyWithHTML('⬇⬇⬇<b>РЕДАКТОР</b> для креатива');
   await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
 } catch(e){
-  await ctx.reply('⚠Ошибка!');
+  let x = await ctx.reply('⚠Ошибка!');
+  await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave()
 }
 return ctx.wizard.next()
@@ -130,11 +132,13 @@ searchScene.on('callback_query', async (ctx) => {
   ctx.wizard.state.data.searchScene = ctx.callbackQuery.message.date;
   switch (number) {
     case '1':
-  await ctx.reply('Введите название искомой истории');
+  let msg = await ctx.reply('Введите название искомой истории');
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   return ctx.wizard.next()
   break;
     case '2':
-  await ctx.reply('Введите номер искомой истории');
+  let ms = await ctx.reply('Введите номер искомой истории');
+  await messages.create({authId: `${ms.chat.id}`, message_id: `${ms.message_id}`})
   return ctx.wizard.selectStep(3)
       break;
     case '3':
@@ -147,7 +151,7 @@ searchScene.on('callback_query', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -156,7 +160,8 @@ searchScene.on('callback_query', async (ctx) => {
       action: 'storyreadlast'}))
         ]
         ])
-    ) 
+    )
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
   return ctx.wizard.selectStep(4)
       break;
@@ -177,7 +182,7 @@ searchScene.on('callback_query', async (ctx) => {
     const cou = await like.count({where:{
       story: rows[u].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].title}</u>
+    let msg = await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].title}</u>
 <i>👀 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -188,9 +193,11 @@ searchScene.on('callback_query', async (ctx) => {
         ])
     ) 
   }
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   return ctx.wizard.selectStep(4)
 } catch(e){
-  await ctx.reply('⚠Ошибка!');
+  let x = await ctx.reply('⚠Ошибка!');
+  await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave()
 }
       break;
@@ -211,7 +218,8 @@ choiceScene.on('text', async (ctx) => {
     release: true,
   }})
   if (count < 1){
-    await ctx.reply('⚠Историй с таким названием нет!');
+    let msg = await ctx.reply('⚠Историй с таким названием нет!');
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     return ctx.scene.leave()
   }
   let x = count - 1;
@@ -219,7 +227,7 @@ choiceScene.on('text', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -229,9 +237,11 @@ choiceScene.on('text', async (ctx) => {
         ]
         ])
     )
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
 } catch(e){
-  await ctx.reply('⚠Ошибка!');
+  let x = await ctx.reply('⚠Ошибка!');
+  await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave()
 }
 return ctx.wizard.selectStep(4)
@@ -246,7 +256,8 @@ numberScene.on('text', async (ctx) => {
     release: true,
   }})
   if (count < 1){
-    await ctx.reply('⚠Историй с таким номером нет!');
+    let msg = await ctx.reply('⚠Историй с таким номером нет!');
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     return ctx.scene.leave()
   }
   let x = count - 1;
@@ -254,7 +265,7 @@ numberScene.on('text', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -264,9 +275,11 @@ numberScene.on('text', async (ctx) => {
         ]
         ])
     )
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
 } catch(e){
-  await ctx.reply('⚠Ошибка!');
+  let x = await ctx.reply('⚠Ошибка!');
+  await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave()
 }
 return ctx.wizard.next()
@@ -295,20 +308,25 @@ readScene.on('callback_query', async (ctx) => {
       return ctx.scene.leave()
     }
     try{
-      await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
+      let msg = await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `🎫 ${row.title}`});
+      await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     }catch(e){
-      await ctx.reply(`🎫 ${row.title}`);
+      let msg = await ctx.reply(`🎫 ${row.title}`);
+      await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     }
-    await ctx.reply (`📜 ${row.desc}`)
-    await ctx.reply('Начать читать?', Markup.inlineKeyboard(
+    let x = await ctx.reply (`📜 ${row.desc}`)
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
+    let y = await ctx.reply('Начать читать?', Markup.inlineKeyboard(
       [
       [Markup.button.callback('👆', searchBtn.create({
         number: '0',
         name: ctx.wizard.state.data.searchScene,
         action: `storyreadtrue${ctx.wizard.state.data.readScene}`}))]
     ]))
+    await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
   } catch (e){
-    await ctx.reply('⚠Ошибка!')
+    let x = await ctx.reply('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
     return ctx.scene.leave()
 }
 return ctx.wizard.next()
@@ -322,11 +340,13 @@ readSceneTrue.on('callback_query', async (ctx) => {
     const { number, name, action } = searchBtn.parse(ctx.callbackQuery.data);
     ctx.wizard.state.data.readSceneTrue = number;
     if (action != `storyreadtrue${ctx.wizard.state.data.readScene}`){
-      await ctx.reply('⚠Ошибка!');
+      let x = await ctx.reply('⚠Ошибка!');
+      await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
       return ctx.scene.leave()
     }
     if (name != ctx.wizard.state.data.searchScene) {
-      await ctx.reply('⚠Ошибка!');
+      let x = await ctx.reply('⚠Ошибка!');
+      await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
       return ctx.scene.leave()
     }
     var rov = null;
@@ -341,7 +361,8 @@ readSceneTrue.on('callback_query', async (ctx) => {
         storyblId: r.storyblId,
         storyId: ctx.wizard.state.data.readScene
       }})*/
-      await ctx.reply (`${(rov.smile != null && rov.smile != undefined && rov.smile.length > 0) ? rov.smile : '👆'} ${rov.text}`)
+      let msg = await ctx.reply (`${(rov.smile != null && rov.smile != undefined && rov.smile.length > 0) ? rov.smile : '👆'} ${rov.text}`)
+      await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     }
     var row = null
   if (ctx.wizard.state.data.readSceneTrue == '0'){
@@ -361,10 +382,12 @@ readSceneTrue.on('callback_query', async (ctx) => {
 }
   
 try {
-  await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `${row.text}`});
+  let msg = await ctx.replyWithPhoto({ url: `${row.img}` }, { caption: `${row.text}`});
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
 }
 catch(e) {
-  await ctx.reply(`${row.text}`);
+  let msg = await ctx.reply(`${row.text}`);
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
 }
   const {count, rows} = await storylin.findAndCountAll ({where: {
     release: true,
@@ -378,7 +401,7 @@ catch(e) {
     }})
     console.log(rov);
     if (rov === null){
-      await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
+      let msg = await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
         [
         [Markup.button.callback('👍', likeBtn.create({
           number: ctx.wizard.state.data.readScene,
@@ -389,9 +412,10 @@ catch(e) {
         ],
       )
     );
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     return ctx.wizard.next()
     }
-    await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
+    let msg = await ctx.reply('Прохождение одной из сюжетных ветвей окончено, поставьте оценку.', Markup.inlineKeyboard(
       [
       [Markup.button.callback('👎', likeBtn.create({
         number: ctx.wizard.state.data.readScene,
@@ -402,11 +426,13 @@ catch(e) {
       ],
     )
   );
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     return ctx.wizard.next()
   }
   let x = count - 1;
+  let msg;
   for (let i = 0; i <= x; i++){
-    await ctx.reply(`${rows[i].text}`, Markup.inlineKeyboard(
+    msg = await ctx.reply(`${rows[i].text}`, Markup.inlineKeyboard(
       [
       [Markup.button.callback(`${(rows[i].smile != null && rows[i].smile != undefined && rows[i].smile.length > 0) ? rows[i].smile : '👆'}`, searchBtn.create({
         number: rows[i].target,
@@ -415,10 +441,12 @@ catch(e) {
     ]
     )
   )
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
 } catch(e){
   await ctx.answerCbQuery('⚠Ошибка!');
-  await ctx.reply('Вы завершили прохождение истории!');
+  let y = await ctx.reply('Вы завершили прохождение истории!');
+  await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
   return ctx.scene.leave()
 }
 return ctx.wizard.selectStep(5)
@@ -427,9 +455,10 @@ return ctx.wizard.selectStep(5)
 const likeScene = new Composer()
 likeScene.on('callback_query', async (ctx) => {
   try{
-  await ctx.replyWithHTML (`🔚Прохождение истории окончено:
+  let msg = await ctx.replyWithHTML (`🔚Прохождение истории окончено:
   /start - главное меню
   /myprofile - мой профиль`)
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
   ctx.wizard.state.data.likeScene = action;
   switch (ctx.wizard.state.data.likeScene) {
@@ -457,7 +486,8 @@ likeScene.on('callback_query', async (ctx) => {
     return ctx.scene.leave()
   }
   } catch (error) {
-    await ctx.reply ('⚠Ошибка!');
+    let x = await ctx.reply ('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
     await t.rollback();
     return ctx.scene.leave()
   }
@@ -489,11 +519,13 @@ likeScene.on('callback_query', async (ctx) => {
       return ctx.scene.leave()
     break;
     default:
-      await ctx.reply('⚠Ошибка!')
+      let x = await ctx.reply('⚠Ошибка!')
+      await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
       return ctx.scene.leave()
   }
   } catch (e){
-    await ctx.reply('⚠Ошибка!')
+    let x = await ctx.reply('⚠Ошибка!')
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
     return ctx.scene.leave()
 }
 return ctx.scene.leave()
@@ -512,14 +544,16 @@ const profileScene = new Scenes.BaseScene('profile')
 profileScene.enter(async (ctx) => {
   try{
   ctx.session.myData = {};
-  ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
+  let msg = ctx.reply(`Имя: ${ctx.message.from.first_name}`, Markup.inlineKeyboard(
     [
     [Markup.button.callback('Мои истории📚', 'mystory')], 
     [Markup.button.callback('Любимые истории💜', 'likedstory')],
   ]))
+  await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
 }
 catch(e){
-  await ctx.reply('⚠Ошибка!');
+  let x = await ctx.reply('⚠Ошибка!');
+  await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave();
 }
 });
@@ -536,11 +570,12 @@ profileScene.action('mystory', async (ctx) => {
     return ctx.scene.leave();
   }
   let x = count - 1;
+  let msg;
   for (let i = 0; i <= x; i++) {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('❌Удалить историю', profileBtn.create({
@@ -549,6 +584,7 @@ profileScene.action('mystory', async (ctx) => {
         ]
         ])
     )
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
 }catch(e){
   await ctx.answerCbQuery('⚠Ошибка!');
@@ -595,7 +631,8 @@ profileScene.action(profileBtn.filter({action: 'deletestory'}), async (ctx) => {
     }
   })
   ctx.session.myData.preferenceType = number;
-    await ctx.reply(`История "${row.title}" была удалена.`);
+    let msg = await ctx.reply(`История "${row.title}" была удалена.`);
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     }catch(e){
     await ctx.answerCbQuery('⚠Ошибка!')
     return ctx.scene.leave();
@@ -614,8 +651,10 @@ profileScene.action('likedstory', async (ctx) => {
       await ctx.answerCbQuery('⚠Для этой функции требуется лайкнуть историю!');
       return ctx.scene.leave();
     }
-    await ctx.reply ('Любимые истории:');
+    let msg = await ctx.reply ('Любимые истории:');
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
       let x = count - 1;
+      let y;
       for (let i=0; i<=x; i++){
         const row = await story.findOne({where: {
           id: rows[i].story,
@@ -624,8 +663,9 @@ profileScene.action('likedstory', async (ctx) => {
         const coun = await like.count({where:{
           story: row.id
         }})
-        await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.title}</u>
+        y = await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.title}</u>
 <i>👀 ${row.views}, ⭐ +${coun}</i>`)
+await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
       }
       return ctx.scene.leave();
     } catch (e){

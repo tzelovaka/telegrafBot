@@ -9,6 +9,7 @@ const sequelize = require('./db');
 require ('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
+const { A } = process.env;
 const bot = new Telegraf(BOT_TOKEN, {
   polling: true,
   autoStart: true,
@@ -33,10 +34,8 @@ try {
 }
 story.hasMany(storybl);
 story.hasMany(storylin);
-
 bot.on('text', async (ctx, next) => {
   try{
-  console.log(ctx.message);
   await messages.create({authId: `${ctx.message.chat.id}`, message_id: `${ctx.message.message_id}`})
   let msgs = await messages.findAll({where:{authId: `${ctx.message.chat.id}`}})
   if (msgs){
@@ -704,6 +703,69 @@ const stagep = new Scenes.Stage([profileScene])
 bot.use(session())
 bot.use(stagep.middleware())
 bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
+
+
+
+const adminScene = new Scenes.BaseScene('admin')
+profileScene.enter(async (ctx) => {
+ try {
+  await ctx.reply('Действия:', Markup.inlineKeyboard(
+    [
+      [Markup.button.callback('Очистить всё (юзеры, сообщения)', 'clean')], 
+      [Markup.button.callback('Редактировать титульный', 'title')],
+      [Markup.button.callback('Добавление в спам', 'spam')],
+      [Markup.button.callback('Смена верификации', 'veriferi')],
+    ])
+  );
+ } catch (e) {
+  await ctx.reply('Ошибка');
+ } 
+})
+
+
+adminScene.action('clean', async (ctx) => {
+  try{
+  console.log('CLEAN');
+      return ctx.scene.leave();
+    } catch (e){
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave();
+    }
+});
+
+adminScene.action('title', async (ctx) => {
+  try{
+  console.log('TITLE');
+      return ctx.scene.leave();
+    } catch (e){
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave();
+    }
+});
+adminScene.action('spam', async (ctx) => {
+  try{
+  console.log('SPAM');
+      return ctx.scene.leave();
+    } catch (e){
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave();
+    }
+});
+adminScene.action('veriferi', async (ctx) => {
+  try{
+    console.log('VERIFERI');
+      return ctx.scene.leave();
+    } catch (e){
+      await ctx.answerCbQuery('⚠Ошибка!')
+      return ctx.scene.leave();
+    }
+});
+
+  const stagea = new Scenes.Stage([adminScene])
+  bot.use(session())
+  bot.use(stagea.middleware())
+  bot.on('text', (ctx) => {if (ctx.message.from.id === A && ctx.message.text === B) ctx.scene.enter('admin')})
+  
 
 bot.launch()
 

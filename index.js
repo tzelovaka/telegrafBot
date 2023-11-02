@@ -710,7 +710,8 @@ bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 const adminScene = new Scenes.BaseScene('admin')
 adminScene.enter(async (ctx) => {
  try {
-  await ctx.reply('Действия:', Markup.inlineKeyboard(
+  if (ctx.message.from.id === A){
+    await ctx.reply('Действия:', Markup.inlineKeyboard(
     [
       [Markup.button.callback('Очистить всё (юзеры, сообщения)', 'clean')], 
       [Markup.button.callback('Редактировать титульный', 'title')],
@@ -718,6 +719,8 @@ adminScene.enter(async (ctx) => {
       [Markup.button.callback('Смена верификации', 'veriferi')],
     ])
   );
+  }
+  
  } catch (e) {
   await ctx.reply('Ошибка');
  } 
@@ -765,7 +768,7 @@ adminScene.action('veriferi', async (ctx) => {
   const stagea = new Scenes.Stage([adminScene])
   bot.use(session())
   bot.use(stagea.middleware())
-  bot.on('text', (ctx) => {if (ctx.message.from.id === A && ctx.message.text === B) ctx.scene.enter('admin')})
+  bot.command('admin', (ctx) => ctx.scene.enter('admin'))
   
 
 bot.launch()

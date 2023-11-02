@@ -729,7 +729,7 @@ adminScene.action('clean', async (ctx) => {
   console.log(ctx.callbackQuery.message.message_id);
   for (let i = 0; i < ctx.callbackQuery.message.message_id; i++) {
     try {
-      await ctx.telegram.deleteMessage(5497989692, i);
+      await ctx.telegram.deleteMessage(357611081, i);
     } catch (e) {
     }
   }

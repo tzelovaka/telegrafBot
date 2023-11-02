@@ -193,8 +193,9 @@ searchScene.on('callback_query', async (ctx) => {
         ]
         ])
     ) 
-  }
   await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
+  }
+  
   return ctx.wizard.selectStep(4)
 } catch(e){
   let x = await ctx.reply('⚠Ошибка!');

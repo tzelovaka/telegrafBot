@@ -708,7 +708,7 @@ bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 
 
 const adminScene = new Scenes.BaseScene('admin')
-profileScene.enter(async (ctx) => {
+adminScene.enter(async (ctx) => {
  try {
   await ctx.reply('Действия:', Markup.inlineKeyboard(
     [

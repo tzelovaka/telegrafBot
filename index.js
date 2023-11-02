@@ -36,6 +36,7 @@ story.hasMany(storylin);
 
 bot.on('text', async (ctx, next) => {
   try{
+  console.log(ctx.message);
   await messages.create({authId: `${ctx.message.chat.id}`, message_id: `${ctx.message.message_id}`})
   let msgs = await messages.findAll({where:{authId: `${ctx.message.chat.id}`}})
   if (msgs){

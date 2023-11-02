@@ -726,7 +726,7 @@ adminScene.enter(async (ctx) => {
 
 adminScene.action('clean', async (ctx) => {
   try{
-  console.log(ctx);
+  console.log(ctx.callbackQuery.message);
       return ctx.scene.leave();
     } catch (e){
       await ctx.reply('⚠Ошибка!');

@@ -733,6 +733,7 @@ adminScene.action('clean', async (ctx) => {
     } catch (e) {
     }
   }
+  console.log('Почистили');
       return ctx.scene.leave();
     } catch (e){
       await ctx.reply('⚠Ошибка!');

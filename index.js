@@ -178,11 +178,12 @@ searchScene.on('callback_query', async (ctx) => {
     console.log("Story:", JSON.stringify(story, null, 2));
   });*/
   let x = count - 1
+  let msg;
   for (let u = 0; u <= 4 && u<=x; u++){
     const cou = await like.count({where:{
       story: rows[u].id
     }})
-    let msg = await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].title}</u>
+    msg = await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].title}</u>
 <i>👀 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({

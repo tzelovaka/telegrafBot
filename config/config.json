@@ -1,23 +1,32 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+  "username": "DATABASE_USER",
+  "password": "DATABASE_PASSWORD",
+  "database": "DATABASE",
+  "host": "DATABASE_HOST",
+  "dialect":"postgres",
+  "protocol":"postgres",
+  "port":"xxxx"
+ },
+  "staging": {
+    "username": "DATABASE_USER",
+    "password": "DATABASE_PASSWORD",
+    "database": "DATABASE",
+    "host": "DATABASE_HOST",
+    "dialect":"postgres",
+    "protocol":"postgres",
+    "port":"xxxx"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+ "protocol": "postgres",
+ "ssl": true,
+ "dialectOptions": {
+   "ssl": {
+    "require": true,
+    "rejectUnauthorized": false
+   }
+ }
   }
 }

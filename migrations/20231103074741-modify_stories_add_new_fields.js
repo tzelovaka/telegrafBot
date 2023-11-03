@@ -1,5 +1,4 @@
 'use strict';
-const {DataTypes} = require('sequelize')
 
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -8,7 +7,7 @@ module.exports = {
         'stories', // table name
         'spam', // new field name
         {
-          type: DataTypes.BOOLEAN,
+          type: Sequelize.DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
         },
@@ -17,7 +16,7 @@ module.exports = {
         'stories',
         'verification',
         {
-          type: DataTypes.BOOLEAN,
+          type: Sequelize.DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
         },

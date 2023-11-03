@@ -10,25 +10,15 @@ const story = sequelize.define ('story', {
     authId: {type: DataTypes.BIGINT, unique: false},
     release: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
-sequelize.sync()
-  .then(() => {
-    return story.addColumn('spam', {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      });
-  })
-  .then(() => {
-    story.addColumn('verification', {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      });
-  }).then(()=>{
-    console.log('2 columns was added succesfully');
-  })
-  .catch((err) => {
-    console.error('Error adding column:', err);
+/*story.addColumn('spam', {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
   });
-
+  story.addColumn('spam', {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  });
+  User.sync();*/
 module.exports = story;

@@ -33,6 +33,11 @@ try {
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
+sequelize.addColumn('story', 'spam', {
+  type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+})
 story.hasMany(storybl);
 story.hasMany(storylin);
 bot.on('text', async (ctx, next) => {

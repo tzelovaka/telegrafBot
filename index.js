@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3000;
 const { BOT_TOKEN} = process.env;
 const { A } = process.env;
 const { B } = process.env;
-const {DataTypes} = require('sequelize')
 const bot = new Telegraf(BOT_TOKEN, {
   polling: true,
   autoStart: true,
@@ -34,11 +33,6 @@ try {
 } catch (e) {
   console.log('Невозможно выполнить подключение к БД ', e)
 }
-sequelize.addColumn('story', 'spam', {
-  type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-})
 story.hasMany(storybl);
 story.hasMany(storylin);
 bot.on('text', async (ctx, next) => {

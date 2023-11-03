@@ -1,2 +1,2 @@
-release: npx sequelize-cli db:migrate
+release: pg sequelize-cli db:migrate
 worker: npm start

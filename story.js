@@ -10,11 +10,7 @@ const story = sequelize.define ('story', {
     authId: {type: DataTypes.BIGINT, unique: false},
     release: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
-sequelize.addColumn('story', 'spam', {
-    type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-  })
+
 /*story.addColumn('spam', {
     type: DataTypes.BOOLEAN,
     allowNull: false,

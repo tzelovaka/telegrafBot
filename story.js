@@ -10,13 +10,4 @@ const story = sequelize.define ('story', {
     authId: {type: DataTypes.BIGINT, unique: false},
     release: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
-sequelize.addColumn('story', 'spam', {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: false,
-    primaryKey: false,
-    unique: false,
-  })
-    .then(() => story.reload({}))
-    .catch(err => console.error(err))
 module.exports = story;

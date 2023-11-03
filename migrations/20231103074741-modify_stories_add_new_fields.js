@@ -4,19 +4,19 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return Promise.all([
       queryInterface.addColumn(
-        'story', // table name
+        'stories', // table name
         'spam', // new field name
         {
-          type: Sequelize.DataTypes.BOOLEAN,
+          type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
         },
       ),
       queryInterface.addColumn(
-        'story',
+        'stories',
         'verification',
         {
-          type: Sequelize.DataTypes.BOOLEAN,
+          type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
         },
@@ -26,8 +26,8 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
     return Promise.all([
-      queryInterface.removeColumn('story', 'spam'),
-      queryInterface.removeColumn('story', 'verification'),
+      queryInterface.removeColumn('stories', 'spam'),
+      queryInterface.removeColumn('stories', 'verification'),
     ]);
   }
 };

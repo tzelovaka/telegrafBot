@@ -1,2 +1,2 @@
-release: npx sequelize-cli db:migrate
+release: npx sequelize-cli db:migrate:undo
 worker: npm start

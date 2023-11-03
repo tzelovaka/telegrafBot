@@ -15,7 +15,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return Promise.all([
       queryInterface.addColumn(
-        "'stories'", // table name
+        "stories", // table name
         "spam", // new field name
         {
           type: Sequelize.BOOLEAN,

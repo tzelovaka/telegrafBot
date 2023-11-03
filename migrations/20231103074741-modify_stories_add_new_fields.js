@@ -7,13 +7,13 @@ module.exports = {
    * @return Promise<void>
    */
   up: async (queryInterface) => {
-    const tableDefinition =  await queryInterface.describeTable("stories");
+    const tableDefinition =  await queryInterface.describeTable("story");
     const promises = [];
 
     return queryInterface.sequelize.transaction((transaction) => {
       if (!tableDefinition.column1) {
         promises.push(queryInterface.addColumn(
-          "stories",
+          "story",
           'spam',
           {
             type: queryInterface.sequelize.Sequelize.BOOLEAN,
@@ -27,7 +27,7 @@ module.exports = {
 
       if (!tableDefinition.oauth2_token_expire_at) {
         promises.push(queryInterface.addColumn(
-          "stories",
+          "story",
           'verification',
           {
             type: queryInterface.sequelize.Sequelize.BOOLEAN,

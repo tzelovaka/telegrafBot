@@ -1,44 +1,13 @@
-'use strict';
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_OLIVE_URL, {
-  dialect: 'postgres',
-  protocol: 'postgres',
-  dialectOptions: {
-      ssl: {
-          require: true,
-          rejectUnauthorized: false
-      }
-  }
-});
-const queryInterface = sequelize.getQueryInterface();
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    return Promise.all([
-      queryInterface.sequelize.addColumn(
-        "stories", // table name
-        "spam", // new field name
-        {
-          type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-        }
-      ),
-      queryInterface.addColumn(
-        "stories",
-        "verification",
-        {
-          type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-        }
-      ),
-    ]);
+  up: async (queryInterface, DataTypes) => {
+    await queryInterface.addColumn('story', 'spam', {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    });
   },
 
-  async down (queryInterface, Sequelize) {
-    return Promise.all([
-      queryInterface.removeColumn('stories', 'spam'),
-      queryInterface.removeColumn('stories', 'verification'),
-    ]);
-  }
+  down: async (queryInterface) => {
+    await queryInterface.removeColumn('story', 'spam');
+  },
 };

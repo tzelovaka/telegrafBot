@@ -16,7 +16,7 @@ module.exports = {
     return Promise.all([
       queryInterface.addColumn(
         "stories", // table name
-        'spam', // new field name
+        "spam", // new field name
         {
           type: Sequelize.BOOLEAN,
     allowNull: false,
@@ -27,7 +27,7 @@ module.exports = {
       ),
       queryInterface.addColumn(
         "stories",
-        'verification',
+        "verification",
         {
           type: Sequelize.BOOLEAN,
     allowNull: false,

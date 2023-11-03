@@ -9,5 +9,7 @@ const story = sequelize.define ('story', {
     desc: {type: DataTypes.STRING},
     authId: {type: DataTypes.BIGINT, unique: false},
     release: {type: DataTypes.BOOLEAN, defaultValue: false}
+}, {
+    tableName: 'stories',
 })
 module.exports = story;

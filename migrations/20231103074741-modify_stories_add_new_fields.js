@@ -14,7 +14,7 @@ const queryInterface = sequelize.getQueryInterface();
 module.exports = {
   async up (queryInterface, Sequelize) {
     return Promise.all([
-      queryInterface.sequelize.addColumn(
+      queryInterface.addColumn(
         "'stories'", // table name
         "spam", // new field name
         {

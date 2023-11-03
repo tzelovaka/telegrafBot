@@ -1,55 +1,44 @@
 'use strict';
 const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_OLIVE_URL, {
+  dialect: 'postgres',
+  protocol: 'postgres',
+  dialectOptions: {
+      ssl: {
+          require: true,
+          rejectUnauthorized: false
+      }
+  }
+});
+const queryInterface = sequelize.getQueryInterface();
 module.exports = {
-  /**
-   * @description Up.
-   * @param {QueryInterface} queryInterface
-   * @return Promise<void>
-   */
-  up: async (queryInterface) => {
-    const tableDefinition =  await queryInterface.describeTable("public.stories");
-    const promises = [];
-
-    return queryInterface.sequelize.transaction((transaction) => {
-      if (!tableDefinition.column1) {
-        promises.push(queryInterface.addColumn(
-          "public.stories",
-          'spam',
-          {
-            type: queryInterface.sequelize.Sequelize.BOOLEAN,
+  async up (queryInterface, Sequelize) {
+    return Promise.all([
+      queryInterface.sequelize.addColumn(
+        "stories", // table name
+        "spam", // new field name
+        {
+          type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-            allowNull: true,
-          },
-          {transaction},
-        ));
-      }
-
-      if (!tableDefinition.oauth2_token_expire_at) {
-        promises.push(queryInterface.addColumn(
-          "public.stories",
-          'verification',
-          {
-            type: queryInterface.sequelize.Sequelize.BOOLEAN,
+        }
+      ),
+      queryInterface.addColumn(
+        "stories",
+        "verification",
+        {
+          type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-          },
-          {transaction},
-        ));
-      }
-
-      return Promise.all(promises);
-    });
+        }
+      ),
+    ]);
   },
-  /**
-   * @description Down.
-   * @param {QueryInterface} queryInterface
-   * @return Promise<void>
-   */
-  down: (queryInterface) => {
+
+  async down (queryInterface, Sequelize) {
     return Promise.all([
       queryInterface.removeColumn('stories', 'spam'),
       queryInterface.removeColumn('stories', 'verification'),
     ]);
-  },
+  }
 };

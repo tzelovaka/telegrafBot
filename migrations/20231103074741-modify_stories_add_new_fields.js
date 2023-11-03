@@ -24,7 +24,7 @@ module.exports = {
         }
       ),
       queryInterface.addColumn(
-        "'stories'",
+        "stories",
         "verification",
         {
           type: Sequelize.BOOLEAN,

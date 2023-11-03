@@ -21,7 +21,9 @@ module.exports = {
           type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-        },
+        },{
+          freezeTableName: true
+        }
       ),
       queryInterface.addColumn(
         "stories",
@@ -30,7 +32,9 @@ module.exports = {
           type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-        },
+        },{
+          freezeTableName: true
+        }
       ),
     ]);
   },

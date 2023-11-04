@@ -759,7 +759,7 @@ try{
   const spamScene = new Composer()
   spamScene.on('text', async (ctx) => {
     try{
-    ctx.wizard.state.data.verificationScene = ctx.message.text;
+    ctx.wizard.state.data.spamScene = ctx.message.text;
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     await ctx.reply('Типа кинули в спам')
   } catch(e){
@@ -773,6 +773,7 @@ try{
   const verificationScene = new Composer()
   verificationScene.on('text', async (ctx) => {
     try{
+      ctx.wizard.state.data.verificationScene = ctx.message.text;
       await ctx.reply('Типа сняли верификацию.')
       await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
     } catch (e){

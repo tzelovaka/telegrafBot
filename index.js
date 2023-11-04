@@ -759,11 +759,11 @@ try{
   spamScene.on('text', async (ctx) => {
     try{
     ctx.wizard.state.data.spamScene = ctx.message.text;
-    let msg = await ctx.reply('Типа кинули в спам')
-    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
-    const st = await story.findOne({where:{id: ctx.wizard.state.data.spamScene}})
+    const st = await story.findOne({where:{id: BigInt(ctx.wizard.state.data.spamScene)}})
     st.spam = !st.spam
     await st.save()
+    let msg = await ctx.reply('Типа кинули в спам')
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   } catch(e){
     let x = await ctx.reply('⚠Ошибка!');
     await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})

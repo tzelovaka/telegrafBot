@@ -164,7 +164,9 @@ searchScene.on('callback_query', async (ctx) => {
       break;
     case '3':
   const {count, rows} = await story.findAndCountAll({where:{
-    release: true
+    release: true,
+    spam: false,
+    verification: true
   }})
   let x = count - 1;
   let y = count - 5;
@@ -172,8 +174,7 @@ searchScene.on('callback_query', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    if (rows[i].spam === false && rows[i].verification === true){
-      let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -184,8 +185,6 @@ searchScene.on('callback_query', async (ctx) => {
         ])
     )
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
-    }
-    
   }
   return ctx.wizard.selectStep(4)
       break;
@@ -193,7 +192,9 @@ searchScene.on('callback_query', async (ctx) => {
         try{
   const {count, rows} = await story.findAndCountAll({
     where:{
-      release: true
+      release: true,
+      spam: false,
+      verification: true
     },
     order: [
       ['views', 'DESC']
@@ -207,7 +208,6 @@ searchScene.on('callback_query', async (ctx) => {
     const cou = await like.count({where:{
       story: rows[u].id
     }})
-    if (rows[u].spam === false && rows[u].verification === true){
     msg = await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].title}</u>
 <i>👀 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
@@ -219,7 +219,6 @@ searchScene.on('callback_query', async (ctx) => {
         ])
     ) 
   await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
-      }
   }
   
   return ctx.wizard.selectStep(4)
@@ -244,6 +243,7 @@ choiceScene.on('text', async (ctx) => {
   const {count, rows} = await story.findAndCountAll({where:{
     title: ctx.wizard.state.data.choiceScene,
     release: true,
+    verification: true
   }})
   if (count < 1){
     let msg = await ctx.reply('⚠Историй с таким названием нет!');
@@ -282,6 +282,7 @@ numberScene.on('text', async (ctx) => {
   const {count, rows} = await story.findAndCountAll({where:{
     id: ctx.wizard.state.data.numberScene,
     release: true,
+    verification: true
   }})
   if (count < 1){
     let msg = await ctx.reply('⚠Историй с таким номером нет!');

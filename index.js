@@ -753,7 +753,6 @@ try{
     await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
     return ctx.scene.leave()
   }
-    return ctx.scene.leave()
   })
   //2
   const spamScene = new Composer()
@@ -767,7 +766,7 @@ try{
     await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
     return ctx.scene.leave()
   }
-  return ctx.wizard.leave()
+  return ctx.scene.leave()
   })
   //3
   const verificationScene = new Composer()
@@ -781,7 +780,7 @@ try{
       await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
       return ctx.scene.leave()
   }
-  return ctx.wizard.leave()
+  return ctx.scene.leave()
   })
   
   const adminMenuScene = new Scenes.WizardScene('adminScene', adminChoiceScene, adminSwitchScene, spamScene, verificationScene)

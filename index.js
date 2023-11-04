@@ -172,7 +172,8 @@ searchScene.on('callback_query', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    if (rows[i].spam === false && rows[i].verification === true){
+      let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -183,6 +184,8 @@ searchScene.on('callback_query', async (ctx) => {
         ])
     )
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
+    }
+    
   }
   return ctx.wizard.selectStep(4)
       break;
@@ -204,6 +207,7 @@ searchScene.on('callback_query', async (ctx) => {
     const cou = await like.count({where:{
       story: rows[u].id
     }})
+    if (rows[u].spam === false && rows[u].verification === true){
     msg = await ctx.replyWithHTML (`<u>№${rows[u].id} 📚 ${rows[u].title}</u>
 <i>👀 ${rows[u].views}, ⭐ +${cou}</i>`, Markup.inlineKeyboard(
       [
@@ -215,6 +219,7 @@ searchScene.on('callback_query', async (ctx) => {
         ])
     ) 
   await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
+      }
   }
   
   return ctx.wizard.selectStep(4)

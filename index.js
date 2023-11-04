@@ -784,8 +784,8 @@ try{
   return ctx.wizard.next()
   })
   
-  const adminScene = new Scenes.WizardScene('adminScene', adminChoiceScene, adminSwitchScene, spamScene, verificationScene)
-  const stagea = new Scenes.Stage([adminScene])
+  const adminMenuScene = new Scenes.WizardScene('adminScene', adminChoiceScene, adminSwitchScene, spamScene, verificationScene)
+  const stagea = new Scenes.Stage([adminMenuScene])
   bot.use(session())
   bot.use(stagea.middleware())
 bot.on('text', (ctx) => {if (ctx.message.from.id === Number(A) && ctx.message.text === B) ctx.scene.enter('adminScene')})

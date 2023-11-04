@@ -711,6 +711,7 @@ bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
   adminChoiceScene.on('text', async (ctx) => {
     try{
     ctx.wizard.state.data = {};
+    await ctx.reply('Меню')
       await ctx.reply('Действия:', Markup.inlineKeyboard(
       [
         [

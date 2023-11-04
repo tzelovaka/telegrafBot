@@ -758,7 +758,7 @@ try{
   })
   //2
   const spamScene = new Composer()
-  verificationScene.on('text', async (ctx) => {
+  spamScene.on('text', async (ctx) => {
     try{
     ctx.wizard.state.data.verificationScene = ctx.message.text;
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})

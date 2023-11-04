@@ -774,7 +774,7 @@ try{
     try{
       ctx.wizard.state.data.verificationScene = ctx.message.text;
       let msg = await ctx.reply('Типа сняли верификацию.')
-      await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
+      await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     } catch (e){
       let x = await ctx.reply('⚠Ошибка!');
       await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})

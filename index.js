@@ -761,6 +761,7 @@ try{
     ctx.wizard.state.data.spamScene = ctx.message.text;
     let st = await story.findOne({where:{id: BigInt(ctx.wizard.state.data.spamScene)}})
     st.spam = !st.spam
+    console.log(st);
     await st.save()
     let msg = await ctx.reply('Типа кинули в спам')
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})

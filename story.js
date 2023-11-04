@@ -8,7 +8,9 @@ const story = sequelize.define ("story", {
     title: {type: DataTypes.STRING},
     desc: {type: DataTypes.STRING},
     authId: {type: DataTypes.BIGINT, unique: false},
-    release: {type: DataTypes.BOOLEAN, defaultValue: false}
+    release: {type: DataTypes.BOOLEAN, defaultValue: false},
+    spam: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    verification: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true}
 }, {
     tableName: "stories",
 })

@@ -784,7 +784,7 @@ try{
   return ctx.wizard.next()
   })
   
-  const adminScene = new Scenes.WizardScene('adminScene', adminChoiceScene, adminSwitchScenecene, spamScene, verificationScene)
+  const adminScene = new Scenes.WizardScene('adminScene', adminChoiceScene, adminSwitchScene, spamScene, verificationScene)
   const stagea = new Scenes.Stage([adminScene])
   bot.use(session())
   bot.use(stagea.middleware())

@@ -711,19 +711,17 @@ bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
   adminChoiceScene.on('text', async (ctx) => {
     try{
     ctx.wizard.state.data = {};
-    await ctx.reply('Меню')
-      await ctx.reply('Действия:', Markup.inlineKeyboard(
+    await ctx.reply('Меню', Markup.inlineKeyboard(
       [
-        [
-          [Markup.button.callback('СПАМ', likeBtn.create({
-            number: '1',
-            action: 'spam'}))],
-          [Markup.button.callback('ВЕРИФИКАЦИЯ', likeBtn.create({
-            number: '2',
-            action: 'verification'}))]
-          ],
-      ])
-    );
+      [Markup.button.callback('СПАМ', likeBtn.create({
+        number: '1',
+        action: 'spam'}))],
+      [Markup.button.callback('ВЕРИФИКАЦИЯ', likeBtn.create({
+        number: '2',
+        action: 'verification'}))]
+      ],
+    )
+  );
   } catch(e){
     let x = await ctx.reply('⚠Ошибка!');
     await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})

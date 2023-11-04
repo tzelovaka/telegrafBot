@@ -760,8 +760,8 @@ try{
   spamScene.on('text', async (ctx) => {
     try{
     ctx.wizard.state.data.spamScene = ctx.message.text;
+    let msg = await ctx.reply('Типа кинули в спам')
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
-    await ctx.reply('Типа кинули в спам')
   } catch(e){
     let x = await ctx.reply('⚠Ошибка!');
     await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
@@ -774,7 +774,7 @@ try{
   verificationScene.on('text', async (ctx) => {
     try{
       ctx.wizard.state.data.verificationScene = ctx.message.text;
-      await ctx.reply('Типа сняли верификацию.')
+      let msg = await ctx.reply('Типа сняли верификацию.')
       await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
     } catch (e){
       let x = await ctx.reply('⚠Ошибка!');

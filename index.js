@@ -761,9 +761,8 @@ try{
     ctx.wizard.state.data.spamScene = ctx.message.text;
     let st = await story.findOne({where:{id: BigInt(ctx.wizard.state.data.spamScene)}})
     st.spam = !st.spam
-    console.log(st);
     await st.save()
-    let msg = await ctx.reply('Типа кинули в спам')
+    let msg = await ctx.reply('Типа кинули в спам (или наоброт)')
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   } catch(e){
     let x = await ctx.reply('⚠Ошибка!');
@@ -777,7 +776,10 @@ try{
   verificationScene.on('text', async (ctx) => {
     try{
       ctx.wizard.state.data.verificationScene = ctx.message.text;
-      let msg = await ctx.reply('Типа сняли верификацию.')
+      let st = await story.findOne({where:{id: BigInt(ctx.wizard.state.data.verificationScene)}})
+    st.verification = !st.verification
+    await st.save()
+      let msg = await ctx.reply('Типа сняли верификацию (или наоборот).')
       await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
     } catch (e){
       let x = await ctx.reply('⚠Ошибка!');

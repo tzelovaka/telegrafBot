@@ -705,68 +705,90 @@ bot.use(session())
 bot.use(stagep.middleware())
 bot.command('myprofile', (ctx) => ctx.scene.enter('profile'))
 
-
-
-const adminScene = new Scenes.BaseScene('admin')
-adminScene.enter(async (ctx) => {
- try {
-    await ctx.reply('Действия:', Markup.inlineKeyboard(
-    [
-      [Markup.button.callback('Очистить всё (юзеры, сообщения)', 'clean')], 
-      [Markup.button.callback('Редактировать титульный', 'title')],
-      [Markup.button.callback('Добавление в спам', 'spam')],
-      [Markup.button.callback('Смена верификации', 'veriferi')],
-    ])
-  );
- } catch (e) {
-  await ctx.reply('Ошибка');
- } 
-})
-
-
-adminScene.action('clean', async (ctx) => {
-  try{
-  console.log(ctx.callbackQuery.message.message_id);
-      return ctx.scene.leave();
+//const adminBtn = new CallbackData('adminBtn', ['number', 'action']);
+  //0
+  const adminChoiceScene = new Composer()
+  adminChoiceScene.on('text', async (ctx) => {
+    try{
+    ctx.wizard.state.data = {};
+      await ctx.reply('Действия:', Markup.inlineKeyboard(
+      [
+        [
+          [Markup.button.callback('СПАМ', likeBtn.create({
+            number: '1',
+            action: 'spam'}))],
+          [Markup.button.callback('ВЕРИФИКАЦИЯ', likeBtn.create({
+            number: '2',
+            action: 'verification'}))]
+          ],
+      ])
+    );
+  } catch(e){
+    let x = await ctx.reply('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
+    return ctx.scene.leave()
+  }
+  return ctx.wizard.next()
+  })
+  //1
+  const adminSwitchScene = new Composer()
+  adminSwitchScene.on('callback_query', async (ctx) => {
+try{
+  const { number, action } = likeBtn.parse(ctx.callbackQuery.data);
+  ctx.wizard.state.data.adminSwitchScene = number
+  switch (ctx.wizard.state.data.adminSwitchScene) {
+    case '1':
+      await ctx.reply('Введите номер истории для добавления/удаления в/из спам/спама:')
+      return ctx.wizard.next()
+      break;
+    case '2':
+      await ctx.reply('Введите номер истории для смены статуса верификации:')
+      return ctx.wizard.selectStep(3)
+      break;
+    default:
+      return ctx.scene.leave()
+      break;
+  }
+  } catch(e){
+    let x = await ctx.reply('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
+    return ctx.scene.leave()
+  }
+    return ctx.scene.leave()
+  })
+  //2
+  const spamScene = new Composer()
+  verificationScene.on('text', async (ctx) => {
+    try{
+    ctx.wizard.state.data.verificationScene = ctx.message.text;
+    await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
+    await ctx.reply('Типа кинули в спам')
+  } catch(e){
+    let x = await ctx.reply('⚠Ошибка!');
+    await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
+    return ctx.scene.leave()
+  }
+  return ctx.wizard.next()
+  })
+  //3
+  const verificationScene = new Composer()
+  verificationScene.on('text', async (ctx) => {
+    try{
+      await ctx.reply('Типа сняли верификацию.')
+      await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
     } catch (e){
-      await ctx.reply('⚠Ошибка!');
-      return ctx.scene.leave();
-    }
-});
-
-adminScene.action('title', async (ctx) => {
-  try{
-  console.log('TITLE');
-      return ctx.scene.leave();
-    } catch (e){
-      await ctx.reply('⚠Ошибка!');
-      return ctx.scene.leave();
-    }
-});
-adminScene.action('spam', async (ctx) => {
-  try{
-  console.log('SPAM');
-      return ctx.scene.leave();
-    } catch (e){
-      await ctx.reply('⚠Ошибка!');
-      return ctx.scene.leave();
-    }
-});
-adminScene.action('veriferi', async (ctx) => {
-  try{
-    console.log('VERIFERI');
-      return ctx.scene.leave();
-    } catch (e){
-      await ctx.reply('⚠Ошибка!');
-      return ctx.scene.leave();
-    }
-});
-
+      let x = await ctx.reply('⚠Ошибка!');
+      await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
+      return ctx.scene.leave()
+  }
+  return ctx.wizard.next()
+  })
+  
+  const adminScene = new Scenes.WizardScene('adminScene', adminChoiceScene, adminSwitchScenecene, spamScene, verificationScene)
   const stagea = new Scenes.Stage([adminScene])
   bot.use(session())
   bot.use(stagea.middleware())
-  bot.on('text', (ctx) => {if (ctx.message.from.id === Number(A) && ctx.message.text === B) ctx.scene.enter('admin')})
-  
+bot.on('text', (ctx) => {if (ctx.message.from.id === Number(A) && ctx.message.text === B) ctx.scene.enter('adminScene')})
 
 bot.launch()
 

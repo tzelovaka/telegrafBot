@@ -312,20 +312,20 @@ numberScene.on('text', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].title,
+      name: rows[i].title.substring(0, 7),
       action: 'storyreadnumber'}))
         ]
         ])
     )
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
+return ctx.wizard.next()
 } catch(e){
   console.log(e);
   let x = await ctx.reply('⚠Ошибка!');
   await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave()
 }
-return ctx.wizard.next()
 })
 //4
 const readScene = new Composer()

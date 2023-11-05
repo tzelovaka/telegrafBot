@@ -297,7 +297,6 @@ numberScene.on('text', async (ctx) => {
     release: true,
     verification: true
   }})
-  console.log(rows);
   if (count < 1){
     let msg = await ctx.reply('⚠Историй с таким номером нет!');
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
@@ -321,6 +320,7 @@ numberScene.on('text', async (ctx) => {
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
   }
 } catch(e){
+  console.log(e);
   let x = await ctx.reply('⚠Ошибка!');
   await messages.create({authId: `${x.chat.id}`, message_id: `${x.message_id}`})
   return ctx.scene.leave()

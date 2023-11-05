@@ -183,7 +183,8 @@ searchScene.on('callback_query', async (ctx) => {
     const coun = await like.count({where:{
       story: rows[i].id
     }})
-    let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
+    try{
+      let msg = await ctx.replyWithHTML (`<u>№${rows[i].id} 📚 ${rows[i].title}</u>
 <i>👀 ${rows[i].views}, ⭐ +${coun}</i>`, Markup.inlineKeyboard(
       [
         [Markup.button.callback('👆', searchBtn.create({
@@ -194,6 +195,9 @@ searchScene.on('callback_query', async (ctx) => {
         ])
     )
     await messages.create({authId: `${msg.chat.id}`, message_id: `${msg.message_id}`})
+    }catch(e){
+      console.log(e);
+    }
   }
   return ctx.wizard.selectStep(4)
       break;

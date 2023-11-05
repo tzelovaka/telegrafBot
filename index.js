@@ -41,7 +41,12 @@ bot.on('text', async (ctx, next) => {
   let msgs = await messages.findAll({where:{authId: `${ctx.message.chat.id}`}})
   if (msgs){
     msgs.forEach(async msg => {
-    await ctx.deleteMessage(msg.message_id);
+    try {
+      await ctx.deleteMessage(msg.message_id);
+    } catch(e){
+      console.log(e);
+    }
+    
   });
   await messages.destroy({where: {authId: `${ctx.message.chat.id}`}})
 }
@@ -79,7 +84,11 @@ bot.on('callback_query', async (ctx, next) => {
   let msgs = await messages.findAll({where:{authId: `${ctx.callbackQuery.message.chat.id}`}})
   if (msgs){
     msgs.forEach(async msg => {
-    await ctx.deleteMessage(msg.message_id);
+      try {
+        await ctx.deleteMessage(msg.message_id);
+      } catch(e){
+        console.log(e);
+      }
   });
   await messages.destroy({where: {authId: `${ctx.callbackQuery.message.chat.id}`}})
   }

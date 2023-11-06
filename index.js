@@ -189,7 +189,7 @@ searchScene.on('callback_query', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].title,
+      name: rows[i].title.substring(0, 21),
       action: 'storyreadlast'}))
         ]
         ])
@@ -226,7 +226,7 @@ searchScene.on('callback_query', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[u].id,
-      name: rows[u].title,
+      name: rows[u].title.substring(0, 21),
       action: 'storyreadpopular'}))
         ]
         ])
@@ -273,7 +273,7 @@ choiceScene.on('text', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].title,
+      name: rows[i].title.substring(0, 21),
       action: 'storyreadname'}))
         ]
         ])
@@ -312,7 +312,7 @@ numberScene.on('text', async (ctx) => {
       [
         [Markup.button.callback('👆', searchBtn.create({
       number: rows[i].id,
-      name: rows[i].title.substring(0, 7),
+      name: rows[i].title.substring(0, 21),
       action: 'storyreadnumber'}))
         ]
         ])
@@ -340,7 +340,7 @@ readScene.on('callback_query', async (ctx) => {
       where: {
         id: number
       }});
-  await ctx.answerCbQuery(`Вы выбрали историю "${name}"`);
+  await ctx.answerCbQuery(`Вы выбрали историю "${name}..."`);
   ctx.wizard.state.data.readScene = number;
     const row = await story.findOne({where: {
       id: `${ctx.wizard.state.data.readScene}`,

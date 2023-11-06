@@ -690,7 +690,6 @@ profileScene.action('likedstory', async (ctx) => {
   const {count, rows} = await like.findAndCountAll({where:{
     authId: ctx.callbackQuery.from.id,
   }})
-  console.log(count);
     if (count<1) {
       await ctx.answerCbQuery('⚠Для этой функции требуется лайкнуть историю!');
       return ctx.scene.leave();
@@ -705,7 +704,7 @@ profileScene.action('likedstory', async (ctx) => {
           release: true,
           verification: true
         }});
-        
+  console.log(row);
         const coun = await like.count({where:{
           story: row.id
         }})

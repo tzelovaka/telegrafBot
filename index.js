@@ -701,7 +701,8 @@ profileScene.action('likedstory', async (ctx) => {
       for (let i=0; i<=x; i++){
         const row = await story.findOne({where: {
           id: rows[i].story,
-          release: true
+          release: true,
+          verification: true
         }});
         const coun = await like.count({where:{
           story: row.id
@@ -712,6 +713,7 @@ await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
       }
       return ctx.scene.leave();
     } catch (e){
+      console.log(e);
       await ctx.answerCbQuery('⚠Ошибка!')
       return ctx.scene.leave();
     }

@@ -700,11 +700,10 @@ profileScene.action('likedstory', async (ctx) => {
       let y;
       for (let i=0; i<=x; i++){
         const row = await story.findOne({where: {
-          id: rows[i].story,
+          id: Number(rows[i].story),
           release: true,
           verification: true
         }});
-  console.log(rows[i]);
         const coun = await like.count({where:{
           story: row.id
         }})

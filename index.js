@@ -704,7 +704,7 @@ profileScene.action('likedstory', async (ctx) => {
           release: true,
           verification: true
         }});
-  console.log(row);
+  console.log(rows[i]);
         const coun = await like.count({where:{
           story: row.id
         }})

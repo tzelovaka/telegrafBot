@@ -700,16 +700,20 @@ profileScene.action('likedstory', async (ctx) => {
       let y;
       for (let i=0; i<=x; i++){
         const row = await story.findOne({where: {
-          id: Number(rows[i].story),
+          id: rows[i].story,
           release: true,
           verification: true
         }});
-        const coun = await like.count({where:{
+        try{
+          const coun = await like.count({where:{
           story: row.id
         }})
         y = await ctx.replyWithHTML (`<u>№${row.id} 📚 ${row.title}</u>
 <i>👀 ${row.views}, ⭐ +${coun}</i>`)
 await messages.create({authId: `${y.chat.id}`, message_id: `${y.message_id}`})
+        }catch(e){
+          console.log(e);
+        }  
       }
       return ctx.scene.leave();
     } catch (e){
